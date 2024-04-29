@@ -7,6 +7,9 @@ import {
   HeaderMenuButton,
   HeaderGlobalBar,
   HeaderGlobalAction,
+  HeaderNavigation,
+  HeaderMenuItem,
+  HeaderMenu,
   SkipToContent,
   SideNav,
   SideNavItems,
@@ -54,6 +57,14 @@ const HeaderWSideNav = (
             >
               WMS
             </HeaderName>
+            <HeaderNavigation aria-label="IBM [Platform]">
+              <HeaderMenuItem href="#">Home</HeaderMenuItem>
+              <HeaderMenu aria-label="Menu" menuLinkName="Menu">
+                <HeaderMenuItem href="#one">Sub-link 1</HeaderMenuItem>
+                <HeaderMenuItem href="#two">Sub-link 2</HeaderMenuItem>
+                <HeaderMenuItem href="#three">Sub-link 3</HeaderMenuItem>
+              </HeaderMenu>
+            </HeaderNavigation>
 
             <SideNav
               aria-label="Side navigation"
