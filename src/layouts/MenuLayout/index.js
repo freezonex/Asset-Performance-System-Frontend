@@ -45,12 +45,6 @@ const HeaderWSideNav = (
         <Theme theme={theme.sideNavTheme}>
           <Header aria-label="SUPCON WMS">
             <SkipToContent />
-            {/* <HeaderMenuButton
-              aria-label={isExpanded ? 'Close menu' : 'Open menu'}
-              onClick={toggleSideNavExpanded}
-              isActive={isExpanded}
-              aria-expanded={isExpanded}
-            /> */}
             <HeaderName
               prefix="SUPCON"
               onClick={() => {
