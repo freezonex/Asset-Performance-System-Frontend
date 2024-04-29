@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # 运行安装指令
-RUN npm config set registry https://registry.npm.taobao.org && npm install
+RUN npm install
 
 # 复制当前目录文件到上面定义的目录WORKDIR中
 # Bundle app source
