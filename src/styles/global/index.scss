@@ -1,0 +1,11 @@
+// 将应用于你的应用程序中的所有页面和组件（引入一次）
+@use '@carbon/react';
+@use '@carbon/styles/scss/theme';
+@use '@carbon/styles/scss/themes';
+// 浏览器默认样式统一
+@import '@/styles/reset/normalize.scss';
+@import '@/styles/reset/nprogress.scss';
+@import '@/styles/reset/reset.scss';
+
+// css 变量
+@import './variable.scss';
