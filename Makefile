@@ -6,4 +6,4 @@ all: server
 
 # Define 'server' target for building Docker image
 server:
-	docker build --platform=linux/amd64 -t apsf-server:1.0.0 .
+	docker build --platform=linux/amd64 -t aps-frontend:1.0.0 .
