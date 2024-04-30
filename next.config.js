@@ -16,7 +16,8 @@ if(!process.env.PROJECT_START){
 }
 
 const nextConfig = {
-  output:'export',
+  //静态导出
+  // output:'export',
   // 开启 webpack5
   webpack5: true,
 
