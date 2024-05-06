@@ -46,11 +46,8 @@ const HeaderWSideNav = (props) => {
     return process.env.PATH_PREFIX + path === pathname;
   };
   const [isSideNavExpanded, setIsSideNavExpanded] = useState(false);
-  console.log('isSideNavExpanded: ', isSideNavExpanded);
-  console.log(theme, 'theme222222');
 
   return (
-    <ThemeProvider>
       <div className={styles.layoutCont}>
         <div className={styles.body}>
           <div className={styles.bodyCont}>{props.children}</div>
@@ -129,9 +126,7 @@ const HeaderWSideNav = (props) => {
                 id="theme-toggle"
                 toggled={theme.headerTheme === 'g100'}
                 onToggle={(e) => {
-                  console.log(e, 3333);
                   if (e) {
-                    console.log(1111111111);
                     setTheme({
                       headerTheme: 'g100',
                       contentTheme: 'g10',
@@ -164,7 +159,6 @@ const HeaderWSideNav = (props) => {
           </Header>
         </div>
       </div>
-    </ThemeProvider>
   );
 };
 export default HeaderWSideNav;

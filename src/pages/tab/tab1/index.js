@@ -2,7 +2,6 @@
 import React, { Component, useContext } from 'react';
 import { withRouter } from 'next/router';
 import { Content, Theme } from '@carbon/react';
-import { ThemeContext, ThemeProvider } from '@/utils/ThemeContext';
 import Head from 'next/head';
 import MenuLayout from '@/layouts/MenuLayout';
 
