@@ -18,6 +18,7 @@ if(!process.env.PROJECT_START){
 const nextConfig = {
   //静态导出
   // output:'export',
+  
   // 开启 webpack5
   webpack5: true,
 
@@ -36,12 +37,6 @@ const nextConfig = {
 
   // 多环境配置
   env: env,
-
-  css: {
-    // 在生产模式下才生成 CSS 文件
-    ignoreDuringBuilds: env === 'dev'
-  }
-
 
   // // 国际化
   // i18n: {

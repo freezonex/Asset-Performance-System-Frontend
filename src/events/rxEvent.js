@@ -6,9 +6,6 @@ import {
 } from 'rxjs-compat';
 
 
-// 发送信息事件
-let sendMsg = new Subject();
-
 // 调用接口之后
 let requestAfter = new Subject();
 
@@ -18,9 +15,8 @@ let loginAfter = new Subject();
 // 退出登录之后
 let clearLoginAfter = new Subject();
 
-export { sendMsg, requestAfter, loginAfter, clearLoginAfter };
+export { requestAfter, loginAfter, clearLoginAfter };
 export default {
-  sendMsg,
   requestAfter,
   loginAfter,
   clearLoginAfter,
