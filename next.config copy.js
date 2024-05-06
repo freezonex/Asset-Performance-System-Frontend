@@ -15,21 +15,27 @@ if(!process.env.PROJECT_START){
   console.log(env);
 }
 
-var next = {}
-
-// 静态打包
-if(process.env.STATIC_EXPORT){
-  next = {
-    ...next,
-    output:'export',
-    basePath: '/apsfrontend',
-    assetPrefix: '/',
-  }
-}
-
 const nextConfig = {
+  
+  basePath: '/apsfrontend',
+  // assetPrefix: '',
+  assetPrefix: process.env.NODE_ENV === "production" ? "/apsfrontend/" : undefined,
+  
+  //静态导出
+  output:'export',
+  // output:'export',
 
-  ...next,
+  // basePath: '/apsfrontend',
+  // output:'standalone',
+  // trailingSlash:true,
+  // // 设置 publicPath
+  // assetPrefix: './',
+  // // 设置哈希路由
+  // exportPathMap: function () {
+  //   return {
+  //     '/': { page: '/' },
+  //   };
+  // },
 
   // 开启 webpack5
   webpack5: true,

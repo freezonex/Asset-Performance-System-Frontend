@@ -154,7 +154,9 @@ const HeaderWSideNav = (props) => {
               <HeaderGlobalAction
                 aria-label="Info"
                 tooltipAlignment="end"
-              ></HeaderGlobalAction>
+              >
+                123123
+              </HeaderGlobalAction>
             </HeaderGlobalBar>
           </Header>
         </div>
