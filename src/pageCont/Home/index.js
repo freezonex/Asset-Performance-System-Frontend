@@ -3,6 +3,8 @@ import styles from './index.module.scss';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
 import styled from 'styled-components';
+import environment from '@/consts/environment';
+
 
 const Title = styled.div`
     font-size: 24px;
@@ -11,9 +13,7 @@ const Title = styled.div`
 @withRouter
 class Comp extends Component {
   componentDidMount = () => {
-    console.log(process.env.NODE_ENV)
-    console.log(process.env.environment)
-    console.log(process.env.iconFontUrl)
+    console.log(environment)
   };
   render() {
     return (

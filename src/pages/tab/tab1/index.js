@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
 import MenuLayout from '@/layouts/MenuLayout';
-import Tab from '@/pageCont/Tab/Tab1';
 
 @withRouter
 class Comp extends Component {
@@ -14,7 +13,6 @@ class Comp extends Component {
         <Head>
           <title>tab1</title>
         </Head>
-        <Tab />
       </div>
     );
   }
