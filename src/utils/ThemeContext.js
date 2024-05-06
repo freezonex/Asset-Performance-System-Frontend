@@ -1,18 +1,22 @@
 'use client';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext({
-  theme: { headerTheme: 'g100', contentTheme: 'g10', sideNavTheme: 'g90' },
+  theme: { headerTheme: 'white', contentTheme: 'white', sideNavTheme: 'white' },
   setTheme: () => {},
 });
 
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState({
-    headerTheme: 'g100',
-    contentTheme: 'g10',
-    sideNavTheme: 'g90',
+    headerTheme: 'white',
+    contentTheme: 'white',
+    sideNavTheme: 'white',
   });
 
+  useEffect(() => {
+    console.log('kkkkkkkkkkkkk');
+  },[])
+console.log(3333333333333);
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}

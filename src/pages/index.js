@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-import PageCont from '@/pageCont/Home';
-import { withRouter } from 'next/router'
+import { withRouter } from 'next/router';
+import Head from 'next/head';
 
 @withRouter
 class Comp extends Component {
   
-  componentDidMount(){
-    // this.props.router.push('/tab/tab1');
+  componentDidMount() {
+    this.props.router.push('/tab/tab1');
   }
+  
   render() {
     return (
       <>
-        <PageCont />
+
       </>
     );
   }
