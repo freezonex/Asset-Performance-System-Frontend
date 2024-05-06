@@ -35,10 +35,10 @@ import {
 } from '@carbon/icons-react';
 import styles from './index.module.scss';
 import { usePathname } from 'next/navigation';
-import { ThemeContext, ThemeProvider } from '@/utils/ThemeContext';
+import { ThemeContext } from '@/utils/ThemeContext';
 import { useRouter } from 'next/navigation';
 
-const HeaderWSideNav = (props) => {
+const HeaderWSideNav = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
   const { theme, setTheme } = useContext(ThemeContext);
@@ -46,80 +46,84 @@ const HeaderWSideNav = (props) => {
     return process.env.PATH_PREFIX + path === pathname;
   };
   const [isSideNavExpanded, setIsSideNavExpanded] = useState(false);
-  console.log('isSideNavExpanded: ', isSideNavExpanded);
-  console.log(theme, 'theme222222');
 
   return (
-    <ThemeProvider>
-      <div className={styles.layoutCont}>
-        <div className={styles.body}>
-          <div className={styles.bodyCont}>{props.children}</div>
-        </div>
-        <div>
+    <div className={styles.layoutCont}>
+      <div className={styles.body}>
+        <div className={styles.bodyCont}>{children}</div>
+      </div>
+      <div>
+        <Theme theme={theme.sideNavTheme}>
           <Header aria-label="SUPCON WMS">
             <SkipToContent />
             <HeaderMenuButton
               aria-label={isSideNavExpanded ? 'Close menu' : 'Open menu'}
-              onClick={()=>{
-                setIsSideNavExpanded(!isSideNavExpanded)
-              }}
+              onClick={setIsSideNavExpanded}
               isActive={isSideNavExpanded}
               aria-expanded={isSideNavExpanded}
             />
             <HeaderName
               prefix="SUPCON"
               onClick={() => {
-                router.push(`${process.env.PATH_PREFIX}/home`);
+                router.push(`/tab/tab2`);
               }}
               className="cursor-pointer"
             >
-              WMS
+              APS
             </HeaderName>
-            <Theme theme={'g100'}>
-              <SideNav
-                aria-label="Side navigation"
-                expanded={isSideNavExpanded}
-                addFocusListeners={false}
-                className="w-10"
-                onOverlayClick={() => {}}
-              >
-                <SideNavItems isSideNavExpanded={isSideNavExpanded}>
-                  <SideNavLink
-                    isSideNavExpanded={isSideNavExpanded}
-                    renderIcon={Dashboard}
-                    onClick={() => {
-                      router.push(`/tab/tab1`);
-                    }}
-                    className="cursor-pointer"
-                    isActive={isCurrentPath('/tab/tab1')}
-                  >
-                    tab1
-                  </SideNavLink>
-                  <SideNavLink
-                    isSideNavExpanded={isSideNavExpanded}
-                    renderIcon={AssetView}
-                    onClick={() => {
-                      router.push(`/tab/tab2`);
-                    }}
-                    className="cursor-pointer"
-                    isActive={isCurrentPath('/tab/tab2')}
-                  >
-                    tab2
-                  </SideNavLink>
-                  <SideNavLink
-                    isSideNavExpanded={isSideNavExpanded}
-                    renderIcon={InventoryManagement}
-                    onClick={() => {
-                      router.push(`/tab/tab3`);
-                    }}
-                    className="cursor-pointer"
-                    isActive={isCurrentPath('/tab/tab3')}
-                  >
-                    tab3
-                  </SideNavLink>
-                </SideNavItems>
-              </SideNav>
-            </Theme>
+            {/* 顶部菜单 */}
+            {/* <HeaderNavigation aria-label="IBM [Platform]">
+              <HeaderMenuItem href="#">Home</HeaderMenuItem>
+              <HeaderMenu aria-label="Menu" menuLinkName="Menu">
+                <HeaderMenuItem href="#one">Sub-link 1</HeaderMenuItem>
+                <HeaderMenuItem href="#two">Sub-link 2</HeaderMenuItem>
+                <HeaderMenuItem href="#three">Sub-link 3</HeaderMenuItem>
+              </HeaderMenu>
+            </HeaderNavigation> */}
+
+            <SideNav
+              aria-label="Side navigation"
+              expanded={isSideNavExpanded}
+              addFocusListeners={false}
+              className="w-10"
+              onOverlayClick={() => {}}
+            >
+              <SideNavItems isSideNavExpanded={isSideNavExpanded}>
+                <SideNavLink
+                  isSideNavExpanded={isSideNavExpanded}
+                  renderIcon={Dashboard}
+                  onClick={() => {
+                    router.push(`/tab/tab1`);
+                  }}
+                  className="cursor-pointer"
+                  isActive={isCurrentPath('/tab/tab1')}
+                >
+                  tab1
+                </SideNavLink>
+                <SideNavLink
+                  isSideNavExpanded={isSideNavExpanded}
+                  renderIcon={AssetView}
+                  onClick={() => {
+                    router.push(`/tab/tab2`);
+                  }}
+                  className="cursor-pointer"
+                  isActive={isCurrentPath('/tab/tab2')}
+                >
+                  tab2
+                </SideNavLink>
+                <SideNavLink
+                  isSideNavExpanded={isSideNavExpanded}
+                  renderIcon={InventoryManagement}
+                  onClick={() => {
+                    router.push(`/tab/tab3`);
+                  }}
+                  className="cursor-pointer"
+                  isActive={isCurrentPath('/tab/tab3')}
+                >
+                  tab3
+                </SideNavLink>
+              </SideNavItems>
+            </SideNav>
             <HeaderGlobalBar className="flex items-center">
               <Toggle
                 labelA="Light"
@@ -129,15 +133,13 @@ const HeaderWSideNav = (props) => {
                 id="theme-toggle"
                 toggled={theme.headerTheme === 'g100'}
                 onToggle={(e) => {
-                  console.log(e, 3333);
+                  console.log(e);
                   if (e) {
-                    console.log(1111111111);
                     setTheme({
                       headerTheme: 'g100',
                       contentTheme: 'g10',
                       sideNavTheme: 'g90',
                     });
-                    console.log(theme, 'theme');
                   } else {
                     setTheme({
                       headerTheme: 'white',
@@ -162,9 +164,9 @@ const HeaderWSideNav = (props) => {
               ></HeaderGlobalAction>
             </HeaderGlobalBar>
           </Header>
-        </div>
+        </Theme>
       </div>
-    </ThemeProvider>
+    </div>
   );
 };
 export default HeaderWSideNav;

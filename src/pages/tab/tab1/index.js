@@ -1,6 +1,8 @@
 'use client';
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import { withRouter } from 'next/router';
+import { Content, Theme } from '@carbon/react';
+import { ThemeContext, ThemeProvider } from '@/utils/ThemeContext';
 import Head from 'next/head';
 import MenuLayout from '@/layouts/MenuLayout';
 import Tab from '@/pageCont/Tab/Tab1';
@@ -10,7 +12,7 @@ class Comp extends Component {
   componentDidMount = () => {};
   render() {
     return (
-      <div style={{height:'100%'}}>
+      <div style={{ height: '100%' }}>
         <Head>
           <title>tab1</title>
         </Head>
@@ -21,7 +23,9 @@ class Comp extends Component {
 }
 
 Comp.getLayout = function (page) {
-  return <MenuLayout>{page}</MenuLayout>;
+  return (
+      <MenuLayout >{page}</MenuLayout>
+  );
 };
 
 export default Comp;

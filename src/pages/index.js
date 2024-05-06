@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PageCont from '@/pageCont/Tab/Tab1/index';
-import { withRouter } from 'next/router'
+import { withRouter } from 'next/router';
+import Head from 'next/head';
 
 @withRouter
 class Comp extends Component {
   
-  componentDidMount(){
+  componentDidMount() {
     this.props.router.push('/tab/tab1');
   }
+  
   render() {
     return (
       <>

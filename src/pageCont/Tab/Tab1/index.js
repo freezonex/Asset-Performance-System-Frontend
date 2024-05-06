@@ -28,8 +28,4 @@ class Comp extends Component {
   }
 }
 
-// Comp.getLayout = function (page) {
-//   return <MenuLayout>{page}</MenuLayout>;
-// };
-
 export default Comp;
