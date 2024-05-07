@@ -4,7 +4,8 @@
 }
 
 .layoutCont .body {
-  backgroun: red;
+  padding-left: 36px;
+  padding-top: 36px;
 }
 
 .layoutCont :global a.cds--side-nav__link:focus {

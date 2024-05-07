@@ -1,1 +1,1 @@
-@use '@carbon/react/scss/colors';.layoutCont{height:100vh}.layoutCont .body{backgroun:red}.layoutCont :global a.cds--side-nav__link:focus{outline:2px solid transparent}
+@use '@carbon/react/scss/colors';.layoutCont{height:100vh}.layoutCont .body{padding-left:36px;padding-top:36px}.layoutCont :global a.cds--side-nav__link:focus{outline:2px solid transparent}

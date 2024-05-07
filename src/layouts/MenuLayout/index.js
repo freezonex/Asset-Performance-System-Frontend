@@ -22,7 +22,7 @@ import {
   AssetView,
   InventoryManagement,
   OrderDetails,
-  EventSchedule
+  EventSchedule,
 } from '@carbon/icons-react';
 import styles from './index.module.scss';
 import { usePathname } from 'next/navigation';
@@ -40,14 +40,6 @@ const HeaderWSideNav = (props) => {
 
   return (
     <div className={styles.layoutCont}>
-      <Theme theme={theme.contentTheme}>
-        <Content>
-          <div className={styles.body}>
-            <div className={styles.bodyCont}>{props.children}</div>
-          </div>
-        </Content>
-      </Theme>
-
       <div>
         <Theme theme={theme.headerTheme}>
           <Header aria-label="SUPCON WMS">
@@ -101,71 +93,74 @@ const HeaderWSideNav = (props) => {
               <HeaderGlobalAction aria-label="Info" tooltipAlignment="end">
                 <Information size={20} />
               </HeaderGlobalAction>
-              <HeaderGlobalAction aria-label="Info" tooltipAlignment="end">
-                
-              </HeaderGlobalAction>
             </HeaderGlobalBar>
-            {/* 侧边栏 */}
-            <Theme theme={theme.sideNavTheme}>
-              <SideNav
-                aria-label="Side navigation"
-                expanded={isSideNavExpanded}
-              >
-                <SideNavItems isSideNavExpanded={isSideNavExpanded}>
-                  <SideNavLink
-                    isSideNavExpanded={isSideNavExpanded}
-                    renderIcon={Dashboard}
-                    onClick={() => {
-                      router.push(`/dashboard`);
-                    }}
-                    isActive={isCurrentPath('/dashboard')}
-                  >
-                    Dashboard
-                  </SideNavLink>
-                  <SideNavLink
-                    isSideNavExpanded={isSideNavExpanded}
-                    renderIcon={AssetView}
-                    onClick={() => {
-                      router.push(`/assets`);
-                    }}
-                    isActive={isCurrentPath('/assets')}
-                  >
-                    Assets
-                  </SideNavLink>
-                  <SideNavLink
-                    isSideNavExpanded={isSideNavExpanded}
-                    renderIcon={InventoryManagement}
-                    onClick={() => {
-                      router.push(`/inventory`);
-                    }}
-                    isActive={isCurrentPath('/inventory')}
-                  >
-                    Inventory
-                  </SideNavLink>
-                  <SideNavLink
-                    isSideNavExpanded={isSideNavExpanded}
-                    renderIcon={OrderDetails}
-                    onClick={() => {
-                      router.push(`/workOrder`);
-                    }}
-                    isActive={isCurrentPath('/workOrder')}
-                  >
-                    Work Order
-                  </SideNavLink>
-                  <SideNavLink
-                    isSideNavExpanded={isSideNavExpanded}
-                    renderIcon={EventSchedule}
-                    onClick={() => {
-                      router.push(`/schedule`);
-                    }}
-                    isActive={isCurrentPath('/schedule')}
-                  >
-                    Schedule
-                  </SideNavLink>
-                </SideNavItems>
-              </SideNav>
-            </Theme>
           </Header>
+          </Theme>
+          {/* 侧边栏 */}
+          <Theme theme={theme.sideNavTheme}>
+            <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
+              <SideNavItems isSideNavExpanded={isSideNavExpanded}>
+                <SideNavLink
+                  isSideNavExpanded={isSideNavExpanded}
+                  renderIcon={Dashboard}
+                  onClick={() => {
+                    console.log(isSideNavExpanded,"isSideNavExpanded");
+                    router.push(`/dashboard`);
+                  }}
+                  isActive={isCurrentPath('/dashboard')}
+                >
+                  Dashboard
+                </SideNavLink>
+                <SideNavLink
+                  isSideNavExpanded={isSideNavExpanded}
+                  renderIcon={AssetView}
+                  onClick={() => {
+                    router.push(`/assets`);
+                  }}
+                  isActive={isCurrentPath('/assets')}
+                >
+                  Assets
+                </SideNavLink>
+                <SideNavLink
+                  isSideNavExpanded={isSideNavExpanded}
+                  renderIcon={InventoryManagement}
+                  onClick={() => {
+                    router.push(`/inventory`);
+                  }}
+                  isActive={isCurrentPath('/inventory')}
+                >
+                  Inventory
+                </SideNavLink>
+                <SideNavLink
+                  isSideNavExpanded={isSideNavExpanded}
+                  renderIcon={OrderDetails}
+                  onClick={() => {
+                    router.push(`/workOrder`);
+                  }}
+                  isActive={isCurrentPath('/workOrder')}
+                >
+                  Work Order
+                </SideNavLink>
+                <SideNavLink
+                  isSideNavExpanded={isSideNavExpanded}
+                  renderIcon={EventSchedule}
+                  onClick={() => {
+                    router.push(`/schedule`);
+                  }}
+                  isActive={isCurrentPath('/schedule')}
+                >
+                  Schedule
+                </SideNavLink>
+              </SideNavItems>
+            </SideNav>
+          </Theme>
+       
+        <Theme theme={theme.contentTheme} style={{ height: '100vh' }}>
+          <Content>
+            <div className={styles.body}>
+              <div className={styles.bodyCont}>{props.children}</div>
+            </div>
+          </Content>
         </Theme>
       </div>
     </div>

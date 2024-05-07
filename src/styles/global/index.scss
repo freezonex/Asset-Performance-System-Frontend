@@ -2,6 +2,9 @@
 @use '@carbon/react';
 @use '@carbon/styles/scss/theme';
 @use '@carbon/styles/scss/themes';
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 // 浏览器默认样式统一
 @import '@/styles/reset/normalize.scss';
 @import '@/styles/reset/nprogress.scss';
