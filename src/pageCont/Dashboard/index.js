@@ -12,18 +12,9 @@ class Comp extends Component {
   componentDidMount = () => {};
   render() {
     return (
-      <ThemeContext.Consumer>
-        {({ theme, setTheme }) => (
-          <Theme theme={theme.contentTheme}>
-          <Content>
-            <div className={styles.container}>
-              <div>1111</div>
-              <Button onClick={() => {}}>carbon UI</Button>
-            </div>
-          </Content>
-        </Theme>
-        )}
-      </ThemeContext.Consumer>
+     <div>
+      Dashboard
+     </div>
     );
   }
 }

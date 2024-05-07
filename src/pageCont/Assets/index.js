@@ -1,48 +1,65 @@
 'use client';
 import React, { Component } from 'react';
 import { withRouter } from 'next/router';
+import classNames from 'classnames';
 import styles from './index.module.scss';
 import Head from 'next/head';
-import MenuLayout from '@/layouts/MenuLayout';
+import WarehouseTable from './Table'
 import {
-  Content,
-  Theme,
   Button,
   Breadcrumb,
   BreadcrumbItem,
   Heading,
+  TextInput,
 } from '@carbon/react';
-import { Add, Search, CloseOutline } from '@carbon/icons-react';
-import { ThemeContext } from '@/utils/ThemeContext';
+import { Add, Search, Close } from '@carbon/icons-react';
 
 @withRouter
 class Comp extends Component {
+  state = {
+    formValue: {
+      asset_id: '',
+      asset: '',
+      type: '',
+      person: '',
+    },
+    isSearchClicked:false,
+    refresh:{},
+  };
   componentDidMount = () => {};
+
+  changeState = (obj)=>{
+    this.setState({
+      obj
+    })
+  }
+
+  initFormValue = () => {
+    this.setState({
+      formValue: {
+        asset_id: '',
+        asset: '',
+        type: '',
+        person: '',
+      },
+    });
+  };
+
+  FormValueChange = (e) => {
+    console.log(e);
+    const { id, value } = e.target;
+    let obj = { ...this.state.formValue };
+    obj[id] = value;
+    this.setState({
+      formValue: obj,
+    });
+  };
   render() {
+    const { formValue,refresh, isSearchClicked} = this.state;
     return (
-      // <ThemeContext.Consumer>
-      //   {({ theme, setTheme }) => (
-      //     <Theme theme={theme.contentTheme}>
-      //     <Content>
-      //       <div className={styles.container}>
-      //         <div>1111</div>
-      //         <Button onClick={() => {}}>carbon UI</Button>
-      //       </div>
-      //     </Content>
-      //   </Theme>
-      //   )}
-      // </ThemeContext.Consumer>
       <div>
+        <Head>Assets</Head>
         <Breadcrumb>
-          <BreadcrumbItem>
-            <a
-              onClick={() => {
-                router.push(`/assets`);
-              }}
-            >
-              Home
-            </a>
-          </BreadcrumbItem>
           <BreadcrumbItem
             onClick={() => {
               router.push(`/assets`);
@@ -53,10 +70,12 @@ class Comp extends Component {
         </Breadcrumb>
         <div className="bx--col-lg-16 flex justify-between items-center">
           <div>
-            <Heading className="mt-2 text-[28px] font-normal">
-              Warehouse
-            </Heading>
-            <Heading className="mt-1 text-sm">
+            <Heading className="mt-2 text-[28px] font-normal">Assets</Heading>
+            <Heading
+              className={classNames('mt-1 text-sm', {
+                [styles.textColor]: true,
+              })}
+            >
               List of warehouses for your storage solutions
             </Heading>
           </div>
@@ -65,11 +84,90 @@ class Comp extends Component {
               setCreateModalOpen(true);
             }}
             isExpressive
-            size="sm"
+            size="md"
             renderIcon={Add}
           >
             Create a Warehouse
           </Button>
+        </div>
+        {/* 搜索框 */}
+        <div className="flex mt-20 space-x-4 items-end">
+          <TextInput
+            className="flex-auto w-20"
+            labelText="Asset ID"
+            id="asset_id"
+            placeholder="Asset ID"
+            value={formValue.asset_id}
+            onChange={(e) => {
+              this.FormValueChange(e);
+            }}
+          />
+          <TextInput
+            className="flex-auto w-20"
+            labelText="Asset"
+            id="asset"
+            placeholder="Asset"
+            value={formValue.asset}
+            onChange={(e) => {
+              this.FormValueChange(e);
+            }}
+          />
+          <TextInput
+            className="flex-auto w-20"
+            labelText="Type"
+            id="type"
+            placeholder="Type"
+            value={formValue.type}
+            onChange={(e) => {
+              this.FormValueChange(e);
+            }}
+          />
+          <TextInput
+            className="flex-auto w-20"
+            labelText="Person"
+            id="person"
+            placeholder="Person"
+            value={formValue.person}
+            onChange={(e) => {
+              this.FormValueChange(e);
+            }}
+          />
+          <Button
+            onClick={() => {
+              //搜索
+              console.log(this.state.formValue, 'formValue');
+            }}
+            style={{ backgroundColor: '#393939' }}
+            isExpressive
+            size="md"
+            renderIcon={Search}
+            iconDescription="Search"
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => {
+              //清空搜索条件
+              this.initFormValue();
+            }}
+            style={{ backgroundColor: '#C6C6C6' }}
+            isExpressive
+            size="md"
+            renderIcon={Close}
+            iconDescription="Close"
+          >
+            Cancet
+          </Button>
+        </div>
+        {/* table 表格 */}
+        <div className="mt-12">
+          <WarehouseTable
+            changeState={this.changeState}
+            formValue={formValue}
+            refresh={refresh}
+            isSearchClicked={isSearchClicked}
+
+          />
         </div>
       </div>
     );

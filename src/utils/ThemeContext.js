@@ -7,9 +7,9 @@ const ThemeContext = createContext({
 
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState({
-    headerTheme: 'white',
-    contentTheme: 'white',
-    sideNavTheme: 'white',
+    headerTheme: 'g100',
+    contentTheme: 'g10',
+    sideNavTheme: 'g90',
   });
 
   return (
