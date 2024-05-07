@@ -12,7 +12,10 @@ import {
   Pagination,
 } from '@carbon/react';
 import { Edit, Delete,TableItem } from '@carbon/icons-react';
-import styles from './table.module.scss';
+// import styles from './table.module.scss';
+import styles from '@/styles/table/table.module.scss';
+
+
 // import ShelfLocationModal from '../Modal/ShelfLocationModal';
 // import {
 //   deleteWarehouse,
@@ -39,7 +42,7 @@ function WarehouseTable({
   ];
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(5);
   //const rowsToShow = rows.slice((page - 1) * pageSize, page * pageSize);
   const [isModalOpen, setModalOpen] = useState(false);
   const [editRow, setEditRow] = useState({});
@@ -47,6 +50,46 @@ function WarehouseTable({
   const [selectedWarehouseInfo, setSelectedWarehouseInfo] = useState({});
   const [rows, setRows] = useState([{
     id:'001',
+    asset_id:'S#24022901',
+    asset_name:'Laptop',
+    asset_type:'Computer',
+    vendor_model:'Y355L4-8',
+    description:'bdaudbjakfdifhkhka',
+    sn:'dafjskdf', 
+    status:'1',
+  },
+  {
+    id:'002',
+    asset_id:'S#24022901',
+    asset_name:'Laptop',
+    asset_type:'Computer',
+    vendor_model:'Y355L4-8',
+    description:'bdaudbjakfdifhkhka',
+    sn:'dafjskdf', 
+    status:'1',
+  },
+  {
+    id:'003',
+    asset_id:'S#24022901',
+    asset_name:'Laptop',
+    asset_type:'Computer',
+    vendor_model:'Y355L4-8',
+    description:'bdaudbjakfdifhkhka',
+    sn:'dafjskdf', 
+    status:'1',
+  },
+  {
+    id:'004',
+    asset_id:'S#24022901',
+    asset_name:'Laptop',
+    asset_type:'Computer',
+    vendor_model:'Y355L4-8',
+    description:'bdaudbjakfdifhkhka',
+    sn:'dafjskdf', 
+    status:'1',
+  },
+  {
+    id:'005',
     asset_id:'S#24022901',
     asset_name:'Laptop',
     asset_type:'Computer',
@@ -105,7 +148,7 @@ function WarehouseTable({
   console.log(selectedWarehouseInfo);
 
   return (
-    <div className={styles.tableAssets}>
+    <div className={styles.tableStyle}>
       <StructuredListWrapper isCondensed>
         <StructuredListHead>
           <StructuredListRow head>
