@@ -1,0 +1,21 @@
+.container{
+    width:100%;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom:10px;
+
+    .title{
+        font-size:16px;
+        color:#161616;
+        font-weight: bold;
+    }
+}
+
+.chart{
+    width:100%;
+    background-color: #fff;
+    height:266px;
+}

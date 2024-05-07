@@ -1,4 +1,26 @@
-.container {
-    background-color: red;
-    height: 100%;
+.textColor{
+    color:#525252;
+}
+
+.chart{
+    display: flex;
+    width:100%;
+    margin-top:40px;
+
+    .left{
+        flex:1;
+        height:264px;
+        margin-right: 20px;
+    }
+
+    .right{
+        width:538px;
+        height:264px;
+        background-color: #fff;
+    }
+
+    .header{
+        display: flex;
+        justify-content: space-between;
+    }
 }
