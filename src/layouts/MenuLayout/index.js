@@ -40,7 +40,7 @@ const HeaderWSideNav = (props) => {
 
   return (
     <div className={styles.layoutCont}>
-      <div>
+    
         <Theme theme={theme.headerTheme}>
           <Header aria-label="SUPCON WMS">
             <SkipToContent />
@@ -155,14 +155,14 @@ const HeaderWSideNav = (props) => {
             </SideNav>
           </Theme>
        
-        <Theme theme={theme.contentTheme} style={{ height: '100vh' }}>
-          <Content>
+        <Theme theme={theme.contentTheme} style={{ height: '100%' }}>
+          <Content style={{ height: '100%' }}>
             <div className={styles.body}>
               <div className={styles.bodyCont}>{props.children}</div>
             </div>
           </Content>
         </Theme>
-      </div>
+ 
     </div>
   );
 };
