@@ -1,0 +1,12 @@
+@use '@carbon/react/scss/colors';
+.layoutCont {
+  height: 100vh;
+}
+
+.layoutCont .body {
+  backgroun: red;
+}
+
+.layoutCont :global a.cds--side-nav__link:focus {
+  outline: 2px solid transparent;
+}

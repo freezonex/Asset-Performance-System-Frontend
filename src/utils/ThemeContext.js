@@ -1,6 +1,9 @@
 import React, { createContext, useState } from 'react';
 
-const ThemeContext = createContext();
+const ThemeContext = createContext({
+  theme: { headerTheme: 'white', contentTheme: 'white', sideNavTheme: 'white' },
+  setTheme: () => {},
+});
 
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState({

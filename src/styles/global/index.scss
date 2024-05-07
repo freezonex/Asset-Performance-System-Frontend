@@ -39,6 +39,10 @@
     max-width: inherit;
     align-items: end;
   }
+
+  .cursorPointer{
+    cursor:pointer;
+  }
   
   @media (min-width: 66rem) {
     .cds--header__menu-toggle__hidden {
@@ -139,6 +143,11 @@
     }
     body {
       @apply bg-background text-foreground;
+    }
+    .cds--toggle{
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
     }
   }
   

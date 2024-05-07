@@ -6,7 +6,7 @@ import Head from 'next/head';
 class Comp extends Component {
   
   componentDidMount() {
-    this.props.router.push('/tab/tab1');
+    this.props.router.push('/dashboard');
   }
   
   render() {
