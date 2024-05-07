@@ -22,7 +22,6 @@ if(process.env.STATIC_EXPORT){
   next = {
     ...next,
     output:'export',
-    basePath: '/apsfrontend',
     assetPrefix: '/',
   }
 }
@@ -30,6 +29,8 @@ if(process.env.STATIC_EXPORT){
 const nextConfig = {
 
   ...next,
+
+  basePath: '/apsfrontend',
 
   // 开启 webpack5
   webpack5: true,
