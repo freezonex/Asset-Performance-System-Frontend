@@ -47,6 +47,11 @@
     //   .cds--structured-list-th {
     //   padding: 0rem;
     // }
+
+    .cds--structured-list-row:hover{
+      background-color: var(--cds-layer-hover);
+      cursor: pointer;
+    }
     .cds--pagination__left {
       padding-left: 0;
     }
@@ -72,7 +77,7 @@
       .cds--structured-list-td,
     .cds--structured-list.cds--structured-list--condensed
       .cds--structured-list-th {
-      padding: 10px;
+      padding: 5px 10px;
     }
 
     .cds--structured-list-tbody{

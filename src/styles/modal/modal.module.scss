@@ -1,0 +1,44 @@
+.ModalFromStyle {
+  :global {
+    .cds--modal-close {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      right: 0;
+      overflow: hidden;
+    }
+    .cds--modal-close:focus{
+      border-color:rgba(0,0,0,0) ;
+    }
+    // .cds--modal-container{
+    //   background-color: #f4f4f4;
+    // }
+    // .cds--modal .cds--text-input{
+    //   background-color: #f4f4f4;
+    // }
+    .cds--text-input__field-outer-wrapper{
+      position: relative;
+    }
+    .cds--form-requirement{
+      position: absolute;
+      bottom: -20px;
+    }
+
+    // button cancel
+    .cds--btn--secondary{
+      background-color: #f4f4f4;
+      color: #0F62FE;
+    }
+    .cds--btn--secondary:hover, .cds--btn--secondary:focus{
+      color: #0F62FE;
+    }
+    .cds--btn--secondary:hover{
+      background: #efefef;
+    }
+
+    // button save
+    .cds--btn--primary:focus{
+      box-shadow: none;
+    }
+  }
+}
