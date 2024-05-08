@@ -40,5 +40,11 @@
     .cds--btn--primary:focus{
       box-shadow: none;
     }
+
+    // modal 中 dataPick svg偏移
+    .cds--date-picker__icon{
+      inset-block-start:auto;
+      transform:none;
+    }
   }
 }

@@ -6,7 +6,10 @@ import {
   SelectItem,
   Column,
   Grid,
+  DatePickerInput,
+  DatePicker,
 } from '@carbon/react';
+import moment from 'moment';
 import styles from '@/styles/modal/modal.module.scss';
 
 const ModalPages = ({ createModalIsopen, changeState }) => {
@@ -20,12 +23,12 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     asset_id: '',
     sn: '',
     asset_type: '',
-    status:'',
+    status: '',
     department: '',
     location: '',
     installation_date: '',
-    value:'',
-    responsible_person:'',
+    value: '',
+    responsible_person: '',
     description: '',
   });
 
@@ -38,21 +41,35 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     }));
   };
 
+  const onDateChange = (e) => {
+    if (!e) {
+      return;
+    }
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      installation_date: moment(e[0]).format(),
+    }));
+  };
+
+  
   const handleCancelClicked = () => {
     setFormValues({
       asset_name: '',
-      warehouse_id: '',
-      type: '',
-      manager: '',
+      asset_id: '',
+      sn: '',
+      asset_type: '',
+      status: '',
       department: '',
-      email: '',
-      project_group: '',
-      note: '',
+      location: '',
+      installation_date: '',
+      value: '',
+      responsible_person: '',
+      description: '',
     });
     setFieldValidation({
-      nameInvalid: false,
-      warehouseIdInvalid: false,
-      typeInvalid: false,
+      assetNameInvalid: false,
+      assetIdInvalid: false,
+      snInvalid: false,
     });
     // onClose();
     changeState({ createModalIsopen: false });
@@ -62,9 +79,8 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     e.preventDefault();
     const newValidation = {
       assetNameInvalid: !formValue.asset_name || formValue.asset_name === '',
-      assetIdInvalid:
-        !formValue.asset_id || formValue.asset_id === '',
-        snInvalid: !formValue.sn || formValue.sn === '',
+      assetIdInvalid: !formValue.asset_id || formValue.asset_id === '',
+      snInvalid: !formValue.sn || formValue.sn === '',
     };
     setFieldValidation(newValidation);
 
@@ -96,7 +112,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               invalidText="This field cannot be empty"
               value={formValue.asset_name}
               onChange={onFormValueChange}
-              onFocus={(e)=>{
+              onFocus={(e) => {
                 // 可以自定义正则校验
                 // 校验不成功，可以修改fieldValidation 为true
                 // console.log('e: ', e.target.value);
@@ -168,7 +184,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           </Column>
           <Column sm={2} md={4} lg={8}>
             <TextInput
-            className="mb-8"
+              className="mb-8"
               id="location"
               labelText="Location"
               placeholder="Location"
@@ -177,18 +193,21 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
             />
           </Column>
           <Column sm={2} md={4} lg={8}>
-            <TextInput
-            className="mb-8"
-              id="installation_date"
-              labelText="Installation Date"
-              placeholder="Installation Date"
-              value={formValue.installation_date}
-              onChange={onFormValueChange}
-            />
+            <DatePicker
+              className="mb-8"
+              datePickerType="single"
+              onChange={onDateChange}
+            >
+              <DatePickerInput
+                id="installation_date"
+                labelText="Installation Date"
+                placeholder="mm/dd/yyyy"
+              />
+            </DatePicker>
           </Column>
           <Column sm={2} md={4} lg={8}>
             <TextInput
-            className="mb-8"
+              className="mb-8"
               id="value"
               labelText="Value"
               placeholder="Value"
@@ -198,7 +217,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           </Column>
           <Column sm={2} md={4} lg={8}>
             <TextInput
-            className="mb-8"
+              className="mb-8"
               id="responsible_person"
               labelText="Responsible Person"
               placeholder="Responsible Person"
@@ -208,7 +227,6 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           </Column>
           <Column sm={2} md={4} lg={16}>
             <TextInput
-              // className="mb-8"
               id="description"
               labelText="Description"
               placeholder="Description"

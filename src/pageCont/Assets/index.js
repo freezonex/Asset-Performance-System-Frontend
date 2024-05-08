@@ -3,7 +3,7 @@ import { withRouter } from 'next/router';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import Head from 'next/head';
-import WarehouseTable from './Table'
+import AssetsTable from './Table'
 import CreateModal from './Modal/CreateModal'
 
 import {
@@ -91,7 +91,7 @@ class Comp extends Component {
             size="md"
             renderIcon={Add}
           >
-            Create a Warehouse
+            Create a Asset
           </Button>
         </div>
         {/* 搜索框 */}
@@ -165,7 +165,7 @@ class Comp extends Component {
         </div>
         {/* table 表格 */}
         <div className="mt-12">
-          <WarehouseTable
+          <AssetsTable
             changeState={this.changeState}
             formValue={formValue}
             refresh={refresh}

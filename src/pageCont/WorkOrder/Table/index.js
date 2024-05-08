@@ -9,12 +9,14 @@ import {
   StructuredListBody,
   Link,
   IconButton,
+  Button,
   Pagination,
   Tag,
 } from '@carbon/react';
-import { Edit, Delete, TableItem } from '@carbon/icons-react';
-import ModalTable from '../Modal/ModalTable';
-import styles from '@/styles/table/table.module.scss';
+import classNames from 'classnames';
+// import ModalTable from '../Modal/ModalTable';
+import tableStyles from '@/styles/table/table.module.scss';
+import styles from './index.module.scss';
 
 // import ShelfLocationModal from '../Modal/ShelfLocationModal';
 // import {
@@ -26,30 +28,31 @@ import styles from '@/styles/table/table.module.scss';
 
 function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
   const headers = [
-    { key: 'asset_id', header: 'Asset Id' },
-    { key: 'asset_name', header: 'Asset Name' },
-    { key: 'asset_type', header: 'Asset Type' },
-    { key: 'vendor_model', header: 'Vendor&Model' },
+    { key: 'work_order', header: 'Work Order' },
+    { key: 'order_name', header: 'Order Name' },
     { key: 'description', header: 'Description' },
-    { key: 'sn', header: 'SN' },
+    { key: 'priority', header: 'Priority' },
+    { key: 'asset_id', header: 'Asset ID' },
+    { key: 'creation_time', header: 'Creation Time' },
+    { key: 'due_time', header: 'Due Time' },
     { key: 'status', header: 'Status' },
-    { key: 'more', header: 'More' },
+    { key: 'edit', header: 'Edit' },
   ];
   const statusList = {
     1: {
-      label: 'Halt',
+      label: 'Closed',
       type: 'red',
     },
     2: {
-      label: 'Maintaining',
+      label: 'Open',
       type: 'green',
     },
     3: {
-      label: 'Running',
+      label: 'In Progress',
       type: 'blue',
     },
     4: {
-      label: 'Scheduled Stop',
+      label: 'Review',
       type: 'purple',
     },
   };
@@ -64,52 +67,57 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
   const [rows, setRows] = useState([
     {
       id: '001',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
+      work_order: 'S#24022901',
+      order_name: 'Laptop',
       description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
+      priority: 'Computer',
+      asset_id: 'S#24022901',
+      creation_time: 1709785600000,
+      due_time: 1709785600000,
       status: '1',
     },
     {
       id: '002',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
+      work_order: 'S#24022901',
+      order_name: 'Laptop',
       description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
+      priority: 'Computer',
+      asset_id: 'S#24022901',
+      creation_time: 1709785600000,
+      due_time: 1709785600000,
       status: '2',
     },
     {
       id: '003',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
+      work_order: 'S#24022901',
+      order_name: 'Laptop',
       description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
+      priority: 'Computer',
+      asset_id: 'S#24022901',
+      creation_time: 1709785600000,
+      due_time: 1709785600000,
       status: '3',
     },
     {
       id: '004',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
+      work_order: 'S#24022901',
+      order_name: 'Laptop',
       description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
+      priority: 'Computer',
+      asset_id: 'S#24022901',
+      creation_time: 1709785600000,
+      due_time: 1709785600000,
       status: '4',
     },
     {
       id: '005',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
+      work_order: 'S#24022901',
+      order_name: 'Laptop',
       description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
+      priority: 'Computer',
+      asset_id: 'S#24022901',
+      creation_time: 1709785600000,
+      due_time: 1709785600000,
       status: '1',
     },
   ]);
@@ -125,15 +133,16 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
         {},
       );
       if (Object.entries(filteredFormValue).length > 0) {
-        // 有搜索条件 调用接口
+        //  调用接口
       }
     } else {
-      // 无搜索条件 调用接口
+      //  调用接口
     }
   }, [page, pageSize, refresh, isSearchClicked]);
 
+
   return (
-    <div className={styles.tableStyle}>
+    <div className={classNames(tableStyles.tableStyle, styles.workOrderTable)}>
       <StructuredListWrapper isCondensed>
         <StructuredListHead>
           <StructuredListRow head>
@@ -148,21 +157,18 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
           {rows.map((row, index) => (
             <StructuredListRow key={row.id}>
               {headers.map((header) => {
-                if (header.key === 'more') {
+                if (header.key === 'edit') {
                   return (
                     <StructuredListCell key={header.key}>
-                      <Link
+                      <span
+                        className={styles.editText}
                         onClick={() => {
-                          // handleShowShelves(
-                          //   row.id,
-                          //   row['warehouse_id'],
-                          //   row['name']
-                          // )
                           setModalTableIsopen(true);
                         }}
                       >
-                        ...
-                      </Link>
+                        Edit
+                      </span>
+                      <span className={styles.delText}>Delete</span>
                     </StructuredListCell>
                   );
                 }
@@ -201,12 +207,12 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
       />
 
       {/* more modal */}
-      {
+      {/* 
         <ModalTable
           modalTableIsopen={modalTableIsopen}
           setModalTableIsopen={setModalTableIsopen}
         />
-      }
+       */}
     </div>
   );
 }

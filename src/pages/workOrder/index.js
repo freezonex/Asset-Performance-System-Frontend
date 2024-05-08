@@ -16,7 +16,8 @@ class Comp extends Component {
         <Head>
           <title>workOrder</title>
         </Head>
-        <WorkOrder/>
+        workOrder
+        {/* <WorkOrder/> */}
       </div>
     );
   }
