@@ -48,6 +48,12 @@
     //   padding: 0rem;
     // }
 
+    //table header 文字垂直居中
+    .cds--structured-list-th{
+      vertical-align:middle;
+    }
+
+    // 背景
     .cds--structured-list-row:hover{
       background-color: var(--cds-layer-hover);
       cursor: pointer;
