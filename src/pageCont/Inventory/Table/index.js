@@ -28,14 +28,14 @@ function WarehouseTable({
   isSearchClicked,
 }) {
   const headers = [
-    { key: 'asset_id', header: 'Asset Id' },
-    { key: 'asset_name', header: 'Asset Name' },
-    { key: 'asset_type', header: 'Asset Type' },
-    { key: 'vendor_model', header: 'Vendor&Model' },
-    { key: 'description', header: 'Description' },
-    { key: 'sn', header: 'SN' },
-    { key: 'status', header: 'Status' },
-    { key: 'more', header: 'More' },
+    { key: 'asset_id', header: 'Asset Type' },
+    { key: 'asset_name', header: 'Quantity' },
+    { key: 'asset_type', header: 'Unit' },
+    { key: 'vendor_model', header: 'Usage Rate ' },
+    { key: 'description', header: 'Supplier Name' },
+    { key: 'sn', header: 'Expected Quantity ' },
+    { key: 'status', header: 'Creation Time' },
+    { key: 'more', header: 'Expected  Date' },
   ];
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);

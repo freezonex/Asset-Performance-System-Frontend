@@ -5,17 +5,22 @@
 .header{
     display: flex;
     justify-content: space-between;
-    margin-bottom:10px;
+    margin-bottom:12px;
 
     .title{
         font-size:16px;
         color:#161616;
         font-weight: bold;
+        font-family: IBM Plex Sans;
+        letter-spacing: 0.1599999964237213px;
     }
 }
 
 .chart{
     width:100%;
     background-color: #fff;
-    height:266px;
+    padding:0 10px;
+    padding-bottom:10px;
+    overflow: hidden;
+    height: 266px;
 }
