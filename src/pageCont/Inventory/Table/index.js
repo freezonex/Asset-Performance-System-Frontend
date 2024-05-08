@@ -1,181 +1,123 @@
-'use client';
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
+import styles from './index.module.scss';
+
 import {
-  HeaderGlobalAction,
   StructuredListWrapper,
   StructuredListHead,
   StructuredListRow,
   StructuredListCell,
   StructuredListBody,
-  Link,
-  IconButton,
   Pagination,
 } from '@carbon/react';
-import { Edit, Delete,TableItem } from '@carbon/icons-react';
-import styles from './table.module.scss';
-// import ShelfLocationModal from '../Modal/ShelfLocationModal';
-// import {
-//   deleteWarehouse,
-//   fetchWarehouses,
-//   fetchWarehousesWithFilters,
-// } from '@/actions/actions';
-// import EditWarehouseModal from '../Modal/EditWarehouseModal';
 
-function WarehouseTable({
-  refresh,
-  setRefresh,
-  filters,
-  isSearchClicked,
-}) {
-  const headers = [
-    { key: 'asset_id', header: 'Asset Type' },
-    { key: 'asset_name', header: 'Quantity' },
-    { key: 'asset_type', header: 'Unit' },
-    { key: 'vendor_model', header: 'Usage Rate ' },
-    { key: 'description', header: 'Supplier Name' },
-    { key: 'sn', header: 'Expected Quantity ' },
-    { key: 'status', header: 'Creation Time' },
-    { key: 'more', header: 'Expected  Date' },
-  ];
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [total, setTotal] = useState(0);
-  //const rowsToShow = rows.slice((page - 1) * pageSize, page * pageSize);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [editRow, setEditRow] = useState({});
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedWarehouseInfo, setSelectedWarehouseInfo] = useState({});
-  const [rows, setRows] = useState([{
-    id:'001',
-    asset_id:'S#24022901',
-    asset_name:'Laptop',
-    asset_type:'Computer',
-    vendor_model:'Y355L4-8',
-    description:'bdaudbjakfdifhkhka',
-    sn:'dafjskdf', 
-    status:'1',
-  }]);
-  useEffect(() => {
-    if (isSearchClicked) {
-      const filteredFormValue = Object.entries(filters).reduce(
-        (acc, [key, value]) => {
-          if (value !== '') {
-            acc[key] = value;
-          }
-          return acc;
-        },
-        {}
-      );
-      if (Object.entries(filteredFormValue).length > 0) {
-        // fetchWarehousesWithFilters(filteredFormValue, {
-        //   pageNum: page,
-        //   pageSize,
-        // }).then((res) => {
-        //   setRows(res.list);
-        //   setTotal(res.total);
-        // });
-      }
-    } else {
-      // fetchWarehouses({ pageNum: page, pageSize }).then((res) => {
-      //   setRows(res.list);
-      //   setTotal(res.total);
-      // });
-    }
-  }, [page, pageSize, refresh, isSearchClicked]);
+import TableSty from '@/components/basicComp/TableSty';
 
-  const handleEditModalClose = () => {
-    setEditModalOpen(false);
-  };
-  const handleEditRow = (row) => {
-    setEditRow(row);
-    setEditModalOpen(true);
+class Comp extends Component {
+  state = {
+
+    /***************** 表格相关 ********************/
+    tabList: [],           //列表数据
+    total: 0,              //总条数
+    pageSize: 10,          //每页条数
+    pageNum: 1,            //当前页
+
+  }
+
+  componentDidMount = () => {
+    this.props.init?.(this)
+    this.getList()
+  }
+
+  // 获取用户列表
+  getList = async (params = {}) => {
+    this.setState({
+      tabList: [1,2,3,4,5]
+    })
   };
 
-  const handleDeleteRow = async (id) => {
-    // deleteWarehouse(id).then((res) => setRefresh({}));
+  // 返回table列表
+  renderTableData = (item, i) => {
+    return {
+      key: i,
+      '1': 'Computer',
+      '2': '50',
+      '3': '-',
+      '4': '1.2%',
+      '5': 'Apple',
+      '6': '30',
+      '7': '2023.10.01',
+      'options': <div className={styles.options}>
+        <span>2023.10.01</span>
+        <a>View All</a>
+      </div>,
+    };
   };
-  const handleShowShelves = (id, warehouse_id, name) => {
-    setSelectedWarehouseInfo({
-      id: id,
-      warehouse_id: warehouse_id,
-      warehouse_name: name,
-    });
-    setModalOpen(true);
-  };
-  console.log(selectedWarehouseInfo);
 
-  return (
-    <div className={styles.tableAssets}>
-      <StructuredListWrapper isCondensed>
-        <StructuredListHead>
-          <StructuredListRow head>
-            {headers.map((header, index) => (
-              <StructuredListCell head key={header.key}>
-                {header.header}
-              </StructuredListCell>
-            ))}
-          </StructuredListRow>
-        </StructuredListHead>
-        <StructuredListBody>
-          {rows.map((row, index) => (
-            <StructuredListRow key={row.id}>
-              {headers.map((header) => {
-                if (header.key === 'more') {
-                  return (
-                    <StructuredListCell key={header.key}>
-                      <Link
-                        onClick={() =>
-                          handleShowShelves(
-                            row.id,
-                            row['warehouse_id'],
-                            row['name']
-                          )
-                        }
-                      >
-                        ...
-                      </Link>
-                    </StructuredListCell>
-                  );
-                }
-                return (
-                  <StructuredListCell key={header.key}>
-                    {row[header.key]}
+  render() {
+
+    const {
+      tabList,
+      total,
+      pageSize,
+      pageNum,
+    } = this.state;
+
+    var headers = [
+      { key: '1', header: 'Asset Type' },
+      { key: '2', header: 'Quantity' },
+      { key: '3', header: 'Unit' },
+      { key: '4', header: 'Usage Rate ' },
+      { key: '5', header: 'Supplier Name' },
+      { key: '6', header: 'Expected Quantity ' },
+      { key: '7', header: 'Creation Time' },
+      { key: 'options', header: 'Expected  Date' },
+    ];
+
+    return (
+      <div className={styles.container}>
+        <TableSty>
+          <StructuredListWrapper isCondensed>
+            <StructuredListHead>
+              <StructuredListRow head>
+                {headers.map((header, index) => (
+                  <StructuredListCell head key={header.key}>
+                    {header.header}
                   </StructuredListCell>
-                );
-              })}
-            </StructuredListRow>
-          ))}
-        </StructuredListBody>
-      </StructuredListWrapper>
-      <Pagination
-        backwardText="Previous page"
-        forwardText="Next page"
-        itemsPerPageText=""
-        page={page}
-        pageNumberText="Page Number"
-        pageSize={pageSize}
-        pageSizes={[10, 20, 30, 40, 50]}
-        totalItems={total}
-        onChange={({ page, pageSize }) => {
-          setPage(page);
-          setPageSize(pageSize);
-        }}
-      />
-      {/* <ShelfLocationModal
-        warehouse_info={selectedWarehouseInfo}
-        isModalOpen={isModalOpen}
-        setModalOpen={setModalOpen}
-      ></ShelfLocationModal> */}
+                ))}
+              </StructuredListRow>
+            </StructuredListHead>
+            <StructuredListBody>
+              {tabList.map((item, i) => this.renderTableData(item, i)).map((row, index) => (
+                <StructuredListRow key={row.id}>
+                  {headers.map((header) => {
+                    return (
+                      <StructuredListCell key={header.key}>
+                        {row[header.key]}
+                      </StructuredListCell>
+                    );
+                  })}
+                </StructuredListRow>
+              ))}
+            </StructuredListBody>
+          </StructuredListWrapper>
+          <Pagination
+            backwardText="Previous page"
+            forwardText="Next page"
+            itemsPerPageText=""
+            page={pageNum}
+            pageNumberText="Page Number"
+            pageSize={pageSize}
+            pageSizes={[10, 20, 30, 40, 50]}
+            totalItems={total}
+            onChange={({ page, pageSize }) => {
 
-      {/* <EditWarehouseModal
-        isOpen={isEditModalOpen}
-        onClose={handleEditModalClose}
-        warehouseValues={editRow}
-        setRefresh={setRefresh}
-        setWarehouseValues={setEditRow}
-      ></EditWarehouseModal> */}
-    </div>
-  );
+            }}
+          />
+
+        </TableSty>
+      </div>
+    );
+  }
 }
 
-export default WarehouseTable;
+export default Comp;

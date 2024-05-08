@@ -23,6 +23,9 @@ import {
 
 
 class Comp extends Component {
+  componentDidMount = () => {
+		this.props.init?.(this)
+	}
   render() {
     return (
       <div className={styles.container}>

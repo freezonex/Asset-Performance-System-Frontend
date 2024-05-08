@@ -1,107 +1,72 @@
 import React, { Component } from 'react';
-import { withRouter } from 'next/router';
-import classNames from 'classnames';
 import styles from './index.module.scss';
-import Head from 'next/head';
-import WarehouseTable from './Table'
-import {
-  Button,
-  Breadcrumb,
-  BreadcrumbItem,
-  Heading,
-  TextInput,
-} from '@carbon/react';
-import { Add, Search, Close } from '@carbon/icons-react';
 
+import { withRouter } from 'next/router';
+
+import Eventproxy from 'eventproxy';
+import { Context } from './context';
+import { initEvent } from './event';
+
+import Header from './Header';
 import Chart from './Chart';
 import RightList from './RightList';
+import Table from './Table'
+
 
 @withRouter
 class Comp extends Component {
+  // 组件控制器
+  controller = {};
   state = {
-    formValue: {
-      asset_id: '',
-      asset: '',
-      type: '',
-      person: '',
-    },
-    isSearchClicked:false,
-    refresh:{},
+    // 事件对象
+    event: new Eventproxy(),
   };
-  componentDidMount = () => {};
 
-  changeState = (obj)=>{
-    this.setState({
-      obj
-    })
+  componentDidMount() {
+    this.init();
   }
 
-  initFormValue = () => {
-    this.setState({
-      formValue: {
-        asset_id: '',
-        asset: '',
-        type: '',
-        person: '',
-      },
-    });
+  // 初始化
+  init = async () => {
+    const { event } = this.state;
+    initEvent(event, this);
   };
 
-  FormValueChange = (e) => {
-    console.log(e);
-    const { id, value } = e.target;
-    let obj = { ...this.state.formValue };
-    obj[id] = value;
-    this.setState({
-      formValue: obj,
-    });
+  changeState = obj => {
+    this.setState(obj);
   };
+
+  // 设置组件控制器
+  setController = (name, compThis) => {
+    this.controller[name] = compThis;
+  };
+
   render() {
-    const { formValue,refresh, isSearchClicked} = this.state;
-    return (
-      <div>
-        <Head>Inventory</Head>
-        <Breadcrumb>
-          <BreadcrumbItem
-            onClick={() => {
-              router.push(`/inventory`);
-            }}
-          >
-            Inventory
-          </BreadcrumbItem>
-        </Breadcrumb>
-        <div className="bx--col-lg-16 flex justify-between items-center">
-          <div>
-            <Heading className="mt-2 text-[28px] font-normal">Inventory</Heading>
-            <Heading
-              className={classNames('mt-1 text-sm', {
-                [styles.textColor]: true,
-              })}
-            >
-              Here we can do predictions for you.
-            </Heading>
-          </div>
-          
-        </div>
 
+    const { setController } = this
+
+    // Context 全局参数 （所有后代都可获取调用）
+    var store = {
+      ...this.state,
+      controller: this.controller,
+      changeState: this.changeState,
+      setController: this.setController,
+    };
+
+
+    return (
+      <Context.Provider value={store}>
+        <Header init={This => setController('Header', This)}/>
         <div className={styles.chart}>
           <div className={styles.left}>
-            <Chart />
+            <Chart init={This => setController('Chart', This)}/>
           </div>
-          <div className={styles.right}><RightList /></div>
+          <div className={styles.right}><RightList init={This => setController('RightList', This)}/></div>
         </div>
-
-        {/* table 表格 */}
         <div className="mt-12">
-          <WarehouseTable
-            changeState={this.changeState}
-            formValue={formValue}
-            refresh={refresh}
-            isSearchClicked={isSearchClicked}
-
-          />
+          <Table init={This => setController('Table', This)}/>
         </div>
-      </div>
+      </Context.Provider>
     );
   }
 }
