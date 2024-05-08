@@ -11,6 +11,7 @@ import {
 } from '@carbon/react';
 
 import TableSty from '@/components/basicComp/TableSty';
+import classNames from 'classnames';
 
 class Comp extends Component {
   state = {
@@ -31,7 +32,7 @@ class Comp extends Component {
   // 获取用户列表
   getList = async (params = {}) => {
     this.setState({
-      tabList: [1,2,3,4,5]
+      tabList: [1, 2, 3, 4, 5]
     })
   };
 
@@ -63,58 +64,119 @@ class Comp extends Component {
     } = this.state;
 
     var headers = [
-      { key: '1', header: 'Asset Type' },
-      { key: '2', header: 'Quantity' },
-      { key: '3', header: 'Unit' },
-      { key: '4', header: 'Usage Rate ' },
-      { key: '5', header: 'Supplier Name' },
-      { key: '6', header: 'Expected Quantity ' },
-      { key: '7', header: 'Creation Time' },
-      { key: 'options', header: 'Expected  Date' },
+      { key: '1', header: 'Asset Type', width: '8%' },
+      { key: '2', header: 'Quantity', width: '8%' },
+      { key: '3', header: 'Unit', width: '7%' },
+      { key: '4', header: 'Usage Rate ', width: '8%' },
+      { key: '5', header: 'Supplier Name', width: '12%' },
+      { key: '6', header: 'Expected Quantity ', width: '17%' },
+      { key: '7', header: 'Creation Time', width: '17%' },
+      { key: 'options', header: 'Expected  Date', width: '23%' },
     ];
 
     return (
       <div className={styles.container}>
-        <TableSty>
-          <StructuredListWrapper isCondensed>
-            <StructuredListHead>
-              <StructuredListRow head>
-                {headers.map((header, index) => (
-                  <StructuredListCell head key={header.key}>
-                    {header.header}
-                  </StructuredListCell>
-                ))}
-              </StructuredListRow>
-            </StructuredListHead>
-            <StructuredListBody>
-              {tabList.map((item, i) => this.renderTableData(item, i)).map((row, index) => (
-                <StructuredListRow key={row.id}>
-                  {headers.map((header) => {
-                    return (
-                      <StructuredListCell key={header.key}>
-                        {row[header.key]}
-                      </StructuredListCell>
-                    );
-                  })}
-                </StructuredListRow>
-              ))}
-            </StructuredListBody>
-          </StructuredListWrapper>
-          <Pagination
-            backwardText="Previous page"
-            forwardText="Next page"
-            itemsPerPageText=""
-            page={pageNum}
-            pageNumberText="Page Number"
-            pageSize={pageSize}
-            pageSizes={[10, 20, 30, 40, 50]}
-            totalItems={total}
-            onChange={({ page, pageSize }) => {
+        <div className={styles.table}>
+          <div className={styles.tableHeader}>
+            {headers.map((header, i) => {
+              var width = header.width || 'auto'
+              return (
+                <div
+                  key={header.key}
+                  className={styles.tableCell}
+                  style={{
+                    width: width,
+                    minWidth: width,
+                    maxWidth: width,
+                  }}
+                >
+                  {header.header}
+                </div>
+              )
+            })}
+          </div>
 
-            }}
-          />
+          <div className={styles.tableBody}>
+            {tabList.map((item, i) => this.renderTableData(item, i)).map((row, index) => {
+              var showChild = true
+              return (
+                <>
+                  <div className={styles.tableRow} key={row.id}>
+                    {headers.map((header) => {
+                      var width = header.width || 'auto'
+                      return (
+                        <div
+                          key={header.key}
+                          className={classNames([styles.tableCell,{
+                            [styles.showChild]:showChild
+                          }])}
+                          style={{
+                            width: width,
+                            minWidth: width,
+                            maxWidth: width,
+                          }}
+                        >
+                          {row[header.key]}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {
+                    showChild && 
+                    <div className={styles.showComp}>
+                       <div
+                        className={styles.tableCell}
+                        style={{
+                          width: '17%',
+                          minWidth: '17%',
+                          maxWidth: '17%',
+                        }}
+                      >
+                        
+                      </div>
+                      <div
+                        className={styles.tableCell}
+                        style={{
+                          width: '17%',
+                          minWidth: '17%',
+                          maxWidth: '17%',
+                        }}
+                      >
+                        Expected  Date
+                      </div>
+                      <div
+                        className={styles.tableCell}
+                        style={{
+                          width: '23%',
+                          minWidth: '23%',
+                          maxWidth: '23%',
+                        }}
+                      >
+                        Expected Quantity
+                      </div>
+                  </div>
+                  }
+                </>
+              )
+            })}
+          </div>
 
-        </TableSty>
+        </div>
+
+        <Pagination
+          backwardText="Previous page"
+          forwardText="Next page"
+          itemsPerPageText=""
+          page={pageNum}
+          pageNumberText="Page Number"
+          pageSize={pageSize}
+          pageSizes={[10, 20, 30, 40, 50]}
+          totalItems={total}
+          onChange={({ page, pageSize }) => {
+
+          }}
+        />
+
       </div>
     );
   }

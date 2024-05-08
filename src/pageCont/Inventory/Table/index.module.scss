@@ -10,3 +10,46 @@
         user-select: none;
     }
 }
+
+.container{
+  .table {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-right: 0;
+    border-bottom: 0;
+    margin-bottom: -1px;
+  }
+  
+  .tableHeader,
+  .tableRow {
+    display: flex;
+    background-color: #fff;
+  }
+
+  .tableHeader {
+    font-weight: bold;
+    background-color: #E0E0E0;
+    font-size: 16px;
+    
+  }
+  
+  .tableCell {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  .showComp{
+    display: flex;
+    justify-content: flex-end;
+    height: 163px;
+    background-color: #FAFAFA;
+    margin-bottom: 10px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+
+  .showChild{
+    border-top: 1px solid #ccc;
+  }
+}

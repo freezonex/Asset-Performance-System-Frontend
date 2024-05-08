@@ -1,0 +1,12 @@
+
+.options{
+    display: flex;
+    justify-content: space-between;
+
+    a{
+        cursor: pointer;
+        color: #0F62FE;
+        font-size: 14px;
+        user-select: none;
+    }
+}

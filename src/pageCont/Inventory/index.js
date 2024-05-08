@@ -64,6 +64,7 @@ class Comp extends Component {
           <div className={styles.right}><RightList init={This => setController('RightList', This)}/></div>
         </div>
         <div className="mt-12">
+          <div className={styles.title}>All Assets</div>
           <Table init={This => setController('Table', This)}/>
         </div>
       </Context.Provider>
