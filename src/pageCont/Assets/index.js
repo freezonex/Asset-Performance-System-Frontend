@@ -1,10 +1,11 @@
-'use client';
 import React, { Component } from 'react';
 import { withRouter } from 'next/router';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import Head from 'next/head';
 import WarehouseTable from './Table'
+import CreateModal from './Modal/CreateModal'
+
 import {
   Button,
   Breadcrumb,
@@ -23,15 +24,15 @@ class Comp extends Component {
       type: '',
       person: '',
     },
-    isSearchClicked:false,
+    isSearchClicked:false, //是否搜索
     refresh:{},
+    createModalIsopen:false,//create modal 状态
+    modalTableIsopen:false,//more modal 状态
   };
   componentDidMount = () => {};
 
   changeState = (obj)=>{
-    this.setState({
-      obj
-    })
+    this.setState(obj)
   }
 
   initFormValue = () => {
@@ -55,7 +56,7 @@ class Comp extends Component {
     });
   };
   render() {
-    const { formValue,refresh, isSearchClicked} = this.state;
+    const { formValue,refresh, isSearchClicked,createModalIsopen,modalTableIsopen} = this.state;
     return (
       <div>
         <Head>Assets</Head>
@@ -81,7 +82,10 @@ class Comp extends Component {
           </div>
           <Button
             onClick={() => {
-              setCreateModalOpen(true);
+              // setCreateModalOpen(true);
+              this.setState({
+                createModalIsopen:true,
+              })
             }}
             isExpressive
             size="md"
@@ -91,7 +95,7 @@ class Comp extends Component {
           </Button>
         </div>
         {/* 搜索框 */}
-        <div className="flex mt-20 space-x-4 items-end">
+        <div className="flex mt-12 space-x-4 items-end">
           <TextInput
             className="flex-auto w-20"
             labelText="Asset ID"
@@ -166,9 +170,15 @@ class Comp extends Component {
             formValue={formValue}
             refresh={refresh}
             isSearchClicked={isSearchClicked}
-
           />
         </div>
+
+        {/* Create a Asset modal */}
+        {<CreateModal
+          createModalIsopen = {createModalIsopen}
+          changeState = {this.changeState}
+        />}
+        
       </div>
     );
   }

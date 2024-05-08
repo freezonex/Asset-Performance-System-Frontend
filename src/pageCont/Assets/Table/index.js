@@ -10,11 +10,11 @@ import {
   Link,
   IconButton,
   Pagination,
+  Tag,
 } from '@carbon/react';
-import { Edit, Delete,TableItem } from '@carbon/icons-react';
-// import styles from './table.module.scss';
+import { Edit, Delete, TableItem } from '@carbon/icons-react';
+import ModalTable from '../Modal/ModalTable';
 import styles from '@/styles/table/table.module.scss';
-
 
 // import ShelfLocationModal from '../Modal/ShelfLocationModal';
 // import {
@@ -24,12 +24,7 @@ import styles from '@/styles/table/table.module.scss';
 // } from '@/actions/actions';
 // import EditWarehouseModal from '../Modal/EditWarehouseModal';
 
-function WarehouseTable({
-  refresh,
-  setRefresh,
-  filters,
-  isSearchClicked,
-}) {
+function WarehouseTable({ refresh, setRefresh, filters, isSearchClicked }) {
   const headers = [
     { key: 'asset_id', header: 'Asset Id' },
     { key: 'asset_name', header: 'Asset Name' },
@@ -40,64 +35,84 @@ function WarehouseTable({
     { key: 'status', header: 'Status' },
     { key: 'more', header: 'More' },
   ];
+  const statusList = {
+    1: {
+      label: 'Halt',
+      type: 'red',
+    },
+    2: {
+      label: 'Maintaining',
+      type: 'green',
+    },
+    3: {
+      label: 'Running',
+      type: 'blue',
+    },
+    4: {
+      label: 'Scheduled Stop',
+      type: 'purple',
+    },
+  };
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(5);
   //const rowsToShow = rows.slice((page - 1) * pageSize, page * pageSize);
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [modalTableIsopen, setModalTableIsopen] = useState(false);
   const [editRow, setEditRow] = useState({});
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedWarehouseInfo, setSelectedWarehouseInfo] = useState({});
-  const [rows, setRows] = useState([{
-    id:'001',
-    asset_id:'S#24022901',
-    asset_name:'Laptop',
-    asset_type:'Computer',
-    vendor_model:'Y355L4-8',
-    description:'bdaudbjakfdifhkhka',
-    sn:'dafjskdf', 
-    status:'1',
-  },
-  {
-    id:'002',
-    asset_id:'S#24022901',
-    asset_name:'Laptop',
-    asset_type:'Computer',
-    vendor_model:'Y355L4-8',
-    description:'bdaudbjakfdifhkhka',
-    sn:'dafjskdf', 
-    status:'1',
-  },
-  {
-    id:'003',
-    asset_id:'S#24022901',
-    asset_name:'Laptop',
-    asset_type:'Computer',
-    vendor_model:'Y355L4-8',
-    description:'bdaudbjakfdifhkhka',
-    sn:'dafjskdf', 
-    status:'1',
-  },
-  {
-    id:'004',
-    asset_id:'S#24022901',
-    asset_name:'Laptop',
-    asset_type:'Computer',
-    vendor_model:'Y355L4-8',
-    description:'bdaudbjakfdifhkhka',
-    sn:'dafjskdf', 
-    status:'1',
-  },
-  {
-    id:'005',
-    asset_id:'S#24022901',
-    asset_name:'Laptop',
-    asset_type:'Computer',
-    vendor_model:'Y355L4-8',
-    description:'bdaudbjakfdifhkhka',
-    sn:'dafjskdf', 
-    status:'1',
-  }]);
+  const [rows, setRows] = useState([
+    {
+      id: '001',
+      asset_id: 'S#24022901',
+      asset_name: 'Laptop',
+      asset_type: 'Computer',
+      vendor_model: 'Y355L4-8',
+      description: 'bdaudbjakfdifhkhka',
+      sn: 'dafjskdf',
+      status: '1',
+    },
+    {
+      id: '002',
+      asset_id: 'S#24022901',
+      asset_name: 'Laptop',
+      asset_type: 'Computer',
+      vendor_model: 'Y355L4-8',
+      description: 'bdaudbjakfdifhkhka',
+      sn: 'dafjskdf',
+      status: '2',
+    },
+    {
+      id: '003',
+      asset_id: 'S#24022901',
+      asset_name: 'Laptop',
+      asset_type: 'Computer',
+      vendor_model: 'Y355L4-8',
+      description: 'bdaudbjakfdifhkhka',
+      sn: 'dafjskdf',
+      status: '3',
+    },
+    {
+      id: '004',
+      asset_id: 'S#24022901',
+      asset_name: 'Laptop',
+      asset_type: 'Computer',
+      vendor_model: 'Y355L4-8',
+      description: 'bdaudbjakfdifhkhka',
+      sn: 'dafjskdf',
+      status: '4',
+    },
+    {
+      id: '005',
+      asset_id: 'S#24022901',
+      asset_name: 'Laptop',
+      asset_type: 'Computer',
+      vendor_model: 'Y355L4-8',
+      description: 'bdaudbjakfdifhkhka',
+      sn: 'dafjskdf',
+      status: '1',
+    },
+  ]);
   useEffect(() => {
     if (isSearchClicked) {
       const filteredFormValue = Object.entries(filters).reduce(
@@ -107,7 +122,7 @@ function WarehouseTable({
           }
           return acc;
         },
-        {}
+        {},
       );
       if (Object.entries(filteredFormValue).length > 0) {
         // fetchWarehousesWithFilters(filteredFormValue, {
@@ -167,16 +182,26 @@ function WarehouseTable({
                   return (
                     <StructuredListCell key={header.key}>
                       <Link
-                        onClick={() =>
-                          handleShowShelves(
-                            row.id,
-                            row['warehouse_id'],
-                            row['name']
-                          )
-                        }
+                        onClick={() => {
+                          // handleShowShelves(
+                          //   row.id,
+                          //   row['warehouse_id'],
+                          //   row['name']
+                          // )
+                          setModalTableIsopen(true);
+                        }}
                       >
                         ...
                       </Link>
+                    </StructuredListCell>
+                  );
+                }
+                if (header.key === 'status') {
+                  let type = statusList[row[header.key]]?.type;
+                  let label = statusList[row[header.key]]?.label;
+                  return (
+                    <StructuredListCell key={header.key}>
+                      <Tag type={type}>{label}</Tag>
                     </StructuredListCell>
                   );
                 }
@@ -204,19 +229,14 @@ function WarehouseTable({
           setPageSize(pageSize);
         }}
       />
-      {/* <ShelfLocationModal
-        warehouse_info={selectedWarehouseInfo}
-        isModalOpen={isModalOpen}
-        setModalOpen={setModalOpen}
-      ></ShelfLocationModal> */}
 
-      {/* <EditWarehouseModal
-        isOpen={isEditModalOpen}
-        onClose={handleEditModalClose}
-        warehouseValues={editRow}
-        setRefresh={setRefresh}
-        setWarehouseValues={setEditRow}
-      ></EditWarehouseModal> */}
+      {/* more modal */}
+      {
+        <ModalTable
+          modalTableIsopen={modalTableIsopen}
+          setModalTableIsopen={setModalTableIsopen}
+        />
+      }
     </div>
   );
 }
