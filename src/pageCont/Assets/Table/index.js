@@ -15,21 +15,14 @@ import {
 import { Edit, Delete, TableItem } from '@carbon/icons-react';
 import ModalTable from '../Modal/ModalTable';
 import styles from '@/styles/table/table.module.scss';
+import {getAssetList} from '@/api/assets'
 
-// import ShelfLocationModal from '../Modal/ShelfLocationModal';
-// import {
-//   deleteWarehouse,
-//   fetchWarehouses,
-//   fetchWarehousesWithFilters,
-// } from '@/actions/actions';
-// import EditWarehouseModal from '../Modal/EditWarehouseModal';
-
-function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
+function TablePage({ formValue, isSearchClicked }) {
   const headers = [
-    { key: 'asset_id', header: 'Asset Id' },
-    { key: 'asset_name', header: 'Asset Name' },
-    { key: 'asset_type', header: 'Asset Type' },
-    { key: 'vendor_model', header: 'Vendor&Model' },
+    { key: 'assetId', header: 'Asset Id' },
+    { key: 'assetName', header: 'Asset Name' },
+    { key: 'assetType', header: 'Asset Type' },
+    { key: 'vendorModel', header: 'Vendor&Model' },
     { key: 'description', header: 'Description' },
     { key: 'sn', header: 'SN' },
     { key: 'status', header: 'Status' },
@@ -37,16 +30,16 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
   ];
   const statusList = {
     1: {
-      label: 'Halt',
-      type: 'red',
+      label: 'Running',
+      type: 'blue',
     },
     2: {
       label: 'Maintaining',
       type: 'green',
     },
     3: {
-      label: 'Running',
-      type: 'blue',
+      label: 'Halt',
+      type: 'red',
     },
     4: {
       label: 'Scheduled Stop',
@@ -56,82 +49,36 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(5);
-  //const rowsToShow = rows.slice((page - 1) * pageSize, page * pageSize);
   const [modalTableIsopen, setModalTableIsopen] = useState(false);
-  const [editRow, setEditRow] = useState({});
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedWarehouseInfo, setSelectedWarehouseInfo] = useState({});
-  const [rows, setRows] = useState([
-    {
-      id: '001',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
-      description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
-      status: '1',
-    },
-    {
-      id: '002',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
-      description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
-      status: '2',
-    },
-    {
-      id: '003',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
-      description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
-      status: '3',
-    },
-    {
-      id: '004',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
-      description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
-      status: '4',
-    },
-    {
-      id: '005',
-      asset_id: 'S#24022901',
-      asset_name: 'Laptop',
-      asset_type: 'Computer',
-      vendor_model: 'Y355L4-8',
-      description: 'bdaudbjakfdifhkhka',
-      sn: 'dafjskdf',
-      status: '1',
-    },
-  ]);
+  const [rows, setRows] = useState([]);
   useEffect(() => {
+    // 是否携带搜索条件
     if (isSearchClicked) {
-      const filteredFormValue = Object.entries(filters).reduce(
-        (acc, [key, value]) => {
-          if (value !== '') {
-            acc[key] = value;
-          }
-          return acc;
-        },
-        {},
-      );
-      if (Object.entries(filteredFormValue).length > 0) {
-        // 有搜索条件 调用接口
-      }
+      let obj={...formValue,pageNum:1,pageSize:10}
+      getTableList(obj);
     } else {
       // 无搜索条件 调用接口
+      getTableList();
     }
-  }, [page, pageSize, refresh, isSearchClicked]);
+   
+  }, [isSearchClicked]);
 
+  const getTableList = async(filters)=>{
+    let reqData = {
+      pageNum: page,
+      pageSize: pageSize,
+      ...filters,
+    }
+    let res = await getAssetList(reqData)
+    
+    if(res?.data?.code == 200){
+      const {data} = res?.data;
+      setRows(data?.list)
+      setTotal(data?.total)
+      setPage(data?.pageNum);
+      setPageSize(data?.pageSize);
+    }
+  }
   return (
     <div className={styles.tableStyle}>
       <StructuredListWrapper isCondensed>
@@ -153,11 +100,6 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
                     <StructuredListCell key={header.key}>
                       <Link
                         onClick={() => {
-                          // handleShowShelves(
-                          //   row.id,
-                          //   row['warehouse_id'],
-                          //   row['name']
-                          // )
                           setModalTableIsopen(true);
                         }}
                       >
@@ -195,8 +137,10 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
         pageSizes={[10, 20, 30, 40, 50]}
         totalItems={total}
         onChange={({ page, pageSize }) => {
-          setPage(page);
-          setPageSize(pageSize);
+          getTableList({
+            pageNum: page,
+            pageSize: pageSize,
+          })
         }}
       />
 

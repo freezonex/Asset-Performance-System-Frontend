@@ -2,7 +2,7 @@ import axios from 'axios'
 
 axios.defaults.timeout = 10000
 
-axios.defaults.baseURL = process.env.apiUrl
+axios.defaults.baseURL = process.env.apiUrl;
 
 // 请求拦截器
 axios.interceptors.request.use(
@@ -19,7 +19,8 @@ axios.interceptors.response.use(
         return config
     },
     (error) => {
-        return Promise.reject(new Error(error))
+        // if(error.response.status == 500){}
+        return error.response
     }
 )
 

@@ -19,10 +19,10 @@ import { Add, Search, Close } from '@carbon/icons-react';
 class Comp extends Component {
   state = {
     formValue: {
-      asset_id: '',
-      asset: '',
-      type: '',
-      person: '',
+      assetId: '',
+      assetName: '',
+      assetType: '',
+      responsiblePerson: '',
     },
     isSearchClicked:false, //是否搜索
     refresh:{},
@@ -38,16 +38,16 @@ class Comp extends Component {
   initFormValue = () => {
     this.setState({
       formValue: {
-        asset_id: '',
-        asset: '',
-        type: '',
-        person: '',
+        assetId: '',
+      assetName: '',
+      assetType: '',
+      responsiblePerson: '',
       },
+      isSearchClicked: false,
     });
   };
 
   FormValueChange = (e) => {
-    console.log(e);
     const { id, value } = e.target;
     let obj = { ...this.state.formValue };
     obj[id] = value;
@@ -99,9 +99,9 @@ class Comp extends Component {
           <TextInput
             className="flex-auto w-20"
             labelText="Asset ID"
-            id="asset_id"
+            id="assetId"
             placeholder="Asset ID"
-            value={formValue.asset_id}
+            value={formValue.assetId}
             onChange={(e) => {
               this.FormValueChange(e);
             }}
@@ -109,9 +109,9 @@ class Comp extends Component {
           <TextInput
             className="flex-auto w-20"
             labelText="Asset"
-            id="asset"
+            id="assetName"
             placeholder="Asset"
-            value={formValue.asset}
+            value={formValue.assetName}
             onChange={(e) => {
               this.FormValueChange(e);
             }}
@@ -119,9 +119,9 @@ class Comp extends Component {
           <TextInput
             className="flex-auto w-20"
             labelText="Type"
-            id="type"
+            id="assetType"
             placeholder="Type"
-            value={formValue.type}
+            value={formValue.assetType}
             onChange={(e) => {
               this.FormValueChange(e);
             }}
@@ -129,15 +129,18 @@ class Comp extends Component {
           <TextInput
             className="flex-auto w-20"
             labelText="Person"
-            id="person"
+            id="responsiblePerson"
             placeholder="Person"
-            value={formValue.person}
+            value={formValue.responsiblePerson}
             onChange={(e) => {
               this.FormValueChange(e);
             }}
           />
           <Button
             onClick={() => {
+              this.setState({
+                isSearchClicked: true,
+              })
               //搜索
               console.log(this.state.formValue, 'formValue');
             }}
@@ -160,7 +163,7 @@ class Comp extends Component {
             renderIcon={Close}
             iconDescription="Close"
           >
-            Cancet
+            Cancel
           </Button>
         </div>
         {/* table 表格 */}
@@ -168,7 +171,6 @@ class Comp extends Component {
           <AssetsTable
             changeState={this.changeState}
             formValue={formValue}
-            refresh={refresh}
             isSearchClicked={isSearchClicked}
           />
         </div>

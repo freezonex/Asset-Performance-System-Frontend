@@ -11,7 +11,7 @@ import {
 } from '@carbon/react';
 import moment from 'moment';
 import styles from '@/styles/modal/modal.module.scss';
-
+import {addAsset} from '@/api/assets'
 const ModalPages = ({ createModalIsopen, changeState }) => {
   const [fieldValidation, setFieldValidation] = useState({
     assetNameInvalid: false,
@@ -19,16 +19,16 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     snInvalid: false,
   });
   const [formValue, setFormValues] = useState({
-    asset_name: '',
-    asset_id: '',
+    assetName: '',
+    assetId: '',
     sn: '',
-    asset_type: '',
+    assetType: '',
     status: '',
     department: '',
     location: '',
-    installation_date: '',
+    installationDate: '',
     value: '',
-    responsible_person: '',
+    responsiblePerson: '',
     description: '',
   });
 
@@ -47,23 +47,23 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     }
     setFormValues((prevValues) => ({
       ...prevValues,
-      installation_date: moment(e[0]).format(),
+      installationDate: moment(e[0]).format(),
     }));
   };
 
   
   const handleCancelClicked = () => {
     setFormValues({
-      asset_name: '',
-      asset_id: '',
+      assetName: '',
+      assetId: '',
       sn: '',
-      asset_type: '',
+      assetType: '',
       status: '',
       department: '',
       location: '',
-      installation_date: '',
+      installationDate: '',
       value: '',
-      responsible_person: '',
+      responsiblePerson: '',
       description: '',
     });
     setFieldValidation({
@@ -78,17 +78,25 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newValidation = {
-      assetNameInvalid: !formValue.asset_name || formValue.asset_name === '',
-      assetIdInvalid: !formValue.asset_id || formValue.asset_id === '',
+      assetNameInvalid: !formValue.assetName || formValue.assetName === '',
+      assetIdInvalid: !formValue.assetId || formValue.assetId === '',
       snInvalid: !formValue.sn || formValue.sn === '',
     };
     setFieldValidation(newValidation);
-
-    if (Object.values(fieldValidation).some((v) => v)) {
-      setFieldValidation(newValidation);
+    console.log('Object ', Object.values(newValidation).some((v) => v));
+    // 所有必填项都已经填写
+    if (!Object.values(newValidation).some((v) => v)) {
+      createAsset()
       return;
     }
+   
   };
+  const createAsset = async()=>{
+    let res = await addAsset(formValue);
+    if(res.data?.code == 200){
+      handleCancelClicked();
+    }
+  }
 
   return (
     <div className={styles.ModalFromStyle}>
@@ -104,13 +112,13 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           <Column sm={2} md={4} lg={8}>
             <TextInput
               className="mb-8"
-              id="asset_name"
+              id="assetName"
               labelText="Asset Name"
               placeholder="Asset Name"
               required
               invalid={fieldValidation.assetNameInvalid}
               invalidText="This field cannot be empty"
-              value={formValue.asset_name}
+              value={formValue.assetName}
               onChange={onFormValueChange}
               onFocus={(e) => {
                 // 可以自定义正则校验
@@ -122,13 +130,13 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           <Column sm={2} md={4} lg={8}>
             <TextInput
               className="mb-8"
-              id="asset_id"
+              id="assetId"
               labelText="Asset Id"
               placeholder="house#1"
               required
               invalid={fieldValidation.assetIdInvalid}
               invalidText="This field cannot be empty"
-              value={formValue.asset_id}
+              value={formValue.assetId}
               onChange={onFormValueChange}
             />
           </Column>
@@ -141,17 +149,17 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               required
               invalid={fieldValidation.snInvalid}
               invalidText="This field cannot be empty"
-              value={formValue.type}
+              value={formValue.sn}
               onChange={onFormValueChange}
             />
           </Column>
           <Column sm={2} md={4} lg={8}>
             <TextInput
               className="mb-8"
-              id="asset_type"
+              id="assetType"
               labelText="Asset Type"
               placeholder="Asset Type"
-              value={formValue.asset_type}
+              value={formValue.assetType}
               onChange={onFormValueChange}
             />
           </Column>
@@ -166,9 +174,10 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               onChange={onFormValueChange}
             >
               <SelectItem value="" text="Choose an option" />
-              <SelectItem value="department-1" text="department 1" />
-              <SelectItem value="department-2" text="department 2" />
-              <SelectItem value="LSG" text="LSG" />
+              <SelectItem value="1" text="Running" />
+              <SelectItem value="2" text="Maintaining" />
+              <SelectItem value="3" text="Halt" />
+              <SelectItem value="4" text="Scheduled Stop" />
             </Select>
           </Column>
           <Column sm={2} md={4} lg={8}>
@@ -199,7 +208,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               onChange={onDateChange}
             >
               <DatePickerInput
-                id="installation_date"
+                id="installationDate"
                 labelText="Installation Date"
                 placeholder="mm/dd/yyyy"
               />
@@ -218,10 +227,10 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           <Column sm={2} md={4} lg={8}>
             <TextInput
               className="mb-8"
-              id="responsible_person"
+              id="responsiblePerson"
               labelText="Responsible Person"
               placeholder="Responsible Person"
-              value={formValue.responsible_person}
+              value={formValue.responsiblePerson}
               onChange={onFormValueChange}
             />
           </Column>
