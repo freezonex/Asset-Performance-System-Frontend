@@ -6,7 +6,7 @@ import {
 } from '@carbon/react';
 
 import _ from 'lodash';
-
+import { update } from '@/utils/immutableUtil';
 import { inventorylist } from '@/api/common';
 
 import ChildItem from './ChildItem';
@@ -56,9 +56,21 @@ class Comp extends Component {
     }
   };
 
+  open = (item,i)=>{
+    const { unfoldMap } = this.state
+    var obj = { ...unfoldMap }
+    if (obj[i]) {
+      delete obj[i]
+    } else {
+      obj[i] = 1
+    }
+    this.setState({ unfoldMap: obj })
+  }
+
   // 返回table列表
   renderTableData = (item, i) => {
     const { unfoldMap } = this.state
+
     return {
       key: i,
       '1': item.assetType,
@@ -75,19 +87,19 @@ class Comp extends Component {
             [styles.open]: unfoldMap[i]
           })}
           onClick={() => {
-            var obj = { ...unfoldMap }
-            if (obj[i]) {
-              delete obj[i]
-            } else {
-              obj[i] = 1
+            var time = new Date().getTime()
+            if(time - this.lastTime < 1500){
+              return 
             }
-            this.setState({ unfoldMap: obj })
+            this.open(item, i)
+            this.lastTime = time
+
           }}
         >View All</a>
       </div>,
     };
   };
-
+  shouldComponentUpdate = (np, ns) => update.call(this, np, ns);
   render() {
     const { unfoldMap } = this.state
     const {

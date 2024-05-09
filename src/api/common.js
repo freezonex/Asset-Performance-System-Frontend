@@ -8,3 +8,12 @@ export const inventorylist = (data) => {
     data: data,
   })
 }
+
+
+export const queryByAssetTypeList = (data) => {
+  return request({
+    url: '/apsbackend/inventory/queryByAssetTypeList',
+    method: 'post',
+    data: data,
+  })
+}
