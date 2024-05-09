@@ -7,6 +7,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom:12px;
+    height: 28px;
     font-family: IBM Plex Sans;
 
     .title{
@@ -27,14 +28,14 @@
 .chart{
     width:100%;
     background-color: #fff;
-    height:266px;
+    height:310px;
     overflow-y: auto;
     padding:  8px 20px;
    
     .list{
-        // border-top:1px solid #BFBFBF;
         border-bottom:1px solid #BFBFBF;
     }
+
     :global{
         .cds--contained-list__header{
             display: none;
@@ -49,6 +50,10 @@
 
         .cds--contained-list-item__icon{
             color:#1157FE;
+        }
+
+        .cds--contained-list-item{
+            cursor: pointer;
         }
     }
 }

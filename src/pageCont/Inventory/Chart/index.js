@@ -6,6 +6,11 @@ import '@carbon/charts-react/styles.css'
 
 import { withConsumer } from '../context';
 
+import {
+	Select,
+	SelectItem,
+} from '@carbon/react';
+
 @withConsumer
 class Comp extends Component {
 	state = {
@@ -151,10 +156,20 @@ class Comp extends Component {
 			<div className={styles.container}>
 				<div className={styles.header}>
 					<div className={styles.title}>Trend chart</div>
-					<div className={styles.options}>options</div>
+					<div className={styles.options}>
+						<Select
+							labelText=""
+							value={'Done'}
+							onChange={() => { }}
+							required
+							size={'sm'}
+						>
+							<SelectItem value="Done" text="Select an Option" />
+						</Select>
+					</div>
 				</div>
 				<div className={styles.chart}>
-					<div style={{ position: 'relative', top: '-40px' }}>
+					<div style={{ position: 'relative', top: '0px' }}>
 						<ComboChart
 							data={this.state.data}
 							options={this.state.options}>

@@ -2,15 +2,14 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 
 import {
-  StructuredListWrapper,
-  StructuredListHead,
-  StructuredListRow,
-  StructuredListCell,
-  StructuredListBody,
   Pagination,
 } from '@carbon/react';
 
-import TableSty from '@/components/basicComp/TableSty';
+import _ from 'lodash';
+
+import { inventorylist } from '@/api/common';
+
+import ChildItem from './ChildItem';
 import classNames from 'classnames';
 
 class Comp extends Component {
@@ -22,6 +21,8 @@ class Comp extends Component {
     pageSize: 10,          //每页条数
     pageNum: 1,            //当前页
 
+    // 展开 map
+    unfoldMap: {},
   }
 
   componentDidMount = () => {
@@ -29,33 +30,66 @@ class Comp extends Component {
     this.getList()
   }
 
-  // 获取用户列表
+
+  // 获取列表
   getList = async (params = {}) => {
-    this.setState({
-      tabList: [1, 2, 3, 4, 5]
-    })
+    const {
+      pageNum,
+      pageSize,
+    } = this.state;
+
+    var reqData = {
+      pageNum,
+      pageSize,
+    };
+    reqData = { ...reqData, ...params };
+
+    var rs = await inventorylist({ data: reqData });
+    console.log(rs)
+    // 成功
+    if (rs.data.code == 200) {
+      var data = rs.data.data
+      this.setState({
+        tabList: data.list,
+        total: parseInt(data.total),
+      });
+    }
   };
 
   // 返回table列表
   renderTableData = (item, i) => {
+    const { unfoldMap } = this.state
     return {
       key: i,
-      '1': 'Computer',
-      '2': '50',
-      '3': '-',
-      '4': '1.2%',
-      '5': 'Apple',
-      '6': '30',
-      '7': '2023.10.01',
+      '1': item.assetType,
+      '2': item.quantity,
+      '3': item.unit,
+      '4': item.usageRate,
+      '5': item.supplierName,
+      '6': item.expectedQuantity,
+      '7': item.creationTime,
       'options': <div className={styles.options}>
-        <span>2023.10.01</span>
-        <a>View All</a>
+        <span>{item.expectedDate}</span>
+        <a
+          className={classNames({
+            [styles.open]: unfoldMap[i]
+          })}
+          onClick={() => {
+            var obj = { ...unfoldMap }
+            if (obj[i]) {
+              delete obj[i]
+            } else {
+              obj[i] = 1
+            }
+            this.setState({ unfoldMap: obj })
+          }}
+        >View All</a>
       </div>,
     };
   };
 
   render() {
-
+    const { unfoldMap } = this.state
     const {
       tabList,
       total,
@@ -98,7 +132,7 @@ class Comp extends Component {
 
           <div className={styles.tableBody}>
             {tabList.map((item, i) => this.renderTableData(item, i)).map((row, index) => {
-              var showChild = true
+              var showChild = unfoldMap[index]
               return (
                 <>
                   <div className={styles.tableRow} key={row.id}>
@@ -107,8 +141,8 @@ class Comp extends Component {
                       return (
                         <div
                           key={header.key}
-                          className={classNames([styles.tableCell,{
-                            [styles.showChild]:showChild
+                          className={classNames([styles.tableCell, {
+                            [styles.showChild]: showChild
                           }])}
                           style={{
                             width: width,
@@ -121,61 +155,37 @@ class Comp extends Component {
                       );
                     })}
                   </div>
-                  {
-                    showChild && 
-                    <div className={styles.showComp}>
-                       <div
-                        className={styles.tableCell}
-                        style={{
-                          width: '17%',
-                          minWidth: '17%',
-                          maxWidth: '17%',
-                        }}
-                      >
-                        
-                      </div>
-                      <div
-                        className={styles.tableCell}
-                        style={{
-                          width: '17%',
-                          minWidth: '17%',
-                          maxWidth: '17%',
-                        }}
-                      >
-                        Expected  Date
-                      </div>
-                      <div
-                        className={styles.tableCell}
-                        style={{
-                          width: '23%',
-                          minWidth: '23%',
-                          maxWidth: '23%',
-                        }}
-                      >
-                        Expected Quantity
-                      </div>
-                  </div>
-                  }
+                  <ChildItem showChild={showChild} />
                 </>
               )
             })}
           </div>
-
         </div>
 
-        <Pagination
-          backwardText="Previous page"
-          forwardText="Next page"
-          itemsPerPageText=""
-          page={pageNum}
-          pageNumberText="Page Number"
-          pageSize={pageSize}
-          pageSizes={[10, 20, 30, 40, 50]}
-          totalItems={total}
-          onChange={({ page, pageSize }) => {
+        <div className={styles.pagination}>
+          <Pagination
+            backwardText="Previous page"
+            forwardText="Next page"
+            itemsPerPageText=""
+            page={pageNum}
+            pageNumberText="Page Number"
+            pageSize={pageSize}
+            pageSizes={[10, 20, 30, 40, 50]}
+            totalItems={total}
+            onChange={({ page, pageSize }) => {
+              this.setState({
+                pageSize: pageSize,
+                pageNum: page,
+              }, () => {
+                this.getList({
+                  pageNum: page,
+                  pageSize: pageSize,
+                })
+              })
 
-          }}
-        />
+            }}
+          />
+        </div>
 
       </div>
     );
