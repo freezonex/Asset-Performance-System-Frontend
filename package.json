@@ -12,8 +12,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@carbon/charts-react": "^1.15.7",
-    "@carbon/icons-react": "^11.40.0",
+    "@carbon/charts-react": "^1.15.5",
+    "@carbon/icons-react": "^11.36.0",
     "@carbon/react": "^1.33.0",
     "@reduxjs/toolkit": "^2.2.0",
     "axios": "^0.19.0",
