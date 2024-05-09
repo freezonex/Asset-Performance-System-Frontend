@@ -1,6 +1,8 @@
 import * as user from './user';
+import * as common from './common';
 
-export { user };
+
+export { user,common };
 export default {
-  user
+  user,common
 };

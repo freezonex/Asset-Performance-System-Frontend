@@ -17,6 +17,8 @@
 }
 
 .container {
+  padding-bottom: 30px;
+
   .table {
     width: 100%;
     border: 1px solid #ccc;
@@ -62,4 +64,11 @@
   .showChild {
     border-top: 1px solid #ccc;
   }
+}
+
+.pagination{
+  border: 1px solid #ccc;
+  position: relative;
+  top: -1px;
+  border-top: 0;
 }

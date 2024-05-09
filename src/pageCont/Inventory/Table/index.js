@@ -7,6 +7,8 @@ import {
 
 import _ from 'lodash';
 
+import { inventorylist } from '@/api/common';
+
 import ChildItem from './ChildItem';
 import classNames from 'classnames';
 
@@ -28,11 +30,30 @@ class Comp extends Component {
     this.getList()
   }
 
-  // 获取用户列表
+
+  // 获取列表
   getList = async (params = {}) => {
-    this.setState({
-      tabList: [1, 2, 3, 4, 5]
-    })
+    const {
+      pageNum,
+      pageSize,
+    } = this.state;
+
+    var reqData = {
+      pageNum,
+      pageSize,
+    };
+    reqData = { ...reqData, ...params };
+
+    var rs = await inventorylist({ data: reqData });
+    console.log(rs)
+    // 成功
+    if (rs.data.code == 200) {
+      var data = rs.data.data
+      this.setState({
+        tabList: data.list,
+        total: parseInt(data.total),
+      });
+    }
   };
 
   // 返回table列表
@@ -40,28 +61,28 @@ class Comp extends Component {
     const { unfoldMap } = this.state
     return {
       key: i,
-      '1': 'Computer',
-      '2': '50',
-      '3': '-',
-      '4': '1.2%',
-      '5': 'Apple',
-      '6': '30',
-      '7': '2023.10.01',
+      '1': item.assetType,
+      '2': item.quantity,
+      '3': item.unit,
+      '4': item.usageRate,
+      '5': item.supplierName,
+      '6': item.expectedQuantity,
+      '7': item.creationTime,
       'options': <div className={styles.options}>
-        <span>2023.10.01</span>
+        <span>{item.expectedDate}</span>
         <a
-         className={classNames({
-          [styles.open] : unfoldMap[i]
-         })}
-         onClick={() => {
-          var obj = { ...unfoldMap }
-          if (obj[i]) {
-            delete obj[i]
-          } else {
-            obj[i] = 1
-          }
-          this.setState({ unfoldMap: obj })
-        }}
+          className={classNames({
+            [styles.open]: unfoldMap[i]
+          })}
+          onClick={() => {
+            var obj = { ...unfoldMap }
+            if (obj[i]) {
+              delete obj[i]
+            } else {
+              obj[i] = 1
+            }
+            this.setState({ unfoldMap: obj })
+          }}
         >View All</a>
       </div>,
     };
@@ -69,7 +90,6 @@ class Comp extends Component {
 
   render() {
     const { unfoldMap } = this.state
-    console.log(this.state.unfoldMap)
     const {
       tabList,
       total,
@@ -142,19 +162,30 @@ class Comp extends Component {
           </div>
         </div>
 
-        <Pagination
-          backwardText="Previous page"
-          forwardText="Next page"
-          itemsPerPageText=""
-          page={pageNum}
-          pageNumberText="Page Number"
-          pageSize={pageSize}
-          pageSizes={[10, 20, 30, 40, 50]}
-          totalItems={total}
-          onChange={({ page, pageSize }) => {
+        <div className={styles.pagination}>
+          <Pagination
+            backwardText="Previous page"
+            forwardText="Next page"
+            itemsPerPageText=""
+            page={pageNum}
+            pageNumberText="Page Number"
+            pageSize={pageSize}
+            pageSizes={[10, 20, 30, 40, 50]}
+            totalItems={total}
+            onChange={({ page, pageSize }) => {
+              this.setState({
+                pageSize: pageSize,
+                pageNum: page,
+              }, () => {
+                this.getList({
+                  pageNum: page,
+                  pageSize: pageSize,
+                })
+              })
 
-          }}
-        />
+            }}
+          />
+        </div>
 
       </div>
     );
