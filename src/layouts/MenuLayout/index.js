@@ -99,7 +99,12 @@ const HeaderWSideNav = (props) => {
       </Theme>
       {/* 侧边栏 */}
       <Theme theme={theme.sideNavTheme}>
-        <SideNav aria-label="Side navigation" expanded={isSideNavExpanded}>
+        <SideNav
+          aria-label="Side navigation"
+          expanded={isSideNavExpanded}
+          addFocusListeners={false}
+          className="w-10"
+        >
           <SideNavItems isSideNavExpanded={isSideNavExpanded}>
             <SideNavLink
               className="cursor-pointer"

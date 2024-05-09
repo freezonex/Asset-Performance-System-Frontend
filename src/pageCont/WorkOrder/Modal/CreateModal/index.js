@@ -12,23 +12,23 @@ import {
 import moment from 'moment';
 import styles from '@/styles/modal/modal.module.scss';
 
-const ModalPages = ({ createModalIsopen, changeState }) => {
+const ModalPages = ({ createModalIsopen, changeState,createModaType,tableData}) => {
   const [fieldValidation, setFieldValidation] = useState({
-    assetNameInvalid: false,
+    orderNameInvalid: false,
+    workOrderIdInvalid: false,
     assetIdInvalid: false,
-    snInvalid: false,
   });
   const [formValue, setFormValues] = useState({
-    asset_name: '',
+    order_name: '',
+    workOrder_id: '',
     asset_id: '',
-    sn: '',
-    asset_type: '',
+    workOrder_type: '',
     status: '',
-    department: '',
-    location: '',
-    installation_date: '',
-    value: '',
-    responsible_person: '',
+    priority: '',
+    creation_time: '',
+    due_time: '',
+    assigned_to: '',
+    created_by: '',
     description: '',
   });
 
@@ -51,19 +51,18 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     }));
   };
 
-  
   const handleCancelClicked = () => {
     setFormValues({
-      asset_name: '',
+      order_name: '',
+      workOrder_id: '',
       asset_id: '',
-      sn: '',
-      asset_type: '',
+      workOrder_type: '',
       status: '',
-      department: '',
-      location: '',
-      installation_date: '',
-      value: '',
-      responsible_person: '',
+      priority: '',
+      creation_time: '',
+      due_time: '',
+      assigned_to: '',
+      created_by: '',
       description: '',
     });
     setFieldValidation({
@@ -90,11 +89,21 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     }
   };
 
+
+  // 决定弹窗 header
+  const getModalHeading=()=>{
+    if(createModaType == 'edit'){
+      return  `Work Order - ${tableData?.work_order}`
+    }
+    if(createModaType == 'create'){
+      return 'Create a New Asset'
+    }
+  }
   return (
     <div className={styles.ModalFromStyle}>
       <Modal
         open={createModalIsopen}
-        modalHeading="Create a New Asset"
+        modalHeading={getModalHeading()}
         primaryButtonText="Save"
         secondaryButtonText="Cancel"
         onRequestClose={handleCancelClicked}
@@ -104,11 +113,11 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           <Column sm={2} md={4} lg={8}>
             <TextInput
               className="mb-8"
-              id="asset_name"
-              labelText="Asset Name"
-              placeholder="Asset Name"
+              id="order_name"
+              labelText="Order Name"
+              placeholder="Order Name"
               required
-              invalid={fieldValidation.assetNameInvalid}
+              invalid={fieldValidation.orderNameInvalid}
               invalidText="This field cannot be empty"
               value={formValue.asset_name}
               onChange={onFormValueChange}
@@ -122,40 +131,44 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           <Column sm={2} md={4} lg={8}>
             <TextInput
               className="mb-8"
+              id="workOrder_id"
+              labelText="work Order Id"
+              placeholder="house#1"
+              required
+              invalid={fieldValidation.workOrderIdInvalid}
+              invalidText="This field cannot be empty"
+              value={formValue.workOrder_id}
+              onChange={onFormValueChange}
+            />
+          </Column>
+          <Column sm={2} md={4} lg={8}>
+            <TextInput
+              className="mb-8"
               id="asset_id"
               labelText="Asset Id"
-              placeholder="house#1"
+              placeholder="Asset Id"
               required
               invalid={fieldValidation.assetIdInvalid}
               invalidText="This field cannot be empty"
               value={formValue.asset_id}
               onChange={onFormValueChange}
+              onFocus={(e) => {
+                // 可以自定义正则校验
+                // 校验不成功，可以修改fieldValidation 为true
+                // console.log('e: ', e.target.value);
+              }}
             />
           </Column>
           <Column sm={2} md={4} lg={8}>
             <TextInput
               className="mb-8"
-              id="sn"
-              labelText="SN"
-              placeholder="SN"
-              required
-              invalid={fieldValidation.snInvalid}
-              invalidText="This field cannot be empty"
-              value={formValue.type}
+              id="workOrder_type"
+              labelText="Work Order Type"
+              placeholder="Work Order Type"
+              value={formValue.workOrder_type}
               onChange={onFormValueChange}
             />
           </Column>
-          <Column sm={2} md={4} lg={8}>
-            <TextInput
-              className="mb-8"
-              id="asset_type"
-              labelText="Asset Type"
-              placeholder="Asset Type"
-              value={formValue.asset_type}
-              onChange={onFormValueChange}
-            />
-          </Column>
-
           <Column sm={2} md={4} lg={8}>
             <Select
               className="mb-8"
@@ -172,58 +185,76 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
             </Select>
           </Column>
           <Column sm={2} md={4} lg={8}>
-            <TextInput
+            <Select
               className="mb-8"
-              id="department"
-              labelText="Department"
-              placeholder="Enter Department"
-              type="Department"
-              value={formValue.department}
+              id="priority"
+              labelText="Priority"
+              value={formValue.priority}
+              // placeholder="Choose an option"
               onChange={onFormValueChange}
-            />
+            >
+              <SelectItem value="" text="Choose an option" />
+              <SelectItem value="department-1" text="department 1" />
+              <SelectItem value="department-2" text="department 2" />
+              <SelectItem value="LSG" text="LSG" />
+            </Select>
           </Column>
           <Column sm={2} md={4} lg={8}>
-            <TextInput
-              className="mb-8"
-              id="location"
-              labelText="Location"
-              placeholder="Location"
-              value={formValue.location}
-              onChange={onFormValueChange}
-            />
-          </Column>
-          <Column sm={2} md={4} lg={8}>
-            <DatePicker
+          <DatePicker
               className="mb-8"
               datePickerType="single"
               onChange={onDateChange}
             >
               <DatePickerInput
                 id="installation_date"
-                labelText="Installation Date"
+                labelText="Creation Time"
                 placeholder="mm/dd/yyyy"
               />
             </DatePicker>
           </Column>
           <Column sm={2} md={4} lg={8}>
-            <TextInput
+          <DatePicker
               className="mb-8"
-              id="value"
-              labelText="Value"
-              placeholder="Value"
-              value={formValue.value}
-              onChange={onFormValueChange}
-            />
+              datePickerType="single"
+              onChange={onDateChange}
+            >
+              <DatePickerInput
+                id="installation_date"
+                labelText="Due Time"
+                placeholder="mm/dd/yyyy"
+              />
+            </DatePicker>
           </Column>
           <Column sm={2} md={4} lg={8}>
-            <TextInput
+            <Select
               className="mb-8"
-              id="responsible_person"
-              labelText="Responsible Person"
-              placeholder="Responsible Person"
-              value={formValue.responsible_person}
+              id="assigned_to"
+              labelText="Assigned To"
+              value={formValue.assigned_to}
+              // placeholder="Choose an option"
               onChange={onFormValueChange}
-            />
+            >
+              <SelectItem value="" text="Choose an option" />
+              <SelectItem value="department-1" text="department 1" />
+              <SelectItem value="department-2" text="department 2" />
+              <SelectItem value="LSG" text="LSG" />
+            </Select>
+          </Column>
+
+          <Column sm={2} md={4} lg={8}>
+            <Select
+              className="mb-8"
+              id="created_by"
+              labelText="Created By"
+              value={formValue.created_by}
+              // placeholder="Choose an option"
+              onChange={onFormValueChange}
+            >
+              <SelectItem value="" text="Choose an option" />
+              <SelectItem value="department-1" text="department 1" />
+              <SelectItem value="department-2" text="department 2" />
+              <SelectItem value="LSG" text="LSG" />
+            </Select>
           </Column>
           <Column sm={2} md={4} lg={16}>
             <TextInput
