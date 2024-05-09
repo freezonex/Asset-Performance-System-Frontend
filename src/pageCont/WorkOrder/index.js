@@ -3,8 +3,8 @@ import { withRouter } from 'next/router';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import Head from 'next/head';
-import WorkOrderTable from './Table'
-// import CreateModal from './Modal/CreateModal'
+import WorkOrderTable from './Table';
+import CreateModal from './Modal/CreateModal'
 
 import {
   Button,
@@ -24,16 +24,16 @@ class Comp extends Component {
       type: '',
       creation_time: '',
     },
-    isSearchClicked:false, //是否搜索
-    refresh:{},
-    createModalIsopen:false,//create modal 状态
-    modalTableIsopen:false,//more modal 状态
+    isSearchClicked: false, //是否搜索
+    tableData: {},
+    createModalIsopen: false, //create modal 状态
+    createModaType: 'create', //create modal 类型 create/edit
   };
   componentDidMount = () => {};
 
-  changeState = (obj)=>{
-    this.setState(obj)
-  }
+  changeState = (obj) => {
+    this.setState(obj);
+  };
 
   initFormValue = () => {
     this.setState({
@@ -56,14 +56,20 @@ class Comp extends Component {
     });
   };
   render() {
-    const { formValue,refresh, isSearchClicked,createModalIsopen,modalTableIsopen} = this.state;
+    const {
+      formValue,
+      isSearchClicked,
+      createModalIsopen,
+      createModaType,
+      tableData
+    } = this.state;
     return (
       <div>
         <Head>Work Order</Head>
         <Breadcrumb>
           <BreadcrumbItem
             onClick={() => {
-              router.push(`/assets`);
+              // this.props.router.push(`/workOrder`);
             }}
           >
             Work Order
@@ -71,7 +77,9 @@ class Comp extends Component {
         </Breadcrumb>
         <div className="bx--col-lg-16 flex justify-between items-center">
           <div>
-            <Heading className="mt-2 text-[28px] font-normal">Work Order</Heading>
+            <Heading className="mt-2 text-[28px] font-normal">
+              Work Order
+            </Heading>
             <Heading
               className={classNames('mt-1 text-sm', {
                 [styles.textColor]: true,
@@ -84,8 +92,8 @@ class Comp extends Component {
             onClick={() => {
               // setCreateModalOpen(true);
               this.setState({
-                createModalIsopen:true,
-              })
+                createModalIsopen: true,
+              });
             }}
             isExpressive
             size="md"
@@ -168,17 +176,17 @@ class Comp extends Component {
           <WorkOrderTable
             changeState={this.changeState}
             formValue={formValue}
-            refresh={refresh}
             isSearchClicked={isSearchClicked}
           />
         </div>
 
         {/* Create a Asset modal */}
-        {/* {<CreateModal
+        {<CreateModal
           createModalIsopen = {createModalIsopen}
+          createModaType={createModaType}
+          tableData={tableData}
           changeState = {this.changeState}
-        />} */}
-        
+        />}
       </div>
     );
   }

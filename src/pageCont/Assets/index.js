@@ -63,7 +63,7 @@ class Comp extends Component {
         <Breadcrumb>
           <BreadcrumbItem
             onClick={() => {
-              router.push(`/assets`);
+              // this.props.router.push(`/assets`);
             }}
           >
             Assets

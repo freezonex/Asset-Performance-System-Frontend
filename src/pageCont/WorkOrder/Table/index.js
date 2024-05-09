@@ -26,7 +26,7 @@ import styles from './index.module.scss';
 // } from '@/actions/actions';
 // import EditWarehouseModal from '../Modal/EditWarehouseModal';
 
-function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
+function TablePage({formValue, changeState,isSearchClicked }) {
   const headers = [
     { key: 'work_order', header: 'Work Order' },
     { key: 'order_name', header: 'Order Name' },
@@ -59,11 +59,6 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(5);
-  //const rowsToShow = rows.slice((page - 1) * pageSize, page * pageSize);
-  const [modalTableIsopen, setModalTableIsopen] = useState(false);
-  const [editRow, setEditRow] = useState({});
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedWarehouseInfo, setSelectedWarehouseInfo] = useState({});
   const [rows, setRows] = useState([
     {
       id: '001',
@@ -138,7 +133,7 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
     } else {
       //  调用接口
     }
-  }, [page, pageSize, refresh, isSearchClicked]);
+  }, [page, pageSize, isSearchClicked]);
 
 
   return (
@@ -163,7 +158,16 @@ function TablePage({ refresh, setRefresh, filters, isSearchClicked }) {
                       <span
                         className={styles.editText}
                         onClick={() => {
-                          setModalTableIsopen(true);
+                          changeState({
+                            tableData:row,
+                            createModaType: 'edit',
+                          })
+                          // 延迟打开弹窗
+                          setTimeout(() => {
+                            changeState({
+                              createModalIsopen:true,
+                            })
+                          });
                         }}
                       >
                         Edit

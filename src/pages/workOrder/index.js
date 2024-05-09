@@ -1,4 +1,3 @@
-'use client';
 import React, { Component, useContext } from 'react';
 import { withRouter } from 'next/router';
 import { Content, Theme } from '@carbon/react';
@@ -16,8 +15,7 @@ class Comp extends Component {
         <Head>
           <title>workOrder</title>
         </Head>
-        workOrder
-        {/* <WorkOrder/> */}
+        <WorkOrder/>
       </div>
     );
   }
