@@ -38,11 +38,12 @@ class Comp extends Component {
   initFormValue = () => {
     this.setState({
       formValue: {
-        asset_id: '',
-        asset: '',
-        type: '',
-        person: '',
+        assetId: '',
+      assetName: '',
+      assetType: '',
+      responsiblePerson: '',
       },
+      isSearchClicked: false,
     });
   };
 
@@ -162,7 +163,7 @@ class Comp extends Component {
             renderIcon={Close}
             iconDescription="Close"
           >
-            Cancet
+            Cancel
           </Button>
         </div>
         {/* table 表格 */}
