@@ -32,9 +32,9 @@
     padding:  8px 20px;
    
     .list{
-        // border-top:1px solid #BFBFBF;
         border-bottom:1px solid #BFBFBF;
     }
+
     :global{
         .cds--contained-list__header{
             display: none;
@@ -49,6 +49,10 @@
 
         .cds--contained-list-item__icon{
             color:#1157FE;
+        }
+
+        .cds--contained-list-item{
+            cursor: pointer;
         }
     }
 }

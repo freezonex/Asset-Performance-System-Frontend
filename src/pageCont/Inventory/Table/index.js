@@ -2,15 +2,12 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 
 import {
-  StructuredListWrapper,
-  StructuredListHead,
-  StructuredListRow,
-  StructuredListCell,
-  StructuredListBody,
   Pagination,
 } from '@carbon/react';
 
-import TableSty from '@/components/basicComp/TableSty';
+import _ from 'lodash';
+
+import ChildItem from './ChildItem';
 import classNames from 'classnames';
 
 class Comp extends Component {
@@ -22,6 +19,8 @@ class Comp extends Component {
     pageSize: 10,          //每页条数
     pageNum: 1,            //当前页
 
+    // 展开 map
+    unfoldMap: {},
   }
 
   componentDidMount = () => {
@@ -38,6 +37,7 @@ class Comp extends Component {
 
   // 返回table列表
   renderTableData = (item, i) => {
+    const { unfoldMap } = this.state
     return {
       key: i,
       '1': 'Computer',
@@ -49,13 +49,27 @@ class Comp extends Component {
       '7': '2023.10.01',
       'options': <div className={styles.options}>
         <span>2023.10.01</span>
-        <a>View All</a>
+        <a
+         className={classNames({
+          [styles.open] : unfoldMap[i]
+         })}
+         onClick={() => {
+          var obj = { ...unfoldMap }
+          if (obj[i]) {
+            delete obj[i]
+          } else {
+            obj[i] = 1
+          }
+          this.setState({ unfoldMap: obj })
+        }}
+        >View All</a>
       </div>,
     };
   };
 
   render() {
-
+    const { unfoldMap } = this.state
+    console.log(this.state.unfoldMap)
     const {
       tabList,
       total,
@@ -98,7 +112,7 @@ class Comp extends Component {
 
           <div className={styles.tableBody}>
             {tabList.map((item, i) => this.renderTableData(item, i)).map((row, index) => {
-              var showChild = true
+              var showChild = unfoldMap[index]
               return (
                 <>
                   <div className={styles.tableRow} key={row.id}>
@@ -107,8 +121,8 @@ class Comp extends Component {
                       return (
                         <div
                           key={header.key}
-                          className={classNames([styles.tableCell,{
-                            [styles.showChild]:showChild
+                          className={classNames([styles.tableCell, {
+                            [styles.showChild]: showChild
                           }])}
                           style={{
                             width: width,
@@ -121,46 +135,11 @@ class Comp extends Component {
                       );
                     })}
                   </div>
-                  {
-                    showChild && 
-                    <div className={styles.showComp}>
-                       <div
-                        className={styles.tableCell}
-                        style={{
-                          width: '17%',
-                          minWidth: '17%',
-                          maxWidth: '17%',
-                        }}
-                      >
-                        
-                      </div>
-                      <div
-                        className={styles.tableCell}
-                        style={{
-                          width: '17%',
-                          minWidth: '17%',
-                          maxWidth: '17%',
-                        }}
-                      >
-                        Expected  Date
-                      </div>
-                      <div
-                        className={styles.tableCell}
-                        style={{
-                          width: '23%',
-                          minWidth: '23%',
-                          maxWidth: '23%',
-                        }}
-                      >
-                        Expected Quantity
-                      </div>
-                  </div>
-                  }
+                  <ChildItem showChild={showChild} />
                 </>
               )
             })}
           </div>
-
         </div>
 
         <Pagination
