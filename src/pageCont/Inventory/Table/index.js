@@ -44,7 +44,7 @@ class Comp extends Component {
     };
     reqData = { ...reqData, ...params };
 
-    var rs = await inventorylist({ data: reqData });
+    var rs = await inventorylist(reqData);
     console.log(rs)
     // 成功
     if (rs.data.code == 200) {
@@ -93,6 +93,7 @@ class Comp extends Component {
           }}
         >View All</a>
       </div>,
+      data:item,
     };
   };
   shouldComponentUpdate = (np, ns) => update.call(this, np, ns);
@@ -163,7 +164,7 @@ class Comp extends Component {
                       );
                     })}
                   </div>
-                  <ChildItem showChild={showChild} />
+                  <ChildItem showChild={showChild} data={row.data} />
                 </>
               )
             })}

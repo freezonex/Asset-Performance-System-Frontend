@@ -31,7 +31,7 @@ class Comp extends Component {
   render() {
     return (
       <div>
-        {<Cont init={This => this.contThis = This} />}
+        {<Cont init={This => this.contThis = This} data={this.props.data} />}
       </div>
     );
   }
