@@ -17,3 +17,12 @@ export const queryByAssetTypeList = (data) => {
     data: data,
   })
 }
+
+
+export const allList = (data) => {
+  return request({
+    url: '/apsbackend/assetType/allList',
+    method: 'post',
+    data: data,
+  })
+}

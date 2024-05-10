@@ -11,18 +11,11 @@ class Comp extends Component {
   }
   open = () => {
     console.log('开')
-    this.setState({ isSHow: true })
+    this.contThis?.open()
   }
   close = () => {
     console.log('关')
-    if (this.contThis) {
-      this.contThis?.close()
-    }
-    setTimeout(() => {
-      if(!this.props.showChild){
-        this.setState({ isSHow: false })
-      }
-    }, 1000)
+    this.contThis?.close()
   }
 
   componentDidUpdate(prevProps) {
@@ -34,11 +27,11 @@ class Comp extends Component {
       }
     }
   }
+  shouldComponentUpdate = (np, ns) => update.call(this, np, ns)
   render() {
-    const { isSHow } = this.state
     return (
       <div>
-        {isSHow && <Cont init={This => this.contThis = This} />}
+        {<Cont init={This => this.contThis = This} data={this.props.data} />}
       </div>
     );
   }

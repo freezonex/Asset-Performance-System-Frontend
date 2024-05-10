@@ -5,7 +5,7 @@ import { ComboChart } from '@carbon/charts-react'
 import '@carbon/charts-react/styles.css'
 
 import { withConsumer } from '../context';
-
+import { allList } from '@/api/common';
 import {
 	Select,
 	SelectItem,
@@ -14,6 +14,8 @@ import {
 @withConsumer
 class Comp extends Component {
 	state = {
+		selectList: [],
+
 		data: [
 			{
 				"group": "Health",
@@ -148,10 +150,28 @@ class Comp extends Component {
 
 	componentDidMount = () => {
 		this.props.init?.(this)
+		this.allList()
+	}
+
+	// 获取列表
+	allList = async (params = {}) => {
+		var reqData = {};
+		reqData = { ...reqData, ...params };
+		var rs = await allList(reqData);
+		if (rs.data.code == 200) {
+			this.setState({
+				selectList: rs.data.data,
+				value: rs.data.data[0].assetType || '',
+			})
+		}
+	};
+
+	initChart = () => {
+
 	}
 
 	render() {
-
+		const { selectList, value } = this.state
 		return (
 			<div className={styles.container}>
 				<div className={styles.header}>
@@ -159,12 +179,19 @@ class Comp extends Component {
 					<div className={styles.options}>
 						<Select
 							labelText=""
-							value={'Done'}
-							onChange={() => { }}
+							value={value}
+							
 							required
 							size={'sm'}
+							onChange={(v) => {
+								this.setState({value:v.target.value})
+							}}
 						>
-							<SelectItem value="Done" text="Select an Option" />
+							{
+								selectList.map((item, i) => {
+									return <SelectItem value={item.assetType} text={item.assetType} />
+								})
+							}
 						</Select>
 					</div>
 				</div>

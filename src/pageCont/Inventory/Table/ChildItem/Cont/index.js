@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 import { update } from '@/utils/immutableUtil';
-import { inventorylist } from '@/api/common';
+import { queryByAssetTypeList } from '@/api/common';
 
 class Comp extends Component {
   state = {
@@ -14,11 +14,12 @@ class Comp extends Component {
   }
   componentDidMount() {
     this.props.init?.(this)
-    setTimeout(() => {
-      this.setState({ isSHow: true })
-    }, 50)
+    
+  }
 
+  open = ()=>{
     this.getList()
+    // this.setState({ isSHow: true })
   }
 
   close = ()=>{
@@ -32,13 +33,16 @@ class Comp extends Component {
       pageSize,
     } = this.state;
 
+    console.log(this.props.data)
+
     var reqData = {
       pageNum,
       pageSize,
+      "assetTypeId": this.props.data.assetTypeId,
     };
     reqData = { ...reqData, ...params };
 
-    var rs = await inventorylist({ data: reqData });
+    var rs = await queryByAssetTypeList(reqData);
     console.log(rs)
     // 成功
     if (rs.data.code == 200) {
@@ -46,13 +50,14 @@ class Comp extends Component {
       this.setState({
         tabList: data.list,
         total: parseInt(data.total),
+        isSHow: true,
       });
     }
   };
 
+  shouldComponentUpdate = (np, ns) => update.call(this, np, ns)
   render() {
-
-    const { isSHow } = this.state
+    const { isSHow,tabList } = this.state
 
     var list = [
       {
@@ -77,12 +82,12 @@ class Comp extends Component {
 
     var columns = [
       {
-        dataIndex: 'date',
+        dataIndex: 'expectedDate',
         title: 'Expected  Date',
         width: '17%',
       },
       {
-        dataIndex: 'quantity',
+        dataIndex: 'expectedQuantity',
         title: 'Expected  Quantity',
         width: '23%',
         style: {
@@ -91,7 +96,7 @@ class Comp extends Component {
       },
     ];
 
-    var height = 41.2 * list.length
+    var height = 41.2 * tabList.length
 
     return (
       <div
@@ -118,12 +123,13 @@ class Comp extends Component {
               >
                 <div className={styles.header} style={nextSty}>{header.title}</div>
                 {
-                  list.map((ite, i) => {
+                  tabList.map((ite, i) => {
                     return (
                       <div
                         className={classNames([styles.item, {
-                          [styles.s1]: ite.state == 1,
-                          [styles.s2]: ite.state == 2,
+                          [styles.s0]: ite.colorType == 0,
+                          [styles.s1]: ite.colorType == 1,
+                          [styles.s2]: ite.colorType == 2,
                         }])}
                         style={nextSty}
                       >
