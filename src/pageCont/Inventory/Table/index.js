@@ -87,12 +87,8 @@ class Comp extends Component {
             [styles.open]: unfoldMap[i]
           })}
           onClick={() => {
-            var time = new Date().getTime()
-            if(time - this.lastTime < 1500){
-              return 
-            }
             this.open(item, i)
-            this.lastTime = time
+
 
           }}
         >View All</a>

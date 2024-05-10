@@ -14,11 +14,12 @@ class Comp extends Component {
   }
   componentDidMount() {
     this.props.init?.(this)
-    setTimeout(() => {
-      this.setState({ isSHow: true })
-    }, 50)
+    
+  }
 
+  open = ()=>{
     this.getList()
+    this.setState({ isSHow: true })
   }
 
   close = ()=>{
@@ -50,8 +51,8 @@ class Comp extends Component {
     }
   };
 
+  shouldComponentUpdate = (np, ns) => update.call(this, np, ns)
   render() {
-
     const { isSHow } = this.state
 
     var list = [
