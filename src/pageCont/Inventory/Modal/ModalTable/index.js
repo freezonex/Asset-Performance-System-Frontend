@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Modal,
   StructuredListWrapper,
@@ -11,13 +11,14 @@ import {
 import styles from '@/styles/modal/modal.module.scss';
 import stylesTable from '@/styles/table/table.module.scss';
 
+import { assetTypeQuantityList } from '@/api/common';
+
+
 const ModalPages = ({ modalTableIsopen, setModalTableIsopen }) => {
   const headers = [
-    { key: 'department', header: 'Department' },
-    { key: 'location', header: 'Location' },
-    { key: 'installation_date', header: 'Installation Date' },
-    { key: 'value', header: 'Value' },
-    { key: 'responsible_person', header: 'Responsible Person' },
+    { key: 'assetType', header: 'Asset Name' },
+    { key: 'quantity', header: 'Quality' },
+    
   ];
   const [rows, setRows] = useState([
     {
@@ -69,11 +70,35 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen }) => {
     setModalTableIsopen(false);
   };
 
+
+  // 获取列表
+  var getList = async (params = {}) => {
+
+    var reqData = {
+      pageNum:page ,
+      pageSize: pageSize,
+    };
+    reqData = { ...reqData, ...params };
+
+    var rs = await assetTypeQuantityList(reqData);
+   
+    // 成功
+    if (rs.data.code == 200) {
+      var data = rs.data.data
+      setRows(data.list)
+      setTotal(data.total)
+    }
+  };
+
+  useEffect(()=>{
+      getList()
+  },[])
+
   return (
     <div className={styles.ModalFromStyle}>
       <Modal
         open={modalTableIsopen}
-        modalHeading="More"
+        modalHeading="Safety Level Stock Spare Parts"
         passiveModal
         onRequestClose={onRequestClose}
       >
@@ -114,6 +139,10 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen }) => {
             onChange={({ page, pageSize }) => {
               setPage(page);
               setPageSize(pageSize);
+              getList({
+                pageNum:page ,
+                pageSize: pageSize,
+              })
             }}
           />
         </div>

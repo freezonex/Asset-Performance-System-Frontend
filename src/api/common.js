@@ -45,3 +45,12 @@ export const assetTypeList = (data) => {
     data: data,
   })
 }
+
+// Safety level asset type quantity list
+export const assetTypeQuantityList = (data) => {
+  return request({
+    url: '/apsbackend/inventory/assetTypeQuantity/list',
+    method: 'post',
+    data: data,
+  })
+}
