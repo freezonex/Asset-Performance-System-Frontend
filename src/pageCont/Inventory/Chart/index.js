@@ -102,6 +102,10 @@ class Comp extends Component {
 			}
 		],
 		options: {
+			'color': {
+				'line': 'blue', // 折线的颜色
+				'area': 'green', // 面积的颜色
+			  },
 			// "title": "Combo (Line + Area) Time series",
 			"points": {
 				"enabled": false
@@ -147,7 +151,8 @@ class Comp extends Component {
 			"timeScale": {
 				"addSpaceOnEdges": 0
 			},
-			"height": "300px"
+			"height": "300px",
+			
 		}
 	};
 
@@ -161,7 +166,7 @@ class Comp extends Component {
 		var reqData = {};
 		reqData = { ...reqData, ...params };
 		var rs = await allList(reqData);
-		if (rs.data.code == 200) {
+		if (rs?.data?.code == 200) {
 			this.setState({
 				selectList: rs.data.data,
 				value: rs.data.data[0].id || '',
@@ -177,7 +182,7 @@ class Comp extends Component {
 		};
 		reqData = { ...reqData, ...params };
 		var rs = await queryChartData(reqData);
-		if (rs.data.code == 200) {
+		if (rs?.data?.code == 200) {
 			console.log(rs.data.data)
 			var data = rs.data.data
 
