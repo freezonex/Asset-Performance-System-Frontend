@@ -5,7 +5,7 @@ import { ComboChart } from '@carbon/charts-react'
 import '@carbon/charts-react/styles.css'
 
 import { withConsumer } from '../context';
-import { allList } from '@/api/common';
+import { allList, queryChartData } from '@/api/common';
 import {
 	Select,
 	SelectItem,
@@ -15,8 +15,10 @@ import {
 class Comp extends Component {
 	state = {
 		selectList: [],
+		value: '',
 
-		data: [
+		data: [],
+		data2: [
 			{
 				"group": "Health",
 				"key": "2018-12-29T16:00:00.000Z",
@@ -57,6 +59,7 @@ class Comp extends Component {
 				"key": "2019-02-12T16:00:00.000Z",
 				"value": 442
 			},
+
 			{
 				"group": "Temperature",
 				"key": "2018-12-31T16:00:00.000Z",
@@ -112,20 +115,20 @@ class Comp extends Component {
 					"scaleType": "time",
 					"mapsTo": "key"
 				},
-				"right": {
-					// "title": "Temperature (°C)",
-					"mapsTo": "temp",
-					"correspondingDatasets": [
-						"Temperature"
-					]
-				}
+				// "right": {
+				// 	// "title": "Temperature (°C)",
+				// 	"mapsTo": "temp",
+				// 	"correspondingDatasets": [
+				// 		"Quantity"
+				// 	]
+				// }
 			},
 			"comboChartTypes": [
 				{
 					"type": "area",
 					"options": {},
 					"correspondingDatasets": [
-						"Health"
+						"ExpectedQuantity"
 					]
 				},
 				{
@@ -136,7 +139,7 @@ class Comp extends Component {
 						}
 					},
 					"correspondingDatasets": [
-						"Temperature"
+						"Quantity"
 					]
 				}
 			],
@@ -161,13 +164,43 @@ class Comp extends Component {
 		if (rs.data.code == 200) {
 			this.setState({
 				selectList: rs.data.data,
-				value: rs.data.data[0].assetType || '',
+				value: rs.data.data[0].id || '',
+			}, () => {
+				this.initChart()
 			})
 		}
 	};
 
-	initChart = () => {
+	initChart = async (params = {}) => {
+		var reqData = {
+			"assetTypeId": this.state.value,
+		};
+		reqData = { ...reqData, ...params };
+		var rs = await queryChartData(reqData);
+		if (rs.data.code == 200) {
+			console.log(rs.data.data)
+			var data = rs.data.data
 
+			var list = []
+
+			data.dataList.forEach((item, i) => {
+				list.push({
+					"group": "ExpectedQuantity",
+					"key": item.date,
+					"value": item.expectedQuantity || 0
+				})
+			})
+
+			data.dataList.forEach((item, i) => {
+				list.push({
+					"group": "Quantity",
+					"key": item.date,
+					"value": item.quantity || 0
+				})
+			})
+
+			this.setState({ data: list })
+		}
 	}
 
 	render() {
@@ -180,16 +213,18 @@ class Comp extends Component {
 						<Select
 							labelText=""
 							value={value}
-							
 							required
 							size={'sm'}
 							onChange={(v) => {
-								this.setState({value:v.target.value})
+								this.setState({ value: v.target.value })
+								this.initChart({
+									"assetTypeId": v.target.value,
+								})
 							}}
 						>
 							{
 								selectList.map((item, i) => {
-									return <SelectItem value={item.assetType} text={item.assetType} />
+									return <SelectItem value={item.id} text={item.assetType} />
 								})
 							}
 						</Select>

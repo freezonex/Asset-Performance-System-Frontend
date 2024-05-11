@@ -26,3 +26,13 @@ export const allList = (data) => {
     data: data,
   })
 }
+
+
+// 图表
+export const queryChartData = (data) => {
+  return request({
+    url: '/apsbackend/inventory/queryChartData',
+    method: 'post',
+    data: data,
+  })
+}
