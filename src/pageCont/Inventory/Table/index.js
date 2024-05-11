@@ -185,6 +185,7 @@ class Comp extends Component {
               this.setState({
                 pageSize: pageSize,
                 pageNum: page,
+                unfoldMap:{},
               }, () => {
                 this.getList({
                   pageNum: page,

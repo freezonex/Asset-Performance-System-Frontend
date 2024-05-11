@@ -110,6 +110,14 @@ class Comp extends Component {
 			"points": {
 				"enabled": false
 			},
+
+			color: {
+				scale: {
+					ExpectedQuantity: '#D0E2FF',
+					Quantity: '#0F62FE',
+				},
+			  },
+
 			"axes": {
 				"left": {
 					// "title": "Score",
@@ -133,7 +141,7 @@ class Comp extends Component {
 					"options": {},
 					"correspondingDatasets": [
 						"ExpectedQuantity"
-					]
+					],
 				},
 				{
 					"type": "line",
@@ -144,7 +152,7 @@ class Comp extends Component {
 					},
 					"correspondingDatasets": [
 						"Quantity"
-					]
+					],
 				}
 			],
 			"curve": "curveNatural",
