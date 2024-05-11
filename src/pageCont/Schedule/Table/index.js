@@ -1,12 +1,16 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import {
-  StructuredListWrapper,
-  StructuredListHead,
-  StructuredListRow,
-  StructuredListCell,
-  StructuredListBody,
-  Tooltip,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHeader,
+  Pagination,
+  DatePicker,
+  DatePickerInput,
 } from '@carbon/react';
 import classNames from 'classnames';
 import tableStyles from '@/styles/table/table.module.scss';
@@ -14,7 +18,7 @@ import styles from './index.module.scss';
 
 function TablePage({}) {
   const headers = [
-    { key: 'assetName', header: 'Asset Name' },
+    { key: 'assetName', header: 'Department' },
     { key: 'MonJan5', header: 'Mon,Jan 5' },
     { key: 'TueJan6', header: 'Tue,Jan 6' },
     { key: 'WedJan7', header: 'Wed,Jan 7' },
@@ -33,19 +37,19 @@ function TablePage({}) {
   ];
   const colorList = {
     1: {
-      label: '10% More',
+      label: 'Free',
       bgColor: '#18b03d',
     },
     2: {
-      label: '5% More',
+      label: 'Assignable',
       bgColor: '#b7ecc1',
     },
     3: {
-      label: 'Lower than expected',
+      label: 'Busy',
       bgColor: '#c83837',
     },
     4: {
-      label: 'Exhausted',
+      label: 'Unassignable',
       bgColor: '#f4f4f4',
     },
   };
@@ -133,67 +137,96 @@ function TablePage({}) {
   useEffect(() => {}, [page, pageSize]);
 
   return (
-    <div className={classNames(tableStyles.tableStyle, styles.scheduleTable)}>
-      <StructuredListWrapper isCondensed>
-        <StructuredListHead>
-          <StructuredListRow head>
-            {headers.map((header, index) => (
-              <StructuredListCell head key={header.key}>
-                {header.header}
-              </StructuredListCell>
-            ))}
-          </StructuredListRow>
-        </StructuredListHead>
-        <StructuredListBody>
-          {rows.map((row, index) => (
-            <StructuredListRow key={row.id}>
-              {headers.map((header) => {
-                if (header.key != 'assetName') {
-                  let color = colorList[row[header.key]]?.bgColor;
+    <div className={styles.scheduleTable}>
+      <div className={styles.scheduleTableHeader}>
+        <div className={styles.scheduleTableHeaderLeft}>
+          <DatePicker datePickerType="single">
+            <DatePickerInput
+              placeholder="mm/dd/yyyy"
+              // labelText="Date Picker label"
+              id="date-picker-single"
+              size="md"
+            />
+          </DatePicker>
+        </div>
+        <div className={styles.scheduleTableHeaderRight}>
+          {Object.values(colorList).map((data, ind) => {
+            return (
+              <div className={styles.headerRightIconParent}>
+                <span className={styles.headerRightIcon} style={{ backgroundColor: data.bgColor }}></span>
+                <span>{data.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className={tableStyles.tableStyle}>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {headers.map((header, index) => {
+                  if (header.key == 'assetName') {
+                    return (
+                      <TableHeader
+                        style={{ minWidth: '120px' }}
+                        key={header.key}
+                        header
+                      >
+                        {header.header}
+                      </TableHeader>
+                    );
+                  }
                   return (
-                    <StructuredListCell key={header.key}>
-                      <div
-                        style={{
-                          backgroundColor: color,
-                          width: '117px',
-                          height: '40px',
-                        }}
-                      ></div>
-                    </StructuredListCell>
+                    <TableHeader head key={header.key}>
+                      {header.header}
+                    </TableHeader>
                   );
-                }
-                if (row[header.key].length > 9) {
-                  let data = row[header.key];
-                  return (
-                    <StructuredListCell
-                      key={header.key}
-                      style={{ minWidth: '105px' }}
-                    >
-                      <div style={{ height: '40px' }}>
-                        <div className={styles.assetName}>
-                          {/* <Tooltip align="top" label={data}> */}
-                            {data.slice(0, 9) + '...'}
-                          {/* </Tooltip> */}
-                        </div>
-                      </div>
-                    </StructuredListCell>
-                  );
-                }
-                return (
-                  <StructuredListCell
-                    key={header.key}
-                    style={{ minWidth: '105px' }}
-                  >
-                    <div style={{ height: '40px' }}>
-                      <div className={styles.assetName}>{row[header.key]}</div>
-                    </div>
-                  </StructuredListCell>
-                );
-              })}
-            </StructuredListRow>
-          ))}
-        </StructuredListBody>
-      </StructuredListWrapper>
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row, i) => (
+                <TableRow key={i}>
+                  {headers.map((header) => {
+                    if (header.key != 'assetName') {
+                      let color = colorList[row[header.key]]?.bgColor;
+                      return (
+                        <TableCell key={header.key}>
+                          <div
+                            style={{
+                              backgroundColor: color,
+                              width: '117px',
+                              height: '3rem',
+                            }}
+                          ></div>
+                        </TableCell>
+                      );
+                    }
+                    return (
+                      <TableCell key={header.key}>{row[header.key]}</TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+      <Pagination
+        backwardText="Previous page"
+        forwardText="Next page"
+        itemsPerPageText=""
+        page={page}
+        pageNumberText="Page Number"
+        pageSize={pageSize}
+        pageSizes={[10, 20, 30, 40, 50]}
+        totalItems={total}
+        onChange={({ page, pageSize }) => {
+          setPage(page);
+          setPageSize(pageSize);
+        }}
+      />
     </div>
   );
 }
