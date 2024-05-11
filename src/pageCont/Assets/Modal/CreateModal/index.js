@@ -8,10 +8,17 @@ import {
   Grid,
   DatePickerInput,
   DatePicker,
+  FormItem,
+  FileUploaderDropContainer,
+  FileUploaderItem,
+  Tag,
 } from '@carbon/react';
+import { AddAlt } from '@carbon/icons-react';
 import moment from 'moment';
-import styles from '@/styles/modal/modal.module.scss';
-import {addAsset} from '@/api/assets'
+import classNames from 'classnames';
+import modalStyles from '@/styles/modal/modal.module.scss';
+import styles from './index.module.scss';
+import { addAsset } from '@/api/assets';
 const ModalPages = ({ createModalIsopen, changeState }) => {
   const [fieldValidation, setFieldValidation] = useState({
     assetNameInvalid: false,
@@ -31,6 +38,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     responsiblePerson: '',
     description: '',
   });
+  const [file, setFile] = useState(null);
 
   const onFormValueChange = (e) => {
     const { id, value } = e.target;
@@ -51,7 +59,6 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     }));
   };
 
-  
   const handleCancelClicked = () => {
     setFormValues({
       assetName: '',
@@ -83,23 +90,27 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
       snInvalid: !formValue.sn || formValue.sn === '',
     };
     setFieldValidation(newValidation);
-    console.log('Object ', Object.values(newValidation).some((v) => v));
+    console.log(
+      'Object ',
+      Object.values(newValidation).some((v) => v),
+    );
     // 所有必填项都已经填写
     if (!Object.values(newValidation).some((v) => v)) {
-      createAsset()
+      createAsset();
       return;
     }
-   
   };
-  const createAsset = async()=>{
+  const createAsset = async () => {
     let res = await addAsset(formValue);
-    if(res.data?.code == 200){
+    if (res.data?.code == 200) {
       handleCancelClicked();
     }
-  }
+  };
 
   return (
-    <div className={styles.ModalFromStyle}>
+    <div
+      className={classNames([modalStyles.ModalFromStyle, styles.createModal])}
+    >
       <Modal
         open={createModalIsopen}
         modalHeading="Create a New Asset"
@@ -234,7 +245,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               onChange={onFormValueChange}
             />
           </Column>
-          <Column sm={2} md={4} lg={16}>
+          {/* <Column sm={2} md={4} lg={16}>
             <TextInput
               id="description"
               labelText="Description"
@@ -242,6 +253,49 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               value={formValue.description}
               onChange={onFormValueChange}
             />
+          </Column> */}
+          <Column sm={2} md={4} lg={16}>
+            <p className={styles.cds_file_label}>Upload files</p>
+            <div>
+              <FileUploaderDropContainer
+                accept=".pdf,.docx" // 限制上传文件类型为 PDF 和 Word 文档
+                // accept={['image/jpeg', 'image/png']}
+                labelText={
+                  <>
+                    <AddAlt size={16}/> <span style={{marginLeft:10}}>Upload Document</span>
+                  </>
+                }
+                multiple={false}
+                onAddFiles={(e) => {
+                  console.log(e.target.files, 'onAddFiles');
+                  console.log(e.target.files[0].name, '3333');
+                  setFile(e.target.files);
+                }}
+                onChange={(e) => {
+                  console.log(e, 'onchange');
+                }}
+              />
+              <div className={styles.cds_label_description}>
+                <div>Supported Formats:</div>
+                <Tag className="some-class" type="outline">
+                  {'PDF'}
+                </Tag>
+                <Tag className="some-class" type="outline">
+                  {'WORD'}
+                </Tag>
+              </div>
+            </div>
+            {file?.length > 0 && (
+              <FileUploaderItem
+                iconDescription="Delete file"
+                name={file[0].name}
+                onDelete={() => {
+                  setFile(null);
+                }}
+                size="md"
+                status="edit"
+              />
+            )}
           </Column>
         </Grid>
       </Modal>
