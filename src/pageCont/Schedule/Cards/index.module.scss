@@ -1,0 +1,45 @@
+.cardParent {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .card {
+    flex: 1 0 265px; /* 自适应宽度，最小宽度为329像素 */
+    height: 150px;
+    background-color: #fff;
+    box-shadow: 0px 2px 10px rgba(157, 152, 152, 0.2);
+    border-radius: 2px;
+    margin-left: 35px; /* 卡片之间的间距 */
+    box-sizing: border-box;
+    padding: 20px;
+    position: relative;
+    cursor: pointer;
+  }
+  .card:first-child {
+    margin-left: 0; /* 第一个卡片左边距为0 */
+  }
+  
+  .card:last-child {
+    margin-right: 0; /* 最后一个卡片右边距为0 */
+  }
+  .cardHeader{
+    font-size: 16px;
+    font-weight: 600;
+    color: #333333;
+    line-height: 22px;
+  }
+  .cardBottom{
+    display: flex;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #161616;
+    align-items:baseline;
+    .bottomLeft{
+        font-size: 35px;
+        font-weight: 400;
+        margin-right: 3px;
+    }
+  }
+
+}

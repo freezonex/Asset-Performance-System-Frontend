@@ -1,0 +1,41 @@
+.scheduleTable {
+  width: 100%;
+  overflow-y: auto;
+  .status {
+    min-width: 100px;
+  }
+  .editText {
+    margin-right: 15px;
+    color: #0f62fe;
+  }
+  .delText {
+    color: #da1e28;
+  }
+  .assetName {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    padding-left:10px;
+    box-sizing: border-box;
+  }
+
+  :global {
+    .cds--structured-list-td {
+      line-height: 0;
+      padding: 0;
+    }
+    .cds--structured-list.cds--structured-list--condensed
+      .cds--structured-list-td {
+      padding: 0;
+    }
+    .table_tableStyle___lmjm
+      .cds--structured-list.cds--structured-list--condensed
+      .cds--structured-list-td {
+      padding: 0;
+    }
+  }
+}
