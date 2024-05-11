@@ -3,6 +3,9 @@ import styles from './index.module.scss';
 import classNames from 'classnames';
 import { update } from '@/utils/immutableUtil';
 import { queryByAssetTypeList } from '@/api/common';
+import {
+  Pagination,
+} from '@carbon/react';
 
 class Comp extends Component {
   state = {
@@ -14,15 +17,22 @@ class Comp extends Component {
   }
   componentDidMount() {
     this.props.init?.(this)
-    
+
   }
 
-  open = ()=>{
-    this.getList()
-    // this.setState({ isSHow: true })
+  open = () => {
+    this.setState({
+      pageNum: 1,
+      pageSize: 10,
+    }, () => {
+      this.getList({
+        pageNum: 1,
+        pageSize: 10,
+      })
+    })
   }
 
-  close = ()=>{
+  close = () => {
     this.setState({ isSHow: false })
   }
 
@@ -57,28 +67,13 @@ class Comp extends Component {
 
   shouldComponentUpdate = (np, ns) => update.call(this, np, ns)
   render() {
-    const { isSHow,tabList } = this.state
-
-    var list = [
-      {
-        date: '2024.05.06',
-        quantity: '60',
-        state: 1,
-      },
-      {
-        date: '2024.05.09',
-        quantity: '30',
-        state: 2,
-      },
-      {
-        date: '2024.05.11',
-        quantity: '20',
-      },
-      {
-        date: '2024.05.13',
-        quantity: '10',
-      },
-    ]
+    const {
+      isSHow,
+      tabList,
+      total,
+      pageSize,
+      pageNum,
+    } = this.state;
 
     var columns = [
       {
@@ -96,11 +91,15 @@ class Comp extends Component {
       },
     ];
 
-    var height = 41.2 * tabList.length
+    var height = 41.2 * (tabList.length + 1)
+
+    if (isSHow) {
+      height += 40
+    }
 
     return (
       <div
-        className={classNames([styles.showComp, styles.auto])}
+        className={classNames([styles.showComp])}
         style={{
           height: isSHow ? `${height}px` : 0,
           marginBottom: isSHow ? '10px' : 0,
@@ -142,6 +141,32 @@ class Comp extends Component {
             )
           })
         }
+
+        <div className={styles.pagination} style={{ width: '40%' }}>
+          <Pagination
+            backwardText="Previous page"
+            forwardText="Next page"
+            itemsPerPageText=""
+            page={pageNum}
+            pageNumberText="Page Number"
+            pageSize={pageSize}
+            pageSizes={[10, 20, 30, 40, 50]}
+            totalItems={total}
+            onChange={({ page, pageSize }) => {
+              this.setState({
+                pageSize: pageSize,
+                pageNum: page,
+              }, () => {
+                this.getList({
+                  pageNum: page,
+                  pageSize: pageSize,
+                })
+              })
+
+            }}
+          />
+        </div>
+
       </div>
     );
   }

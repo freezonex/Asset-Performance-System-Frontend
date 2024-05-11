@@ -36,3 +36,12 @@ export const queryChartData = (data) => {
     data: data,
   })
 }
+
+
+export const assetTypeList = (data) => {
+  return request({
+    url: '/apsbackend/inventory/assetType/list',
+    method: 'post',
+    data: data,
+  })
+}

@@ -6,6 +6,8 @@ import { Heading, Breadcrumb, BreadcrumbItem } from '@carbon/react';
 import { ContainedList, ContainedListItem } from '@carbon/react';
 import ModalTable from '../Modal/ModalTable'
 
+import { assetTypeList } from '@/api/common';
+
 import {
   Pen,
   Ruler,
@@ -18,54 +20,83 @@ import {
 
 
 class Comp extends Component {
-  state={
-    modalTableIsopen:false,
+  state = {
+    modalTableIsopen: false,
+    list:[],
   }
   componentDidMount = () => {
-		this.props.init?.(this)
-	}
-  setModalTableIsopen=()=>{
-    this.setState({modalTableIsopen:false})
+    this.props.init?.(this)
+    this.getList()
   }
+  setModalTableIsopen = () => {
+    this.setState({ modalTableIsopen: false })
+  }
+
+  // 获取列表
+  getList = async (params = {}) => {
+
+    var reqData = {
+      pageNum: 1,
+      pageSize: 8,
+    };
+    reqData = { ...reqData, ...params };
+
+    var rs = await assetTypeList(reqData);
+   
+    // 成功
+    if (rs.data.code == 200) {
+      var data = rs.data.data
+      console.log(data)
+      this.setState({
+        list:data.list
+      })
+
+    }
+  };
+
+  getIcon = (key) => {
+    var maps = {
+      'Pen': Pen,
+      'Ruler': Ruler,
+      'Laptop': Laptop,
+      'Keyboard': Keyboard,
+      'Clock': Alarm,
+      'Bicycle': Bicycle,
+      'Camera': Camera,
+    }
+    
+    if(!maps[key]) return Pen 
+    return maps[key]
+  }
+
   render() {
-    const {modalTableIsopen} = this.state
+    const { modalTableIsopen ,list } = this.state
     return (
       <div className={styles.container}>
-         <div className={styles.header}>
-            <div className={styles.title}>Safety Level Stock Spare Parts</div>
-            <div className={styles.options} onClick={()=>{
-              this.setState({modalTableIsopen:true})
-            }}>View All</div>
+        <div className={styles.header}>
+          <div className={styles.title}>Safety Level Stock Spare Parts</div>
+          <div className={styles.options} onClick={() => {
+            this.setState({ modalTableIsopen: true })
+          }}>View All</div>
+        </div>
+        <div className={styles.chart}>
+          <div className={styles.list}>
+            <ContainedList label="" kind="on-page">
+              {
+                list.map((item,i)=>{
+                  return (
+                    <ContainedListItem key={i} renderIcon={this.getIcon(item.assetType)}>
+                      {item.assetType}
+                    </ContainedListItem>
+                  )
+                })
+              }
+              
+            </ContainedList>
           </div>
-          <div className={styles.chart}>
-            <div className={styles.list}>
-              <ContainedList label="" kind="on-page">
-                <ContainedListItem renderIcon={Pen}>
-                  Pen
-                </ContainedListItem>
-                <ContainedListItem renderIcon={Ruler}>
-                  Ruler
-                </ContainedListItem>
-                <ContainedListItem renderIcon={Laptop}>
-                  Laptop
-                </ContainedListItem>
-                <ContainedListItem renderIcon={Keyboard}>
-                  Keyboard
-                </ContainedListItem>
-                <ContainedListItem renderIcon={Alarm}>
-                  Clock
-                </ContainedListItem>
-                <ContainedListItem renderIcon={Bicycle}>
-                  Bicycle
-                </ContainedListItem>
-                <ContainedListItem renderIcon={Camera}>
-                  Camera
-                </ContainedListItem>
-              </ContainedList>
-            </div>
-          </div>
+        </div>
 
-          <ModalTable modalTableIsopen={modalTableIsopen} setModalTableIsopen={this.setModalTableIsopen}/>
+        <ModalTable modalTableIsopen={modalTableIsopen} setModalTableIsopen={this.setModalTableIsopen} />
       </div>
     );
   }
