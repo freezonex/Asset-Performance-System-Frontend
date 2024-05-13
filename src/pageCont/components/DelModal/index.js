@@ -21,7 +21,7 @@ const ModalPages = ({ deleteModalIsopen, changeModalOpen ,delConfirm}) => {
       <Modal
         open={deleteModalIsopen}
         modalHeading="Deletion confirmation"
-        primaryButtonText="save"
+        primaryButtonText="Detele"
         secondaryButtonText="Cancel"
         onRequestClose={handleCancelClicked}
         onRequestSubmit={handleSubmit}

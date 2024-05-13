@@ -12,7 +12,34 @@ import {
 import moment from 'moment';
 import styles from '@/styles/modal/modal.module.scss';
 
-const ModalPages = ({ createModalIsopen, changeState,createModaType,tableData}) => {
+const ModalPages = ({
+  createModalIsopen,
+  changeState,
+  createModaType,
+  tableData,
+}) => {
+  const statusList = [
+    {
+      label: 'Open',
+      type: 'green',
+    },
+    {
+      label: 'In Progress',
+      type: 'blue',
+    },
+    {
+      label: 'Review',
+      type: 'purple',
+    },
+    {
+      label: 'Dued',
+      type: 'magenta',
+    },
+    {
+      label: 'Closed',
+      type: 'red',
+    },
+  ];
   const [fieldValidation, setFieldValidation] = useState({
     orderNameInvalid: false,
     workOrderIdInvalid: false,
@@ -89,16 +116,15 @@ const ModalPages = ({ createModalIsopen, changeState,createModaType,tableData}) 
     }
   };
 
-
   // 决定弹窗 header
-  const getModalHeading=()=>{
-    if(createModaType == 'edit'){
-      return  `Work Order - ${tableData?.work_order}`
+  const getModalHeading = () => {
+    if (createModaType == 'edit') {
+      return `Work Order - ${tableData?.work_order}`;
     }
-    if(createModaType == 'create'){
-      return 'Create a New Asset'
+    if (createModaType == 'create') {
+      return 'Create a New Asset';
     }
-  }
+  };
   return (
     <div className={styles.ModalFromStyle}>
       <Modal
@@ -179,9 +205,9 @@ const ModalPages = ({ createModalIsopen, changeState,createModaType,tableData}) 
               onChange={onFormValueChange}
             >
               <SelectItem value="" text="Choose an option" />
-              <SelectItem value="department-1" text="department 1" />
-              <SelectItem value="department-2" text="department 2" />
-              <SelectItem value="LSG" text="LSG" />
+              {statusList.map((item, ind) => {
+                return <SelectItem value={ind + 1} text={item.label} />;
+              })}
             </Select>
           </Column>
           <Column sm={2} md={4} lg={8}>
@@ -194,13 +220,13 @@ const ModalPages = ({ createModalIsopen, changeState,createModaType,tableData}) 
               onChange={onFormValueChange}
             >
               <SelectItem value="" text="Choose an option" />
-              <SelectItem value="department-1" text="department 1" />
-              <SelectItem value="department-2" text="department 2" />
-              <SelectItem value="LSG" text="LSG" />
+              <SelectItem value="1" text="1" />
+              <SelectItem value="2" text="2" />
+              <SelectItem value="3" text="3" />
             </Select>
           </Column>
           <Column sm={2} md={4} lg={8}>
-          <DatePicker
+            <DatePicker
               className="mb-8"
               datePickerType="single"
               onChange={onDateChange}
@@ -213,7 +239,7 @@ const ModalPages = ({ createModalIsopen, changeState,createModaType,tableData}) 
             </DatePicker>
           </Column>
           <Column sm={2} md={4} lg={8}>
-          <DatePicker
+            <DatePicker
               className="mb-8"
               datePickerType="single"
               onChange={onDateChange}
@@ -235,13 +261,13 @@ const ModalPages = ({ createModalIsopen, changeState,createModaType,tableData}) 
               onChange={onFormValueChange}
             >
               <SelectItem value="" text="Choose an option" />
-              <SelectItem value="department-1" text="department 1" />
-              <SelectItem value="department-2" text="department 2" />
-              <SelectItem value="LSG" text="LSG" />
+              <SelectItem value="1" text="1" />
+              <SelectItem value="2" text="2" />
+              <SelectItem value="3" text="3" />
             </Select>
           </Column>
 
-          <Column sm={2} md={4} lg={8}>
+          {/* <Column sm={2} md={4} lg={8}>
             <Select
               className="mb-8"
               id="created_by"
@@ -255,7 +281,7 @@ const ModalPages = ({ createModalIsopen, changeState,createModaType,tableData}) 
               <SelectItem value="department-2" text="department 2" />
               <SelectItem value="LSG" text="LSG" />
             </Select>
-          </Column>
+          </Column> */}
           <Column sm={2} md={4} lg={16}>
             <TextInput
               id="description"
