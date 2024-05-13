@@ -14,10 +14,13 @@ import {
 } from '@carbon/react';
 import { Edit, Delete, TableItem } from '@carbon/icons-react';
 import ModalTable from '../Modal/ModalTable';
-import styles from '@/styles/table/table.module.scss';
-import {getAssetList} from '@/api/assets'
+import classNames from 'classnames';
+import tableStyles from '@/styles/table/table.module.scss';
+import styles from './index.module.scss';
+import DelModal from '@/pageCont/components/DelModal'
+import {getAssetList,assetDelete} from '@/api/assets'
 
-function TablePage({ formValue, isSearchClicked }) {
+function TablePage({ formValue, isSearchClicked,changeState }) {
   const headers = [
     { key: 'assetId', header: 'Asset Id' },
     { key: 'assetName', header: 'Asset Name' },
@@ -27,6 +30,7 @@ function TablePage({ formValue, isSearchClicked }) {
     { key: 'sn', header: 'SN' },
     { key: 'status', header: 'Status' },
     { key: 'more', header: 'More' },
+    { key: 'edit', header: 'Edit' },
   ];
   const statusList = {
     1: {
@@ -50,6 +54,8 @@ function TablePage({ formValue, isSearchClicked }) {
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(5);
   const [modalTableIsopen, setModalTableIsopen] = useState(false);
+  const [deleteModalIsopen, setDeleteModalIsopen] = useState(false);
+  const [selectRowData, setSelectRowData] = useState({});//选中的row data
   const [rows, setRows] = useState([]);
   useEffect(() => {
     // 是否携带搜索条件
@@ -58,7 +64,7 @@ function TablePage({ formValue, isSearchClicked }) {
       getTableList(obj);
     } else {
       // 无搜索条件 调用接口
-      getTableList();
+      getTableList({pageNum:1,pageSize:10});
     }
    
   }, [isSearchClicked]);
@@ -79,8 +85,25 @@ function TablePage({ formValue, isSearchClicked }) {
       setPageSize(data?.pageSize);
     }
   }
+  const deleteAsset = async()=>{
+      if(Object.keys(selectRowData).length<1)return;
+      const {id} =  selectRowData
+      // 调用接口
+      let res = await assetDelete({id})
+      if(res?.data?.code == 200){
+        setDeleteModalIsopen(false)
+        setSelectRowData({})
+        if(isSearchClicked){
+          getTableList({...formValue,pageNum:1,pageSize:10})
+        }else{
+          getTableList({pageNum:1,pageSize:10})
+        }
+        
+      }
+  }
   return (
-    <div className={styles.tableStyle}>
+    <>
+<div className={classNames(tableStyles.tableStyle, styles.assets)}>
       <StructuredListWrapper isCondensed>
         <StructuredListHead>
           <StructuredListRow head>
@@ -105,6 +128,36 @@ function TablePage({ formValue, isSearchClicked }) {
                       >
                         ...
                       </Link>
+                    </StructuredListCell>
+                  );
+                }
+                if (header.key === 'edit') {
+                  return (
+                    <StructuredListCell key={header.key}>
+                      <span
+                        className={classNames(styles.editText,{[styles.disableEdit]:row.usedStatus ==1})}
+                        onClick={() => {
+                          if(row.usedStatus ==1) return;
+                          changeState({
+                            tableData:row,
+                            createModaType: 'edit',
+                          })
+                          // 延迟打开弹窗
+                          setTimeout(() => {
+                            changeState({
+                              createModalIsopen:true,
+                            })
+                          });
+                        }}
+                      >
+                        Edit
+                      </span>
+                      <span className={styles.delText} 
+                      onClick={()=>{
+                        setSelectRowData(row)
+                        setDeleteModalIsopen(true);
+                      }}
+                      >Delete</span>
                     </StructuredListCell>
                   );
                 }
@@ -143,15 +196,23 @@ function TablePage({ formValue, isSearchClicked }) {
           })
         }}
       />
-
-      {/* more modal */}
-      {
+    </div>
+    {/* more modal */}
+    {
         <ModalTable
           modalTableIsopen={modalTableIsopen}
           setModalTableIsopen={setModalTableIsopen}
         />
       }
-    </div>
+      {/* eidit modal */}
+    {/* del modal */}
+    <DelModal
+        deleteModalIsopen={deleteModalIsopen}
+        changeModalOpen={setDeleteModalIsopen}
+        delConfirm={deleteAsset}
+      />
+    </>
+    
   );
 }
 

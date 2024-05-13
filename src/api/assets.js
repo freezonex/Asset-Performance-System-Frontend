@@ -18,3 +18,11 @@ export const addAsset = (data) => {
     data: data,
   })
 }
+// 删除
+export const assetDelete = (data) => {
+  return request({
+    url: '/apsbackend/asset/delete',
+    method: 'post',
+    data: data,
+  })
+}
