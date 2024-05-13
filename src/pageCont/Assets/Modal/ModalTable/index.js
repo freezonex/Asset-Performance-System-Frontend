@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import {
   Modal,
-  StructuredListWrapper,
-  StructuredListHead,
-  StructuredListRow,
-  StructuredListCell,
-  StructuredListBody,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHeader,
 } from '@carbon/react';
 import styles from '@/styles/modal/modal.module.scss';
 import stylesTable from '@/styles/table/table.module.scss';
@@ -73,30 +75,34 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen }) => {
         onRequestClose={onRequestClose}
       >
         <div className={stylesTable.tableStyle}>
-          <StructuredListWrapper isCondensed>
-            <StructuredListHead>
-              <StructuredListRow head>
-                {headers.map((header, index) => (
-                  <StructuredListCell head key={header.key}>
-                    {header.header}
-                  </StructuredListCell>
-                ))}
-              </StructuredListRow>
-            </StructuredListHead>
-            <StructuredListBody>
-              {rows.map((row, index) => (
-                <StructuredListRow key={row.id}>
-                  {headers.map((header) => {
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  {headers.map((header, index) => {
                     return (
-                      <StructuredListCell key={header.key}>
-                        {row[header.key]}
-                      </StructuredListCell>
+                      <TableHeader key={`${header.key}_head`}>
+                        {header.header}
+                      </TableHeader>
                     );
                   })}
-                </StructuredListRow>
-              ))}
-            </StructuredListBody>
-          </StructuredListWrapper>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, i) => (
+                  <TableRow key={i}>
+                    {headers.map((header) => {
+                      return (
+                        <TableCell key={header.key}>
+                          {row[header.key]}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </Modal>
     </div>

@@ -1,17 +1,15 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import {
-  HeaderGlobalAction,
-  StructuredListWrapper,
-  StructuredListHead,
-  StructuredListRow,
-  StructuredListCell,
-  StructuredListBody,
-  Link,
-  IconButton,
-  Button,
   Pagination,
   Tag,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHeader,
 } from '@carbon/react';
 import classNames from 'classnames';
 // import ModalTable from '../Modal/ModalTable';
@@ -26,7 +24,7 @@ import styles from './index.module.scss';
 // } from '@/actions/actions';
 // import EditWarehouseModal from '../Modal/EditWarehouseModal';
 
-function TablePage({formValue, changeState,isSearchClicked }) {
+function TablePage({ formValue, changeState, isSearchClicked }) {
   const headers = [
     { key: 'work_order', header: 'Work Order' },
     { key: 'order_name', header: 'Order Name' },
@@ -135,66 +133,74 @@ function TablePage({formValue, changeState,isSearchClicked }) {
     }
   }, [page, pageSize, isSearchClicked]);
 
-
   return (
     <div className={classNames(tableStyles.tableStyle, styles.workOrderTable)}>
-      <StructuredListWrapper isCondensed>
-        <StructuredListHead>
-          <StructuredListRow head>
-            {headers.map((header, index) => (
-              <StructuredListCell head key={header.key}>
-                {header.header}
-              </StructuredListCell>
-            ))}
-          </StructuredListRow>
-        </StructuredListHead>
-        <StructuredListBody>
-          {rows.map((row, index) => (
-            <StructuredListRow key={row.id}>
-              {headers.map((header) => {
-                if (header.key === 'edit') {
-                  return (
-                    <StructuredListCell key={header.key}>
-                      <span
-                        className={styles.editText}
-                        onClick={() => {
-                          changeState({
-                            tableData:row,
-                            createModaType: 'edit',
-                          })
-                          // 延迟打开弹窗
-                          setTimeout(() => {
-                            changeState({
-                              createModalIsopen:true,
-                            })
-                          });
-                        }}
-                      >
-                        Edit
-                      </span>
-                      <span className={styles.delText}>Delete</span>
-                    </StructuredListCell>
-                  );
-                }
-                if (header.key === 'status') {
-                  let type = statusList[row[header.key]]?.type;
-                  let label = statusList[row[header.key]]?.label;
-                  return (
-                    <StructuredListCell key={header.key}>
-                      <Tag type={type}>{label}</Tag>
-                    </StructuredListCell>
-                  );
+      <TableContainer isCondensed>
+        <Table>
+          <TableHead>
+            <TableRow head>
+              {headers.map((header, index) => {
+                if(header.key == 'status'){
+                  return(
+                    <TableHeader style={{ minWidth: '125px' }} head key={header.key}>
+                    {header.header}
+                  </TableHeader>
+                  )
                 }
                 return (
-                  <StructuredListCell key={header.key}>
-                    {row[header.key]}
-                  </StructuredListCell>
+                  <TableHeader head key={header.key}>
+                    {header.header}
+                  </TableHeader>
                 );
               })}
-            </StructuredListRow>
-          ))}
-        </StructuredListBody>
-      </StructuredListWrapper>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow key={row.id}>
+                {headers.map((header) => {
+                  if (header.key === 'edit') {
+                    return (
+                      <TableCell key={header.key}>
+                        <span
+                          className={styles.editText}
+                          onClick={() => {
+                            changeState({
+                              tableData: row,
+                              createModaType: 'edit',
+                            });
+                            // 延迟打开弹窗
+                            setTimeout(() => {
+                              changeState({
+                                createModalIsopen: true,
+                              });
+                            });
+                          }}
+                        >
+                          Edit
+                        </span>
+                        <span className={styles.delText}>Delete</span>
+                      </TableCell>
+                    );
+                  }
+                  if (header.key === 'status') {
+                    let type = statusList[row[header.key]]?.type;
+                    let label = statusList[row[header.key]]?.label;
+                    return (
+                      <TableCell style={{ width: 120 }} key={header.key}>
+                        <Tag type={type}>{label}</Tag>
+                      </TableCell>
+                    );
+                  }
+                  return (
+                    <TableCell key={header.key}>{row[header.key]}</TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Pagination
         backwardText="Previous page"
         forwardText="Next page"
