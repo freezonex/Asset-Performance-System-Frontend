@@ -138,14 +138,13 @@ function TablePage({}) {
     // },
   ]);
   useEffect(() => {
-    getList();
-  }, [page, pageSize]);
+    getList({ selectDate: moment(dataPickValue[0]).format('yyyy-MM-DD') });
+  }, []);
 
   const getList = async (data = {}) => {
     let res = await getScheduleList({
       pageNum: page,
       pageSize: pageSize,
-      selectDate: moment(dataPickValue[0]).format('yyyy-MM-DD'),
       ...data,
     });
     if (res?.data?.code == 200) {
@@ -155,7 +154,6 @@ function TablePage({}) {
       setPageSize(data.pageData.pageSize);
       getHeader(data.dates);
       getTableList(data.pageData.list);
-      console.log('data.pageData.list: ', data.pageData.list);
     }
   };
 
@@ -164,7 +162,8 @@ function TablePage({}) {
     let newArr = data.map((val) => {
       return { key: val, header: val };
     });
-    let newHeaders = headers.concat(newArr);
+    let arr = [{ key: 'groupName', header: 'Department' }]
+    let newHeaders = arr.concat(newArr);
     setHeaders(newHeaders);
   };
 
@@ -181,7 +180,6 @@ function TablePage({}) {
       });
       return obj;
     });
-    console.log(newArr, 'newArr');
     setTabelList(newArr);
   };
 
@@ -193,12 +191,17 @@ function TablePage({}) {
             value={dataPickValue}
             datePickerType="single"
             onChange={(e) => {
-              setDataPickValue(e);
-              getList({
-                pageNum: 1,
-                pageSize: 10,
-                selectDate: moment(dataPickValue[0]).format('yyyy-MM-DD'),
-              });
+              if (e.length < 1) return;
+              const date1 = moment(e[0]).startOf('day');
+              const date2 = moment(dataPickValue).startOf('day');
+              if (!date1.isSame(date2)) {
+                setDataPickValue(e[0]);
+                getList({
+                  pageNum: 1,
+                  pageSize: 10,
+                  selectDate: moment(e[0]).format('yyyy-MM-DD'),
+                });
+              }
             }}
           >
             <DatePickerInput
@@ -212,7 +215,7 @@ function TablePage({}) {
         <div className={styles.scheduleTableHeaderRight}>
           {Object.values(colorList).map((data, ind) => {
             return (
-              <div className={styles.headerRightIconParent}>
+              <div key={ind} className={styles.headerRightIconParent}>
                 <span
                   className={styles.headerRightIcon}
                   style={{ backgroundColor: data.bgColor }}
@@ -234,7 +237,6 @@ function TablePage({}) {
                       <TableHeader
                         style={{ minWidth: '120px' }}
                         key={`${header.key}_head`}
-                        head={true}
                       >
                         {header.header}
                       </TableHeader>
@@ -242,9 +244,8 @@ function TablePage({}) {
                   }
                   return (
                     <TableHeader
-                      head={true}
                       key={`${header.key}_head`}
-                      style={{ minWidth: '115px' }}
+                      style={{ minWidth: '120px' }}
                     >
                       {header.header}
                     </TableHeader>

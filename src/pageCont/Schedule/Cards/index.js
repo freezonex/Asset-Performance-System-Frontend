@@ -11,7 +11,7 @@ function Cards() {
 
   useEffect(()=>{
     getData()
-  })
+  },[])
 
   const getData = async () => {
     let res = await getHeaderData();
@@ -46,8 +46,8 @@ function Cards() {
         <div className={styles.card}>
             <div className={styles.cardHeader}>Total Asset</div>
             <div className={styles.cardBottom}>
-                <div className={styles.bottomLeft}>21</div>
-                <div className={styles.bottomright}>{data.totalAssets}</div>
+                <div className={styles.bottomLeft}>{data.totalAssets}</div>
+                <div className={styles.bottomright}>types</div>
             </div>
         </div>
     </div>
