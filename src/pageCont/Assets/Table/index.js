@@ -1,23 +1,26 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import {
-  HeaderGlobalAction,
-  StructuredListWrapper,
-  StructuredListHead,
-  StructuredListRow,
-  StructuredListCell,
-  StructuredListBody,
   Link,
-  IconButton,
   Pagination,
   Tag,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHeader,
 } from '@carbon/react';
 import { Edit, Delete, TableItem } from '@carbon/icons-react';
 import ModalTable from '../Modal/ModalTable';
-import styles from '@/styles/table/table.module.scss';
-import {getAssetList} from '@/api/assets'
+import classNames from 'classnames';
+import tableStyles from '@/styles/table/table.module.scss';
+import styles from './index.module.scss';
+import DelModal from '@/pageCont/components/DelModal';
+import { getAssetList, assetDelete } from '@/api/assets';
 
-function TablePage({ formValue, isSearchClicked }) {
+function TablePage({ formValue, isSearchClicked, changeState }) {
   const headers = [
     { key: 'assetId', header: 'Asset Id' },
     { key: 'assetName', header: 'Asset Name' },
@@ -27,6 +30,7 @@ function TablePage({ formValue, isSearchClicked }) {
     { key: 'sn', header: 'SN' },
     { key: 'status', header: 'Status' },
     { key: 'more', header: 'More' },
+    { key: 'edit', header: 'Edit' },
   ];
   const statusList = {
     1: {
@@ -50,100 +54,164 @@ function TablePage({ formValue, isSearchClicked }) {
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(5);
   const [modalTableIsopen, setModalTableIsopen] = useState(false);
+  const [deleteModalIsopen, setDeleteModalIsopen] = useState(false);
+  const [selectRowData, setSelectRowData] = useState({}); //选中的row data
   const [rows, setRows] = useState([]);
   useEffect(() => {
     // 是否携带搜索条件
     if (isSearchClicked) {
-      let obj={...formValue,pageNum:1,pageSize:10}
+      let obj = { ...formValue, pageNum: 1, pageSize: 10 };
       getTableList(obj);
     } else {
       // 无搜索条件 调用接口
-      getTableList();
+      getTableList({ pageNum: 1, pageSize: 10 });
     }
-   
   }, [isSearchClicked]);
 
-  const getTableList = async(filters)=>{
+  const getTableList = async (filters) => {
     let reqData = {
       pageNum: page,
       pageSize: pageSize,
       ...filters,
-    }
-    let res = await getAssetList(reqData)
-    
-    if(res?.data?.code == 200){
-      const {data} = res?.data;
-      setRows(data?.list)
-      setTotal(data?.total)
+    };
+    let res = await getAssetList(reqData);
+
+    if (res?.data?.code == 200) {
+      const { data } = res?.data;
+      setRows(data?.list);
+      setTotal(data?.total);
       setPage(data?.pageNum);
       setPageSize(data?.pageSize);
     }
-  }
+  };
+  const deleteAsset = async () => {
+    if (Object.keys(selectRowData).length < 1) return;
+    const { id } = selectRowData;
+    // 调用接口
+    let res = await assetDelete({ id });
+    if (res?.data?.code == 200) {
+      setDeleteModalIsopen(false);
+      setSelectRowData({});
+      if (isSearchClicked) {
+        getTableList({ ...formValue, pageNum: 1, pageSize: 10 });
+      } else {
+        getTableList({ pageNum: 1, pageSize: 10 });
+      }
+    }
+  };
   return (
-    <div className={styles.tableStyle}>
-      <StructuredListWrapper isCondensed>
-        <StructuredListHead>
-          <StructuredListRow head>
-            {headers.map((header, index) => (
-              <StructuredListCell head key={header.key}>
-                {header.header}
-              </StructuredListCell>
-            ))}
-          </StructuredListRow>
-        </StructuredListHead>
-        <StructuredListBody>
-          {rows.map((row, index) => (
-            <StructuredListRow key={row.id}>
-              {headers.map((header) => {
-                if (header.key === 'more') {
+    <>
+      <div className={classNames(tableStyles.tableStyle, styles.assets)}>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {headers.map((header, index) => {
+                 if (header.key == 'status') {
                   return (
-                    <StructuredListCell key={header.key}>
-                      <Link
-                        onClick={() => {
-                          setModalTableIsopen(true);
-                        }}
-                      >
-                        ...
-                      </Link>
-                    </StructuredListCell>
+                    <TableHeader
+                      style={{ minWidth: '108px' }}
+                      key={`${header.key}_head`}
+                    >
+                      {header.header}
+                    </TableHeader>
                   );
                 }
-                if (header.key === 'status') {
-                  let type = statusList[row[header.key]]?.type;
-                  let label = statusList[row[header.key]]?.label;
                   return (
-                    <StructuredListCell key={header.key}>
-                      <Tag type={type}>{label}</Tag>
-                    </StructuredListCell>
+                    <TableHeader key={`${header.key}_head`}>
+                      {header.header}
+                    </TableHeader>
                   );
-                }
-                return (
-                  <StructuredListCell key={header.key}>
-                    {row[header.key]}
-                  </StructuredListCell>
-                );
-              })}
-            </StructuredListRow>
-          ))}
-        </StructuredListBody>
-      </StructuredListWrapper>
-      <Pagination
-        backwardText="Previous page"
-        forwardText="Next page"
-        itemsPerPageText=""
-        page={page}
-        pageNumberText="Page Number"
-        pageSize={pageSize}
-        pageSizes={[10, 20, 30, 40, 50]}
-        totalItems={total}
-        onChange={({ page, pageSize }) => {
-          getTableList({
-            pageNum: page,
-            pageSize: pageSize,
-          })
-        }}
-      />
-
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row, index) => (
+                <TableRow key={row.id}>
+                  {headers.map((header) => {
+                    if (header.key === 'more') {
+                      return (
+                        <TableCell key={header.key}>
+                          <Link
+                            onClick={() => {
+                              setModalTableIsopen(true);
+                            }}
+                          >
+                            ...
+                          </Link>
+                        </TableCell>
+                      );
+                    }
+                    if (header.key === 'edit') {
+                      return (
+                        <TableCell key={header.key}>
+                          <span
+                            className={classNames(styles.editText, {
+                              [styles.disableEdit]: row.usedStatus == 1,
+                            })}
+                            onClick={() => {
+                              if (row.usedStatus == 1) return;
+                              changeState({
+                                tableData: row,
+                                createModaType: 'edit',
+                              });
+                              // 延迟打开弹窗
+                              setTimeout(() => {
+                                changeState({
+                                  createModalIsopen: true,
+                                });
+                              });
+                            }}
+                          >
+                            Edit
+                          </span>
+                          <span
+                            className={styles.delText}
+                            onClick={() => {
+                              setSelectRowData(row);
+                              setDeleteModalIsopen(true);
+                            }}
+                          >
+                            Delete
+                          </span>
+                        </TableCell>
+                      );
+                    }
+                    if (header.key === 'status') {
+                      let type = statusList[row[header.key]]?.type;
+                      let label = statusList[row[header.key]]?.label;
+                      return (
+                        <TableCell key={header.key}>
+                          <Tag type={type}>{label}</Tag>
+                        </TableCell>
+                      );
+                    }
+                    return (
+                      <TableCell key={header.key}>{row[header.key]}</TableCell>
+                    );
+                  })}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Pagination
+          backwardText="Previous page"
+          forwardText="Next page"
+          itemsPerPageText=""
+          page={page}
+          pageNumberText="Page Number"
+          pageSize={pageSize}
+          pageSizes={[10, 20, 30, 40, 50]}
+          totalItems={total}
+          onChange={({ page, pageSize }) => {
+            getTableList({
+              pageNum: page,
+              pageSize: pageSize,
+            });
+          }}
+        />
+      </div>
       {/* more modal */}
       {
         <ModalTable
@@ -151,7 +219,14 @@ function TablePage({ formValue, isSearchClicked }) {
           setModalTableIsopen={setModalTableIsopen}
         />
       }
-    </div>
+      {/* eidit modal */}
+      {/* del modal */}
+      <DelModal
+        deleteModalIsopen={deleteModalIsopen}
+        changeModalOpen={setDeleteModalIsopen}
+        delConfirm={deleteAsset}
+      />
+    </>
   );
 }
 

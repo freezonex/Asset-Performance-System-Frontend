@@ -39,30 +39,10 @@
     }
   }
   :global {
-    .cds--data-table tr {
-      border-left: 1px solid #c6c6c6;
-      border-right: 1px solid #c6c6c6;
-    }
-    .cds--data-table td,
-    .cds--data-table tbody th {
-      border-right: 1px solid #c6c6c6;
-    }
-    .cds--data-table th {
-      font-weight: 600;
-      border-right: 1px solid #c6c6c6;
-      background-color: #e6e6e6;
-    }
+
     .cds--data-table td {
       padding: 0;
     }
-    .cds--data-table tr > td:first-child {
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-    .cds--pagination {
-      border: 1px solid #c6c6c6;
-    }
-
     // dataPick
     .cds--date-picker__input {
       background-color: #e6e6e6;

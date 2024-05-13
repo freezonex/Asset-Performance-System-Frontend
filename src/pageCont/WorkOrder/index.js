@@ -19,10 +19,10 @@ import { Add, Search, Close } from '@carbon/icons-react';
 class Comp extends Component {
   state = {
     formValue: {
-      work_order: '',
-      order_name: '',
+      orderId: '',
+      orderName: '',
       type: '',
-      creation_time: '',
+      creationTime: '',
     },
     isSearchClicked: false, //是否搜索
     tableData: {},
@@ -38,16 +38,16 @@ class Comp extends Component {
   initFormValue = () => {
     this.setState({
       formValue: {
-        ork_order: '',
-        order_name: '',
+        orderId: '',
+        orderName: '',
         type: '',
-        creation_time: '',
+        creationTime: '',
       },
+      isSearchClicked:false,
     });
   };
 
   FormValueChange = (e) => {
-    console.log(e);
     const { id, value } = e.target;
     let obj = { ...this.state.formValue };
     obj[id] = value;
@@ -106,9 +106,9 @@ class Comp extends Component {
         <div className="flex mt-12 space-x-4 items-end">
           <TextInput
             className="flex-auto w-20"
-            labelText="Asset ID"
-            id="asset_id"
-            placeholder="Asset ID"
+            labelText="Work Order"
+            id="orderId"
+            placeholder="Work Order"
             value={formValue.asset_id}
             onChange={(e) => {
               this.FormValueChange(e);
@@ -116,9 +116,9 @@ class Comp extends Component {
           />
           <TextInput
             className="flex-auto w-20"
-            labelText="Asset"
-            id="asset"
-            placeholder="Asset"
+            labelText="Order Name"
+            id="orderName"
+            placeholder="Order Name"
             value={formValue.asset}
             onChange={(e) => {
               this.FormValueChange(e);
@@ -136,9 +136,9 @@ class Comp extends Component {
           />
           <TextInput
             className="flex-auto w-20"
-            labelText="Person"
-            id="person"
-            placeholder="Person"
+            labelText="Creation Time"
+            id="creationTime"
+            placeholder="Creation Time"
             value={formValue.person}
             onChange={(e) => {
               this.FormValueChange(e);
@@ -146,8 +146,9 @@ class Comp extends Component {
           />
           <Button
             onClick={() => {
-              //搜索
-              console.log(this.state.formValue, 'formValue');
+              this.setState({
+                isSearchClicked: true,
+              })
             }}
             style={{ backgroundColor: '#393939' }}
             isExpressive

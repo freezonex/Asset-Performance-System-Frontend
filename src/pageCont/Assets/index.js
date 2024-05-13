@@ -27,7 +27,6 @@ class Comp extends Component {
     isSearchClicked:false, //是否搜索
     refresh:{},
     createModalIsopen:false,//create modal 状态
-    modalTableIsopen:false,//more modal 状态
   };
   componentDidMount = () => {};
 
@@ -56,7 +55,7 @@ class Comp extends Component {
     });
   };
   render() {
-    const { formValue,refresh, isSearchClicked,createModalIsopen,modalTableIsopen} = this.state;
+    const { formValue, isSearchClicked,createModalIsopen} = this.state;
     return (
       <div>
         <Head>Assets</Head>

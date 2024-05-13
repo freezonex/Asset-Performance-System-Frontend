@@ -45,9 +45,8 @@ class Comp extends Component {
     reqData = { ...reqData, ...params };
 
     var rs = await inventorylist(reqData);
-    console.log(rs)
     // 成功
-    if (rs.data.code == 200) {
+    if (rs?.data?.code == 200) {
       var data = rs.data.data
       this.setState({
         tabList: data.list,
