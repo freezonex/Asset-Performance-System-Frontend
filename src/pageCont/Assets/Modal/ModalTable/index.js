@@ -4,7 +4,8 @@ import { DocumentDownload } from '@carbon/icons-react';
 import classNames from 'classnames';
 import modalStyles from '@/styles/modal/modal.module.scss';
 import styles from './index.module.scss';
-const ModalPages = ({ modalTableIsopen, setModalTableIsopen }) => {
+import { assetsDownload } from '@/api/assets';
+const ModalPages = ({ modalTableIsopen, setModalTableIsopen ,tableRowData}) => {
   const headers = [
     { key: 'department', header: 'Department' },
     { key: 'location', header: 'Location' },
@@ -40,7 +41,8 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen }) => {
                   <div className={styles.Right}>
                     <Link
                       onClick={()=>{
-                        
+                        const {id} = tableRowData;
+                        assetsDownload({id})
                       }}
                       renderIcon={() => (
                         <DocumentDownload aria-label="Arrow Right" />
@@ -54,7 +56,7 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen }) => {
             }
             return (
               <div className={styles.parent}>
-                <div className={styles.Left}>{item.key}</div>
+                <div className={styles.Left}>{item.header}</div>
                 <div className={styles.Right}>{rows[item.key]}</div>
               </div>
             );
