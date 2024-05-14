@@ -45,5 +45,9 @@
       background-color: var(--cds-field-02, #ffffff);
       border: none;
     }
+    .cds--file__selected-file{
+      background-color: var(--cds-field-02, #ffffff);
+      max-width: 100%;
+    }
   }
 }

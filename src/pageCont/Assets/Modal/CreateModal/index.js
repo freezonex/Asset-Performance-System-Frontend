@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   TextInput,
@@ -6,20 +6,18 @@ import {
   SelectItem,
   Column,
   Grid,
-  DatePickerInput,
-  DatePicker,
-  FormItem,
   FileUploaderDropContainer,
   FileUploaderItem,
-  Tag,
 } from '@carbon/react';
 import { AddAlt } from '@carbon/icons-react';
 import moment from 'moment';
 import classNames from 'classnames';
 import modalStyles from '@/styles/modal/modal.module.scss';
 import styles from './index.module.scss';
-import { addAsset } from '@/api/assets';
+import { addAsset,addFile,getAssetTypeList } from '@/api/assets';
 const ModalPages = ({ createModalIsopen, changeState }) => {
+  const [assetTypeData,setAssetTypeData]=useState([])
+  const [isUploading,setIsUploading]=useState(false)
   const [fieldValidation, setFieldValidation] = useState({
     assetNameInvalid: false,
     assetIdInvalid: false,
@@ -29,16 +27,31 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     assetName: '',
     assetId: '',
     sn: '',
-    assetType: '',
+    assetTypeId: '',
     status: '',
     department: '',
     location: '',
-    installationDate: '',
     value: '',
     responsiblePerson: '',
     description: '',
+    attachmentDir:'',//文件上传
+    attachmentName:''//文件上传
   });
   const [file, setFile] = useState(null);
+
+  useEffect(()=>{
+    getAssetTypeData()
+  },[createModalIsopen])
+
+
+  const getAssetTypeData = async()=>{
+    let res = await getAssetTypeList();
+    if (res?.data?.code == 200) {
+      const { data } = res?.data;
+      setAssetTypeData(data)
+    }
+  }
+
 
   const onFormValueChange = (e) => {
     const { id, value } = e.target;
@@ -49,22 +62,13 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     }));
   };
 
-  const onDateChange = (e) => {
-    if (!e) {
-      return;
-    }
-    setFormValues((prevValues) => ({
-      ...prevValues,
-      installationDate: moment(e[0]).format(),
-    }));
-  };
-
+  // 初始化数据
   const handleCancelClicked = () => {
     setFormValues({
       assetName: '',
       assetId: '',
       sn: '',
-      assetType: '',
+      assetTypeId: '',
       status: '',
       department: '',
       location: '',
@@ -72,16 +76,20 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
       value: '',
       responsiblePerson: '',
       description: '',
+      attachmentDir:'',//文件上传
+      attachmentName:''//文件上传
     });
     setFieldValidation({
       assetNameInvalid: false,
       assetIdInvalid: false,
       snInvalid: false,
     });
-    // onClose();
+    setFile(null)
     changeState({ createModalIsopen: false });
+    setIsUploading(false)
   };
 
+  // 提交
   const handleSubmit = (e) => {
     e.preventDefault();
     const newValidation = {
@@ -90,16 +98,13 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
       snInvalid: !formValue.sn || formValue.sn === '',
     };
     setFieldValidation(newValidation);
-    console.log(
-      'Object ',
-      Object.values(newValidation).some((v) => v),
-    );
     // 所有必填项都已经填写
     if (!Object.values(newValidation).some((v) => v)) {
-      createAsset();
+      createAsset(formValue);
       return;
     }
   };
+  // 提交接口
   const createAsset = async () => {
     let res = await addAsset(formValue);
     if (res.data?.code == 200) {
@@ -107,10 +112,27 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     }
   };
 
+  // 上传文件
+  const uploadFile = async(file)=>{
+    const formData = new FormData();
+    formData.append('file', file);
+    let res = await addFile(formData)
+    if (res?.data?.code == 200) {
+      const { data } = res?.data;
+      let obj = {
+        attachmentDir:data.attachmentDir,
+        attachmentName:data.attachmentName,
+      }
+      setFormValues({...formValue,...obj})
+      setIsUploading(true)
+    }
+  }
+
   return (
     <div
       className={classNames([modalStyles.ModalFromStyle, styles.createModal])}
     >
+      {/* <Toast /> */}
       <Modal
         open={createModalIsopen}
         modalHeading="Create a New Asset"
@@ -118,6 +140,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
         secondaryButtonText="Cancel"
         onRequestClose={handleCancelClicked}
         onRequestSubmit={handleSubmit}
+        primaryButtonDisabled={!isUploading}
       >
         <Grid className="pl-0 pr-0">
           <Column sm={2} md={4} lg={8}>
@@ -131,6 +154,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               invalidText="This field cannot be empty"
               value={formValue.assetName}
               onChange={onFormValueChange}
+              
               onFocus={(e) => {
                 // 可以自定义正则校验
                 // 校验不成功，可以修改fieldValidation 为true
@@ -165,14 +189,21 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
             />
           </Column>
           <Column sm={2} md={4} lg={8}>
-            <TextInput
+            <Select
               className="mb-8"
-              id="assetType"
+              id="assetTypeId"
               labelText="Asset Type"
-              placeholder="Asset Type"
-              value={formValue.assetType}
+              value={formValue.assetTypeId}
+              // placeholder="Choose an option"
               onChange={onFormValueChange}
-            />
+            >
+              <SelectItem value="" text="Choose an option" />
+              {assetTypeData.map((item,ind)=>{
+                return (
+                  <SelectItem key={item.id} value={item.id} text={item.assetType} />
+                )
+              })}
+            </Select>
           </Column>
 
           <Column sm={2} md={4} lg={8}>
@@ -213,19 +244,6 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
             />
           </Column>
           <Column sm={2} md={4} lg={8}>
-            <DatePicker
-              className="mb-8"
-              datePickerType="single"
-              onChange={onDateChange}
-            >
-              <DatePickerInput
-                id="installationDate"
-                labelText="Installation Date"
-                placeholder="mm/dd/yyyy"
-              />
-            </DatePicker>
-          </Column>
-          <Column sm={2} md={4} lg={8}>
             <TextInput
               className="mb-8"
               id="value"
@@ -245,18 +263,19 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               onChange={onFormValueChange}
             />
           </Column>
-          {/* <Column sm={2} md={4} lg={16}>
+          <Column sm={2} md={4} lg={8}>
             <TextInput
+              className="mb-8"
               id="description"
-              labelText="Description"
-              placeholder="Description"
+              labelText="Responsible PersonDescription"
+              placeholder="Responsible PersonDescription"
               value={formValue.description}
               onChange={onFormValueChange}
             />
-          </Column> */}
+          </Column>
           <Column sm={2} md={4} lg={16}>
             <p className={styles.cds_file_label}>Upload files</p>
-            <div style={{width:'100%',position:'relative'}}>
+            {file == null && <div style={{width:'100%',position:'relative'}}>
               <FileUploaderDropContainer
                 accept=".pdf,.docx" // 限制上传文件类型为 PDF 和 Word 文档
                 labelText={
@@ -266,11 +285,9 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
                 }
                 multiple={false}
                 onAddFiles={(e) => {
-                  console.log(e.target.files, 'onAddFiles');
-                  console.log(e.target.files[0].name, '3333');
                   setFile(e.target.files);
-                  // 调用接口
-
+                  // 调用上传接口
+                  uploadFile(e.target.files[0])
                 }}
               />
               <div className={styles.cds_label_description}>
@@ -278,7 +295,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
                 <div className={styles.fileType}>PDF</div>
                 <div className={styles.fileType}>Word</div>
               </div>
-            </div>
+            </div>}
             {file?.length > 0 && (
               <FileUploaderItem
                 iconDescription="Delete file"
@@ -287,12 +304,14 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
                   setFile(null);
                 }}
                 size="md"
-                status="edit"
+                status={isUploading ? 'edit' : 'uploading'}
               />
             )}
           </Column>
         </Grid>
+        
       </Modal>
+      
     </div>
   );
 };

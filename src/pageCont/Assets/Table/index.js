@@ -20,7 +20,7 @@ import styles from './index.module.scss';
 import DelModal from '@/pageCont/components/DelModal';
 import { getAssetList, assetDelete } from '@/api/assets';
 
-function TablePage({ formValue, isSearchClicked, changeState }) {
+function TablePage({ formValue, isSearchClicked, changeState ,createModalIsopen}) {
   const headers = [
     { key: 'assetId', header: 'Asset Id' },
     { key: 'assetName', header: 'Asset Name' },
@@ -66,7 +66,7 @@ function TablePage({ formValue, isSearchClicked, changeState }) {
       // 无搜索条件 调用接口
       getTableList({ pageNum: 1, pageSize: 10 });
     }
-  }, [isSearchClicked]);
+  }, [isSearchClicked,createModalIsopen]);
 
   const getTableList = async (filters) => {
     let reqData = {
