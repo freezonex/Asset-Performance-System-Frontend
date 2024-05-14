@@ -256,33 +256,27 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           </Column> */}
           <Column sm={2} md={4} lg={16}>
             <p className={styles.cds_file_label}>Upload files</p>
-            <div>
+            <div style={{width:'100%',position:'relative'}}>
               <FileUploaderDropContainer
                 accept=".pdf,.docx" // 限制上传文件类型为 PDF 和 Word 文档
-                // accept={['image/jpeg', 'image/png']}
                 labelText={
-                  <>
+                  <div className={styles.uploadDocument}>
                     <AddAlt size={16}/> <span style={{marginLeft:10}}>Upload Document</span>
-                  </>
+                  </div>
                 }
                 multiple={false}
                 onAddFiles={(e) => {
                   console.log(e.target.files, 'onAddFiles');
                   console.log(e.target.files[0].name, '3333');
                   setFile(e.target.files);
-                }}
-                onChange={(e) => {
-                  console.log(e, 'onchange');
+                  // 调用接口
+
                 }}
               />
               <div className={styles.cds_label_description}>
                 <div>Supported Formats:</div>
-                <Tag className="some-class" type="outline">
-                  {'PDF'}
-                </Tag>
-                <Tag className="some-class" type="outline">
-                  {'WORD'}
-                </Tag>
+                <div className={styles.fileType}>PDF</div>
+                <div className={styles.fileType}>Word</div>
               </div>
             </div>
             {file?.length > 0 && (
