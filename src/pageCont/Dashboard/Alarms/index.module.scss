@@ -1,0 +1,37 @@
+.list {
+  height: 151px;
+  overflow-y: auto;
+
+  .listItem {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #c4c0c0;
+    cursor: pointer;
+
+    .content {
+      display: flex;
+
+      .icon {
+        margin-right: 16px;
+        position: relative;
+        top: 2px;
+        color: #9F1853;
+      }
+
+      .text {
+        font-family: IBM Plex Sans;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: left;
+        margin-right: 8px;
+        color: #9F1853;
+      }
+    }
+
+    .close {
+      cursor: pointer;
+    }
+  }
+}
