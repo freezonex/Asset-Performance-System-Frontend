@@ -12,15 +12,21 @@ import {
   TableRow,
   TableHeader,
 } from '@carbon/react';
-import { Edit, Delete, TableItem } from '@carbon/icons-react';
 import ModalTable from '../Modal/ModalTable';
 import classNames from 'classnames';
 import tableStyles from '@/styles/table/table.module.scss';
 import styles from './index.module.scss';
 import DelModal from '@/pageCont/components/DelModal';
+import EditModal from '../Modal/EditModal';
 import { getAssetList, assetDelete } from '@/api/assets';
 
-function TablePage({ formValue, isSearchClicked, changeState ,createModalIsopen}) {
+function TablePage({
+  formValue,
+  isSearchClicked,
+  changeState,
+  createModalIsopen,
+  editModalIsopen,
+}) {
   const headers = [
     { key: 'assetId', header: 'Asset Id' },
     { key: 'assetName', header: 'Asset Name' },
@@ -56,7 +62,9 @@ function TablePage({ formValue, isSearchClicked, changeState ,createModalIsopen}
   const [modalTableIsopen, setModalTableIsopen] = useState(false);
   const [deleteModalIsopen, setDeleteModalIsopen] = useState(false);
   const [selectRowData, setSelectRowData] = useState({}); //选中的row data
+  const [tableRowData, setTableRowData] = useState({}); //table row data
   const [rows, setRows] = useState([]);
+
   useEffect(() => {
     // 是否携带搜索条件
     if (isSearchClicked) {
@@ -66,7 +74,12 @@ function TablePage({ formValue, isSearchClicked, changeState ,createModalIsopen}
       // 无搜索条件 调用接口
       getTableList({ pageNum: 1, pageSize: 10 });
     }
-  }, [isSearchClicked,createModalIsopen]);
+  }, [isSearchClicked, createModalIsopen, editModalIsopen]);
+
+  useEffect(() => {
+    if (!createModalIsopen && !editModalIsopen && !modalTableIsopen)
+      setTableRowData({});
+  }, [editModalIsopen, modalTableIsopen]);
 
   const getTableList = async (filters) => {
     let reqData = {
@@ -107,16 +120,16 @@ function TablePage({ formValue, isSearchClicked, changeState ,createModalIsopen}
             <TableHead>
               <TableRow>
                 {headers.map((header, index) => {
-                 if (header.key == 'status') {
-                  return (
-                    <TableHeader
-                      style={{ minWidth: '108px' }}
-                      key={`${header.key}_head`}
-                    >
-                      {header.header}
-                    </TableHeader>
-                  );
-                }
+                  if (header.key == 'status') {
+                    return (
+                      <TableHeader
+                        style={{ minWidth: '108px' }}
+                        key={`${header.key}_head`}
+                      >
+                        {header.header}
+                      </TableHeader>
+                    );
+                  }
                   return (
                     <TableHeader key={`${header.key}_head`}>
                       {header.header}
@@ -134,7 +147,10 @@ function TablePage({ formValue, isSearchClicked, changeState ,createModalIsopen}
                         <TableCell key={header.key}>
                           <Link
                             onClick={() => {
-                              setModalTableIsopen(true);
+                              setTableRowData(row);
+                              setTimeout(() => {
+                                setModalTableIsopen(true);
+                              });
                             }}
                           >
                             ...
@@ -151,14 +167,11 @@ function TablePage({ formValue, isSearchClicked, changeState ,createModalIsopen}
                             })}
                             onClick={() => {
                               if (row.usedStatus == 1) return;
-                              changeState({
-                                tableData: row,
-                                createModaType: 'edit',
-                              });
+                              setTableRowData(row);
                               // 延迟打开弹窗
                               setTimeout(() => {
                                 changeState({
-                                  createModalIsopen: true,
+                                  editModalIsopen: true,
                                 });
                               });
                             }}
@@ -217,9 +230,15 @@ function TablePage({ formValue, isSearchClicked, changeState ,createModalIsopen}
         <ModalTable
           modalTableIsopen={modalTableIsopen}
           setModalTableIsopen={setModalTableIsopen}
+          tableRowData={tableRowData}
         />
       }
       {/* eidit modal */}
+      <EditModal
+        tableRowData={tableRowData}
+        editModalIsopen={editModalIsopen}
+        changeState={changeState}
+      />
       {/* del modal */}
       <DelModal
         deleteModalIsopen={deleteModalIsopen}

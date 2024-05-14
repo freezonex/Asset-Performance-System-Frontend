@@ -1,108 +1,64 @@
 import React, { useState } from 'react';
-import {
-  Modal,
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableCell,
-  TableRow,
-  TableHeader,
-} from '@carbon/react';
-import styles from '@/styles/modal/modal.module.scss';
-import stylesTable from '@/styles/table/table.module.scss';
-
+import { Modal, Link } from '@carbon/react';
+import { DocumentDownload } from '@carbon/icons-react';
+import classNames from 'classnames';
+import modalStyles from '@/styles/modal/modal.module.scss';
+import styles from './index.module.scss';
 const ModalPages = ({ modalTableIsopen, setModalTableIsopen }) => {
   const headers = [
     { key: 'department', header: 'Department' },
     { key: 'location', header: 'Location' },
-    { key: 'installation_date', header: 'Installation Date' },
     { key: 'value', header: 'Value' },
-    { key: 'responsible_person', header: 'Responsible Person' },
+    { key: 'responsiblePerson', header: 'Responsible Person' },
+    { key: 'arrachments', header: 'Arrachments' },
   ];
-  const [rows, setRows] = useState([
-    {
-      id: '001',
-      department: 'S#24022901',
-      location: 'Laptop',
-      installation_date: 'Computer',
-      value: 'Y355L4-8',
-      responsible_person: 'bdaudbjakfdifhkhka',
-    },
-    {
-      id: '002',
-      department: 'S#24022901',
-      location: 'Laptop',
-      installation_date: 'Computer',
-      value: 'Y355L4-8',
-      responsible_person: 'bdaudbjakfdifhkhka',
-    },
-    {
-      id: '003',
-      department: 'S#24022901',
-      location: 'Laptop',
-      installation_date: 'Computer',
-      value: 'Y355L4-8',
-      responsible_person: 'bdaudbjakfdifhkhka',
-    },
-    {
-      id: '004',
-      department: 'S#24022901',
-      location: 'Laptop',
-      installation_date: 'Computer',
-      value: 'Y355L4-8',
-      responsible_person: 'bdaudbjakfdifhkhka',
-    },
-    {
-      id: '005',
-      department: 'S#24022901',
-      location: 'Laptop',
-      installation_date: 'Computer',
-      value: 'Y355L4-8',
-      responsible_person: 'bdaudbjakfdifhkhka',
-    },
-  ]);
+  const [rows, setRows] = useState({
+    id: '001',
+    department: 'S#24022901',
+    location: 'Laptop',
+    value: 'Y355L4-8',
+    responsiblePerson: 'bdaudbjakfdifhkhka',
+  });
   const onRequestClose = () => {
     setModalTableIsopen(false);
   };
 
   return (
-    <div className={styles.ModalFromStyle}>
+    <div className={classNames([modalStyles.ModalFromStyle, styles.moreModal])}>
       <Modal
         open={modalTableIsopen}
         modalHeading="More"
         passiveModal
         onRequestClose={onRequestClose}
       >
-        <div className={stylesTable.tableStyle}>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {headers.map((header, index) => {
-                    return (
-                      <TableHeader key={`${header.key}_head`}>
-                        {header.header}
-                      </TableHeader>
-                    );
-                  })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row, i) => (
-                  <TableRow key={i}>
-                    {headers.map((header) => {
-                      return (
-                        <TableCell key={header.key}>
-                          {row[header.key]}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        <div className={styles.tableParent}>
+          {headers.map((item, ind) => {
+            if (item.key == 'arrachments') {
+              return (
+                <div className={styles.parent}>
+                  <div className={styles.Left}>{'arrachments'}</div>
+                  <div className={styles.Right}>
+                    <Link
+                      onClick={()=>{
+                        
+                      }}
+                      renderIcon={() => (
+                        <DocumentDownload aria-label="Arrow Right" />
+                      )}
+                    >
+                      Download
+                    </Link>
+                  </div>
+                </div>
+              );
+            }
+            return (
+              <div className={styles.parent}>
+                <div className={styles.Left}>{item.key}</div>
+                <div className={styles.Right}>{rows[item.key]}</div>
+              </div>
+            );
+          })}
         </div>
       </Modal>
     </div>

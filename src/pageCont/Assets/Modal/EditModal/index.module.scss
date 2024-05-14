@@ -1,0 +1,21 @@
+.EditModal {
+  :global {
+    .cds--modal-container {
+      width:406px;
+    }
+    .cds--radio-button-group{
+      flex-direction: column;
+    }
+    .cds--radio-button-wrapper:not(:last-of-type){
+      margin-right:0;
+    }
+    .cds--radio-button-group .cds--radio-button-wrapper:nth-child(2) {
+      /* 添加你的样式 */
+      margin-top: 10px;
+      margin-left: -5px;
+    }
+    .cds--radio-button__label-text{
+      font-size: 16px;
+    }
+  }
+}

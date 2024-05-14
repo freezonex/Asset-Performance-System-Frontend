@@ -27,6 +27,7 @@ class Comp extends Component {
     isSearchClicked:false, //是否搜索
     refresh:{},
     createModalIsopen:false,//create modal 状态
+    editModalIsopen:false,//edit modal 状态
   };
   componentDidMount = () => {};
 
@@ -55,7 +56,7 @@ class Comp extends Component {
     });
   };
   render() {
-    const { formValue, isSearchClicked,createModalIsopen} = this.state;
+    const { formValue, isSearchClicked,createModalIsopen,editModalIsopen} = this.state;
     return (
       <div>
         <Head>Assets</Head>
@@ -171,6 +172,8 @@ class Comp extends Component {
             changeState={this.changeState}
             formValue={formValue}
             isSearchClicked={isSearchClicked}
+            editModalIsopen={editModalIsopen}
+            createModalIsopen={createModalIsopen}
           />
         </div>
 
