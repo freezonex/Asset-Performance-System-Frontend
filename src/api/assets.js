@@ -45,6 +45,24 @@ export const getAssetTypeList = (data) => {
     data: data,
   });
 };
+
+
+// 获取departmentData
+export const getDepartmentList = (data) => {
+  return request({
+    url: '/apsbackend/department/allList',
+    method: 'post',
+    data: data,
+  });
+};
+// 添加departmentData
+export const addDepartmentItem = (data) => {
+  return request({
+    url: '/apsbackend/department/create',
+    method: 'post',
+    data: data,
+  });
+};
 // 删除
 export const assetDelete = (data) => {
   return request({
