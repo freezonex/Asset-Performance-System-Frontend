@@ -13,13 +13,6 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen ,tableRowData}) => {
     { key: 'responsiblePerson', header: 'Responsible Person' },
     { key: 'arrachments', header: 'Arrachments' },
   ];
-  const [rows, setRows] = useState({
-    id: '001',
-    department: 'S#24022901',
-    location: 'Laptop',
-    value: 'Y355L4-8',
-    responsiblePerson: 'bdaudbjakfdifhkhka',
-  });
   const onRequestClose = () => {
     setModalTableIsopen(false);
   };
@@ -54,7 +47,7 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen ,tableRowData}) => {
             return (
               <div className={styles.parent}>
                 <div className={styles.Left}>{item.header}</div>
-                <div className={styles.Right}>{rows[item.key]}</div>
+                <div className={styles.Right}>{tableRowData[item.key]}</div>
               </div>
             );
           })}
