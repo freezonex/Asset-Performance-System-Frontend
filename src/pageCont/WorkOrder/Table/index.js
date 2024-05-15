@@ -145,7 +145,7 @@ function TablePage({ formValue, changeState, isSearchClicked }) {
                     if (header.key === 'edit') {
                       return (
                         <TableCell key={header.key}>
-                          <span
+                          {/* <span
                             className={styles.editText}
                             onClick={() => {
                               changeState({
@@ -161,7 +161,7 @@ function TablePage({ formValue, changeState, isSearchClicked }) {
                             }}
                           >
                             Edit
-                          </span>
+                          </span> */}
                           <span className={styles.delText}
                           onClick={()=>{
                             setSelectRowData(row);
