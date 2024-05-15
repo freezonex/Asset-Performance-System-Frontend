@@ -3,14 +3,15 @@ import { withRouter } from 'next/router';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import Head from 'next/head';
-
 import { Breadcrumb, BreadcrumbItem, Heading } from '@carbon/react';
 import TotalAssets from './Charts/TotalAssets';
 import AssetUsed from './Charts/AssetUsed';
 import WorkOrders from './Charts/WorkOrders';
 import Alarms from './Alarms';
-
 import WorkOrderTable from './Table';
+import Events from './Events';
+import Message from './Message';
+import CalendarComp from './Calendar';
 
 @withRouter
 class Comp extends Component {
@@ -48,8 +49,7 @@ class Comp extends Component {
             {/* 第一行 */}
             <div className={styles.leftTop}>
               <div className={styles.totalAssets}>
-                {/* <div className={styles.masking}>3500</div> */}
-                {/* <TotalAssets/> */}
+                <TotalAssets />
               </div>
               <div className={styles.workOrders}>{/* <WorkOrders/> */}</div>
             </div>
@@ -75,10 +75,19 @@ class Comp extends Component {
           </div>
           {/* 右侧 */}
           <div className={styles.right}>
-            <div className={styles.rightTop}></div>
-            <div className={styles.rightBottom}></div>
+            <div className={styles.rightTop}>
+              <div div className={styles.compTitle}>Calendar</div>
+              <CalendarComp/>
+            </div>
+            <div className={styles.rightBottom}>
+            <div className={styles.compTitle}>Events</div>
+              <Events/>
+            </div>
           </div>
         </div>
+
+        {/* 消息提示弹框 */}
+        <Message/>
       </div>
     );
   }
