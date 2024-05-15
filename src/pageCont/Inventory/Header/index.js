@@ -2,21 +2,27 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
 import Head from 'next/head';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  Heading,
-} from '@carbon/react';
-
+import CreateModal from '../Modal/CreateModal'
+import { Add, } from '@carbon/icons-react';
+import { Breadcrumb, BreadcrumbItem, Heading ,Button} from '@carbon/react';
 
 class Comp extends Component {
   componentDidMount = () => {
-		this.props.init?.(this)
-	}
+    this.props.init?.(this);
+  };
+  state = {
+    createModalIsopen: false,
+  };
+
+  changeState = (obj)=>{
+    this.setState(obj)
+  }
+
   render() {
+    const { createModalIsopen } = this.state;
     return (
       <div>
-       <Head>Inventory</Head>
+        <Head>Inventory</Head>
         <Breadcrumb>
           <BreadcrumbItem
             onClick={() => {
@@ -28,7 +34,9 @@ class Comp extends Component {
         </Breadcrumb>
         <div className="bx--col-lg-16 flex justify-between items-center">
           <div>
-            <Heading className="mt-2 text-[28px] font-normal">Inventory</Heading>
+            <Heading className="mt-2 text-[28px] font-normal">
+              Inventory
+            </Heading>
             <Heading
               className={classNames('mt-1 text-sm', {
                 [styles.textColor]: true,
@@ -37,8 +45,27 @@ class Comp extends Component {
               Here we can do predictions for you.
             </Heading>
           </div>
-          
+          <Button
+            // onClick={() => {
+            //   this.setState({
+            //     createModalIsopen: true,
+            //   });
+            // }}
+            isExpressive
+            size="md"
+            renderIcon={Add}
+          >
+            Create an Inventory
+          </Button>
         </div>
+
+        {/* Create a Asset modal */}
+        {
+          <CreateModal
+            createModalIsopen={createModalIsopen}
+            changeState={this.changeState}
+          />
+        }
       </div>
     );
   }

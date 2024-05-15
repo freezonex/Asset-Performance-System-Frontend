@@ -124,7 +124,7 @@ const ModalPages = ({
     if (res?.data?.code == 200) {
       await getAssignedToData();
     } else {
-      message.error('Failed to add Department');
+      message.error('Failed to add Assigned To');
     }
     setAddassignedToModal(false);
   };
