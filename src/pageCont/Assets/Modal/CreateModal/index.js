@@ -10,7 +10,7 @@ import {
   FileUploaderItem,
 } from '@carbon/react';
 import { AddAlt } from '@carbon/icons-react';
-import moment from 'moment';
+import {message} from 'antd'
 import classNames from 'classnames';
 import modalStyles from '@/styles/modal/modal.module.scss';
 import styles from './index.module.scss';
@@ -49,6 +49,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
     if (res?.data?.code == 200) {
       const { data } = res?.data;
       setAssetTypeData(data)
+      message.success("查询成功");
     }
   }
 

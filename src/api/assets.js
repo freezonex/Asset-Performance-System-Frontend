@@ -20,17 +20,7 @@ export const addFile = (data) => {
     },
   });
 };
-// 下载文件
-export const assetsDownload = (params) => {
-  return request({
-    url: '/apsbackend/asset/download',
-    method: 'get',
-    params:params,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  });
-};
+
 // 新增
 export const addAsset = (data) => {
   return request({

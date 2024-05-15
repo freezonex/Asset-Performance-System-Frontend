@@ -29,7 +29,6 @@ class Comp extends Component {
     createModalIsopen:false,//create modal 状态
     editModalIsopen:false,//edit modal 状态
   };
-  componentDidMount = () => {};
 
   changeState = (obj)=>{
     this.setState(obj)

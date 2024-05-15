@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from "./index.module.scss";
 import { ThemeProvider } from '@/utils/ThemeContext';
-
 import { StoreProvider } from "@/utils/redux/StoreProvider";
 export default class BasicLayout extends React.Component {
-  componentDidMount = async () => {};
+  componentDidMount = async () => {
+
+  };
   render() {
     return (
         <StoreProvider>

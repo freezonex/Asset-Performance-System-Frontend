@@ -40,10 +40,7 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen ,tableRowData}) => {
                   <div className={styles.Left}>{'arrachments'}</div>
                   <div className={styles.Right}>
                     <Link
-                      onClick={()=>{
-                        const {id} = tableRowData;
-                        assetsDownload({id})
-                      }}
+                      href={`${process.env.apiUrl}/apsbackend/asset/download?id=${tableRowData.id}`}
                       renderIcon={() => (
                         <DocumentDownload aria-label="Arrow Right" />
                       )}

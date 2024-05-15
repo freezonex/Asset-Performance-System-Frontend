@@ -153,4 +153,10 @@
       align-items: center;
     }
   }
+
+  // antd message
+
+  :where(.css-dev-only-do-not-override-1r287do).my-antd-message{
+    z-index: 10000000000;
+  }
   

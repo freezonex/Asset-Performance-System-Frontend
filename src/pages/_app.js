@@ -2,8 +2,16 @@
 import '@/styles/global/index.scss'
 import React from 'react'
 import GlobalLayout from "@/layouts/GlobalLayout";
+import { message } from 'antd'; // 导入 Ant Design Message 组件
 
 import { useRouter } from 'next/navigation';
+
+message.config({
+  top:50,
+  duration: 3, // 持续显示时间（秒）
+  maxCount: 3, // 最大同时显示数量
+  prefixCls: 'my-antd-message',
+});
 
 export default function App(params) {
   const router = useRouter();
