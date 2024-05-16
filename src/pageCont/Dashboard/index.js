@@ -18,8 +18,8 @@ import { addDays } from 'date-fns';
 class Comp extends Component {
   state = {
     range: {
-      from: new Date(),
-      to: addDays(new Date(), 4),
+      from: null,
+      to: null,
     },
   };
 
