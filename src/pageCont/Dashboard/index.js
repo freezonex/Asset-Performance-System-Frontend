@@ -6,7 +6,7 @@ import Head from 'next/head';
 import { Breadcrumb, BreadcrumbItem, Heading } from '@carbon/react';
 import TotalAssets from './Charts/TotalAssets';
 import AssetUsed from './Charts/AssetUsed';
-// import WorkOrders from './Charts/WorkOrders';
+import WorkOrders from './Charts/WorkOrders';
 import Alarms from './Alarms';
 import WorkOrderTable from './Table';
 import Events from './Events';
@@ -17,10 +17,10 @@ import { addDays } from 'date-fns';
 @withRouter
 class Comp extends Component {
   state = {
-    range : {
+    range: {
       from: new Date(),
       to: addDays(new Date(), 4),
-    }
+    },
   };
 
   changeState = (obj) => {
@@ -29,7 +29,7 @@ class Comp extends Component {
 
   componentDidMount = () => {};
   render() {
-    const { range } = this.state
+    const { range } = this.state;
 
     return (
       <div>
@@ -40,7 +40,7 @@ class Comp extends Component {
               // this.props.router.push(`/assets`);
             }}
           >
-            Dashboard
+            Home
           </BreadcrumbItem>
         </Breadcrumb>
         <div className="bx--col-lg-16 flex justify-between items-center">
@@ -65,7 +65,12 @@ class Comp extends Component {
               <div className={styles.totalAssets}>
                 <TotalAssets />
               </div>
-              <div className={styles.workOrders}>{/* <WorkOrders/> */}</div>
+              <div className={styles.workOrders}>
+                <div div className={styles.compTitle}>
+                  Work-Orders
+                </div>
+                <WorkOrders />
+              </div>
             </div>
 
             {/* 第二行 */}
@@ -82,7 +87,7 @@ class Comp extends Component {
             {/* 第三行 */}
             <div className={styles.leftBottom}>
               <div className={styles.workOrdersQueue}>
-                <div className={styles.compTitle}>Work orders queue</div>
+                <div className={styles.compTitle}>Work Orders Queue</div>
                 <WorkOrderTable />
               </div>
             </div>
@@ -90,18 +95,20 @@ class Comp extends Component {
           {/* 右侧 */}
           <div className={styles.right}>
             <div className={styles.rightTop}>
-              <div div className={styles.compTitle}>Calendar</div>
-              <CalendarComp range={range} changeState={this.changeState}/>
+              <div div className={styles.compTitle}>
+                Calendar
+              </div>
+              <CalendarComp range={range} changeState={this.changeState} />
             </div>
             <div className={styles.rightBottom}>
-            <div className={styles.compTitle}>Events</div>
+              <div className={styles.compTitle}>Events</div>
               <Events range={range} />
             </div>
           </div>
         </div>
 
         {/* 消息提示弹框 */}
-        <Message/>
+        <Message />
       </div>
     );
   }
