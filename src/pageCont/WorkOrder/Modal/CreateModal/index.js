@@ -250,7 +250,7 @@ const ModalPages = ({
               >
                 <SelectItem value="" text="Choose an option" />
                 {statusList.map((item, ind) => {
-                  return <SelectItem value={ind + 1} text={item.label} />;
+                  return <SelectItem key={ind} value={ind + 1} text={item.label} />;
                 })}
               </Select>
             </Column>
@@ -280,6 +280,7 @@ const ModalPages = ({
                 }}
               >
                 <DatePickerInput
+                  id='creationTime'
                   labelText="Creation Time"
                   placeholder="mm/dd/yyyy"
                 />
@@ -295,6 +296,7 @@ const ModalPages = ({
                 }}
               >
                 <DatePickerInput
+                  id='dueTime'
                   labelText="Due Time"
                   placeholder="mm/dd/yyyy"
                 />

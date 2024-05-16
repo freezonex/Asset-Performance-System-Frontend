@@ -177,6 +177,7 @@ class Comp extends Component {
           <WorkOrderTable
             changeState={this.changeState}
             formValue={formValue}
+            createModalIsopen={createModalIsopen}
             isSearchClicked={isSearchClicked}
           />
         </div>

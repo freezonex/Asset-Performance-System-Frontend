@@ -26,7 +26,7 @@ import { getWorkOrderList, workOrderDelete } from '@/api/workOrder';
 // } from '@/actions/actions';
 // import EditWarehouseModal from '../Modal/EditWarehouseModal';
 
-function TablePage({ formValue, changeState, isSearchClicked }) {
+function TablePage({ formValue, changeState, isSearchClicked ,createModalIsopen}) {
   const headers = [
     { key: 'orderId', header: 'Work Order' },
     { key: 'orderName', header: 'Order Name' },
@@ -75,7 +75,7 @@ function TablePage({ formValue, changeState, isSearchClicked }) {
       // 无搜索条件 调用接口
       getTableList({ pageNum: 1, pageSize: 10 });
     }
-  }, [isSearchClicked]);
+  }, [isSearchClicked,createModalIsopen]);
 
   const getTableList = async (filters) => {
     let reqData = {
@@ -114,16 +114,15 @@ function TablePage({ formValue, changeState, isSearchClicked }) {
       <div
         className={classNames(tableStyles.tableStyle, styles.workOrderTable)}
       >
-        <TableContainer isCondensed>
+        <TableContainer>
           <Table>
             <TableHead>
-              <TableRow head>
+              <TableRow>
                 {headers.map((header, index) => {
                   if (header.key == 'status') {
                     return (
                       <TableHeader
                         style={{ minWidth: '125px' }}
-                        head
                         key={header.key}
                       >
                         {header.header}
@@ -131,7 +130,7 @@ function TablePage({ formValue, changeState, isSearchClicked }) {
                     );
                   }
                   return (
-                    <TableHeader head key={header.key}>
+                    <TableHeader  key={header.key}>
                       {header.header}
                     </TableHeader>
                   );
@@ -144,7 +143,7 @@ function TablePage({ formValue, changeState, isSearchClicked }) {
                   {headers.map((header) => {
                     if (header.key === 'edit') {
                       return (
-                        <TableCell key={header.key}>
+                        <TableCell key={`${row.assetId}-${header.key}`}>
                           {/* <span
                             className={styles.editText}
                             onClick={() => {
@@ -175,13 +174,13 @@ function TablePage({ formValue, changeState, isSearchClicked }) {
                       let type = statusList[row[header.key]]?.type;
                       let label = statusList[row[header.key]]?.label;
                       return (
-                        <TableCell style={{ width: 120 }} key={header.key}>
+                        <TableCell style={{ width: 120 }}  key={`${row.assetId}-${header.key}`}>
                           <Tag type={type}>{label}</Tag>
                         </TableCell>
                       );
                     }
                     return (
-                      <TableCell key={header.key}>{row[header.key]}</TableCell>
+                      <TableCell  key={`${row.assetId}-${header.key}`}>{row[header.key]}</TableCell>
                     );
                   })}
                 </TableRow>
