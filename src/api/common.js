@@ -54,3 +54,21 @@ export const assetTypeQuantityList = (data) => {
     data: data,
   })
 }
+// 添加 asset type name
+export const createAssetTypeName = (data) => {
+  return request({
+    url: '/apsbackend/assetType/create',
+    method: 'post',
+    data: data,
+  })
+}
+// 添加  Inventory
+export const createInventory = (data) => {
+  return request({
+    url: '/apsbackend/inventory/create',
+    method: 'post',
+    data: data,
+  })
+}
+
+

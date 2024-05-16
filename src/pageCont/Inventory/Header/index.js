@@ -46,11 +46,11 @@ class Comp extends Component {
             </Heading>
           </div>
           <Button
-            // onClick={() => {
-            //   this.setState({
-            //     createModalIsopen: true,
-            //   });
-            // }}
+            onClick={() => {
+              this.setState({
+                createModalIsopen: true,
+              });
+            }}
             isExpressive
             size="md"
             renderIcon={Add}
