@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Add, Close } from '@carbon/icons-react';
+import { Close, Alarm } from '@carbon/icons-react';
 import styles from './index.module.scss';
 import { useRouter } from 'next/navigation';
 
@@ -38,7 +38,7 @@ function Alarms() {
           onClick={() => router.push(`/schedule`)}
         >
           <div className={styles.icon}>
-            <Add></Add>
+            <Alarm></Alarm>
           </div>
           <div className={styles.text}>{content}</div>
         </div>

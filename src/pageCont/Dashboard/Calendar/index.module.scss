@@ -1,0 +1,54 @@
+.calendar {
+  background: #ffffff;
+  box-shadow: 0px 2px 6px 0px #0000004d;
+  padding: 16px;
+  margin-top: 16px;
+
+  :global {
+    .rdp-day_selected {
+      background-color: #d0e2ff;
+      color: #000;
+    }
+
+    .rdp-weeknumber,
+    .rdp-day {
+      border-radius: 0;
+    }
+
+    .rdp-day_range_start,
+    .rdp-day_range_end {
+      background-color: white;
+      border: 2px solid #0f62fe;
+    }
+
+    .rdp-months {
+      justify-content: center;
+    }
+
+    .rdp-months,
+    .rdp-month,
+    .rdp-caption,
+    .rdp-table,
+    .rdp-head,
+    .rdp-head_row,
+    .rdp-tbody,
+    .rdp-row {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .rdp-head_cell {
+      width: 14%;
+    }
+
+    .rdp-cell {
+      max-width: 14%;
+      width: 14%;
+    }
+    .rdp-weeknumber,
+    .rdp-day {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+}

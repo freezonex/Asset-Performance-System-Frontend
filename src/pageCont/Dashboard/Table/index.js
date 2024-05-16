@@ -1,108 +1,104 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  StructuredListWrapper,
-  StructuredListHead,
-  StructuredListRow,
-  StructuredListCell,
-  StructuredListBody,
   Tag,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHeader,
 } from '@carbon/react';
+
 import classNames from 'classnames';
 import tableStyles from '@/styles/table/table.module.scss';
+import { getWorkOrdersQueue } from '@/api/dashboard';
 
-function Table() {
+function TableComp() {
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    getTableList();
+  }, []);
+
+  const getTableList = async () => {
+    let res = await getWorkOrdersQueue();
+
+    if (res?.data?.code == 200) {
+      const { data } = res?.data;
+      setRows(data);
+    }
+  };
+
   const headers = [
-    { key: 'order_name', header: 'Order Name' },
-    { key: 'creation_time', header: 'Creation Time' },
-    { key: 'due_time', header: 'Due Time' },
+    { key: 'orderName', header: 'Order Name' },
+    { key: 'creationTime', header: 'Creation Time' },
+    { key: 'dueTime', header: 'Due Time' },
     { key: 'status', header: 'Status' },
   ];
+
   const statusList = {
     1: {
-      label: 'Dued',
-      type: 'red',
-    },
-    2: {
       label: 'Open',
       type: 'green',
     },
-    3: {
+    2: {
       label: 'In Progress',
       type: 'blue',
     },
-    4: {
+    3: {
       label: 'Review',
       type: 'purple',
     },
+    4: {
+      label: 'Dued',
+      type: 'magenta',
+    },
+    5: {
+      label: 'Closed',
+      type: 'red',
+    },
   };
-  const [rows, setRows] = useState([
-    {
-      id: '001',
-      order_name: 'Laptop',
-      creation_time: 1709785600000,
-      due_time: 1709785600000,
-      status: '2',
-    },
-    {
-      id: '002',
-      order_name: 'Laptop',
-      creation_time: 1709785600000,
-      due_time: 1709785600000,
-      status: '3',
-    },
-    {
-      id: '003',
-      order_name: 'Laptop',
-      creation_time: 1709785600000,
-      due_time: 1709785600000,
-      status: '1',
-    },
-    {
-      id: '004',
-      order_name: 'Laptop',
-      creation_time: 1709785600000,
-      due_time: 1709785600000,
-      status: '4',
-    },
-  ]);
 
   return (
     <div className={classNames(tableStyles.tableStyle)}>
-      <StructuredListWrapper isCondensed>
-        <StructuredListHead>
-          <StructuredListRow head>
-            {headers.map((header, index) => (
-              <StructuredListCell head key={header.key}>
-                {header.header}
-              </StructuredListCell>
-            ))}
-          </StructuredListRow>
-        </StructuredListHead>
-        <StructuredListBody>
-          {rows.map((row, index) => (
-            <StructuredListRow key={row.id}>
+      <TableContainer isCondensed>
+        <Table>
+          <TableHead>
+            <TableRow head>
               {headers.map((header) => {
-                if (header.key === 'status') {
-                  let type = statusList[row[header.key]]?.type;
-                  let label = statusList[row[header.key]]?.label;
-                  return (
-                    <StructuredListCell key={header.key}>
-                      <Tag type={type}>{label}</Tag>
-                    </StructuredListCell>
-                  );
-                }
                 return (
-                  <StructuredListCell key={header.key}>
-                    {row[header.key]}
-                  </StructuredListCell>
+                  <TableHeader head key={header.key}>
+                    {header.header}
+                  </TableHeader>
                 );
               })}
-            </StructuredListRow>
-          ))}
-        </StructuredListBody>
-      </StructuredListWrapper>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.assetId}>
+                {headers.map((header) => {
+                  if (header.key === 'status') {
+                    let type = statusList[row[header.key]]?.type;
+                    let label = statusList[row[header.key]]?.label;
+                    return (
+                      <TableCell key={header.key}>
+                        <Tag type={type}>{label}</Tag>
+                      </TableCell>
+                    );
+                  }
+                  return (
+                    <TableCell key={header.key}>{row[header.key]}</TableCell>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 }
 
-export default Table;
+export default TableComp;

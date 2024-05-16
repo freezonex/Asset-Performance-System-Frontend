@@ -1,80 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SimpleBarChart } from '@carbon/charts-react';
 import '@carbon/charts-react/styles.css';
 import styles from './index.module.scss';
+import { getTotalAssets } from '@/api/dashboard';
 
 function TotalAssets() {
   const [isMaskingShow, setIsMaskingShow] = useState(true);
+  const [onMaskNumber, setOnMaskNumber] = useState(null);
+  const [data, setData] = useState([]);
+  const [options, setOptions] = useState({});
 
-  const data = [
-    {
-      group: '品类1',
-      value: 6500,
-    },
-    {
-      group: '品类2',
-      value: 2912,
-    },
-    {
-      group: '品类3',
-      value: 3521,
-    },
-    {
-      group: '品类4',
-      value: 5121,
-    },
-    {
-      group: '品类5',
-      value: 1693,
-    },
-    {
-      group: '品类6',
-      value: 6500,
-    },
-    {
-      group: '品类7',
-      value: 2912,
-    },
-    {
-      group: '品类8',
-      value: 3521,
-    },
-    {
-      group: '品类9',
-      value: 5121,
-    },
-    {
-      group: '品类10',
-      value: 1693,
-    },
-  ];
+  useEffect(() => {
+    getChartsData();
+  }, []);
 
-  let colorScale = {};
-  data.forEach((item) => {
-    colorScale[item.group] = '#1192e8';
-  });
+  const getChartsData = async () => {
+    let res = await getTotalAssets();
 
-  const options = {
-    title: 'Total Assets',
-    axes: {
-      left: {
-        mapsTo: 'value',
-      },
-      bottom: {
-        mapsTo: 'group',
-        scaleType: 'labels',
-        ticks: {
-          values: [],
+    if (res?.data?.code == 200) {
+      const { dataList, totalQuantity } = res?.data?.data;
+      setOnMaskNumber(totalQuantity);
+      setData(dataList?.map((item) => ({ ...item, group: item.assetType })));
+
+      let colorScale = {};
+      dataList?.forEach((item) => (colorScale[item.assetType] = '#1192e8'));
+
+      setOptions({
+        title: 'Total Assets',
+        axes: {
+          left: {
+            mapsTo: 'quantity',
+          },
+          bottom: {
+            mapsTo: 'group',
+            scaleType: 'labels',
+            ticks: {
+              values: [],
+            },
+          },
         },
-      },
-    },
-    color: {
-      scale: colorScale,
-    },
-    legend: {
-      enabled: false,
-    },
-    height: '180px',
+        color: {
+          scale: colorScale,
+        },
+        legend: {
+          enabled: false,
+        },
+        height: '180px',
+      });
+    }
   };
 
   const handleMouseOver = () => {
@@ -92,9 +65,11 @@ function TotalAssets() {
           isMaskingShow ? styles.fadeIn : styles.fadeOut
         }`}
       >
-        3500
+        {onMaskNumber}
       </div>
-      <SimpleBarChart data={data} options={options}></SimpleBarChart>
+      {data?.length > 0 && (
+        <SimpleBarChart data={data} options={{ ...options }}></SimpleBarChart>
+      )}
     </div>
   );
 }
