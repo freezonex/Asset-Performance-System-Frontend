@@ -44,7 +44,7 @@ class Comp extends Component {
     var rs = await assetTypeList(reqData);
    
     // 成功
-    if (rs.data.code == 200) {
+    if (rs?.data?.code == 200) {
       var data = rs.data.data
       console.log(data)
       this.setState({

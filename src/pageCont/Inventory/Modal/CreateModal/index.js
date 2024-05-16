@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
+import { Context } from '../../context';
 import {
   Modal,
   TextInput,
@@ -11,33 +12,28 @@ import {
 } from '@carbon/react';
 import { AddAlt } from '@carbon/icons-react';
 import classNames from 'classnames';
+import moment from 'moment';
 import { message } from 'antd';
 import modalStyles from '@/styles/modal/modal.module.scss';
-// import AddDepartmentModal from '@/pageCont/components/AddModal';
+import AddAssetTypeModal from '../AddAssetTypeModal';
 import styles from './index.module.scss';
-import {
-  addAsset,
-  addFile,
-  getAssetTypeList,
-  getDepartmentList,
-  addDepartmentItem,
-} from '@/api/assets';
+import { getAssetTypeList } from '@/api/assets';
+import { createAssetTypeName, createInventory } from '@/api/common';
 
 const ModalPages = ({ createModalIsopen, changeState }) => {
+  const store = useContext(Context); //全局上下文
   const [assetTypeData, setAssetTypeData] = useState([]);
-  const [departmentData, setDepartmentData] = useState([]);
-  const [addDepartmentModal, setAddDepartmentModal] = useState(false); // 添加 department 弹窗
-  const [isUploading, setIsUploading] = useState(false);
+  const [addAssetTypeNameDataModal, setAddAssetTypeNameDataModall] =
+    useState(false); // 添加 department 弹窗
+  const [isPrimaryButtonDisabled, setIsPrimaryButtonDisabled] = useState(false);
   const [formValue, setFormValues] = useState({
-    assetName: '',
-    assetId: '',
-    sn: '',
+    assetTypeId: '',
+    expectedDate: '',
+    expectedQuantity: '',
   });
-  const [file, setFile] = useState(null);
 
   useEffect(() => {
     getAssetTypeData();
-    getDepartmentData();
   }, [createModalIsopen]);
 
   // 获取assetTypeData
@@ -47,28 +43,6 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
       const { data } = res?.data;
       setAssetTypeData(data);
     }
-  };
-  // 获取departmentData
-  const getDepartmentData = async () => {
-    let res = await getDepartmentList();
-    if (res?.data?.code == 200) {
-      const { data } = res?.data;
-      setDepartmentData(data);
-    }
-  };
-
-  //添加departmentData
-  const handleAddDepartment = async (data) => {
-    let reqObj = {
-      departmentName: data.text,
-    };
-    let res = await addDepartmentItem(reqObj);
-    if (res?.data?.code == 200) {
-      await getDepartmentData();
-    } else {
-      message.error('Failed to add Department');
-    }
-    setAddDepartmentModal(false);
   };
 
   const onFormValueChange = (e) => {
@@ -83,55 +57,45 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
   // 初始化数据
   const handleCancelClicked = () => {
     setFormValues({
-      assetName: '',
-      assetId: '',
-      sn: '',
-      
+      assetTypeId: '',
+      expectedDate: '',
+      expectedQuantity: '',
     });
     changeState({ createModalIsopen: false });
-    setIsUploading(false);
+    setIsPrimaryButtonDisabled(false);
+  };
+
+  //添加 asset type name
+  const addAssetTypeName = async (data) => {
+    console.log(data);
+    let res = await createAssetTypeName(data);
+    if (res?.data?.code == 200) {
+      setAddAssetTypeNameDataModall(false);
+      changeState({ createModalIsopen: true });
+    }
   };
 
   // 提交
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const newValidation = {
-      assetNameInvalid: !formValue.assetName || formValue.assetName === '',
-      assetIdInvalid: !formValue.assetId || formValue.assetId === '',
-      snInvalid: !formValue.sn || formValue.sn === '',
-    };
-    setFieldValidation(newValidation);
-    // 所有必填项都已经填写
-    if (!Object.values(newValidation).some((v) => v)) {
-      createAsset(formValue);
-      return;
-    }
+    setIsPrimaryButtonDisabled(true);
+    addInventory();
   };
   // 提交接口
-  const createAsset = async () => {
-    let res = await addAsset(formValue);
+  const addInventory = async () => {
+    let res = await createInventory(formValue);
     if (res.data?.code == 200) {
       handleCancelClicked();
-    }
-  };
-
-  // 上传文件
-  const uploadFile = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    let res = await addFile(formData);
-    if (res?.data?.code == 200) {
-      const { data } = res?.data;
-      let obj = {
-        attachmentDir: data.attachmentDir,
-        attachmentName: data.attachmentName,
-      };
-      setFormValues({ ...formValue, ...obj });
-      setIsUploading(true);
+      const {controller:{
+        Table,RightList,Chart}} = store;
+      // 刷新页面
+      Table.getList({ pageNum:1, pageSize:10});
+      Table.setState({unfoldMap:{}})
+      RightList.getList();
+      Chart.allList();
     } else {
-      setFile(null);
-      message.error('Upload failure');
+      message.error('Creation failure');
     }
+    setIsPrimaryButtonDisabled(false);
   };
 
   return (
@@ -139,7 +103,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
       className={classNames([modalStyles.ModalFromStyle, styles.createModal])}
     >
       {/* <Toast /> */}
-      {!addDepartmentModal && (
+      {
         <Modal
           open={createModalIsopen}
           modalHeading="Asset Type"
@@ -147,25 +111,26 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           secondaryButtonText="Cancel"
           onRequestClose={handleCancelClicked}
           onRequestSubmit={handleSubmit}
-          primaryButtonDisabled={!isUploading}
+          primaryButtonDisabled={isPrimaryButtonDisabled}
         >
           <Grid className="pl-0 pr-0">
             <Column sm={2} md={4} lg={8}>
               <Select
                 className="mb-8"
-                id="assetName"
+                id="assetTypeId"
                 labelText={
                   <div
                     style={{ display: 'flex' }}
                     onClick={() => {
-                      setAddDepartmentModal(true);
+                      changeState({ createModalIsopen: false });
+                      setAddAssetTypeNameDataModall(true);
                     }}
                   >
                     <span className="mr-1">Asset Type Name</span>
                     <AddAlt />
                   </div>
                 }
-                value={formValue.assetName}
+                value={formValue.assetTypeId}
                 onChange={onFormValueChange}
               >
                 <SelectItem value="" text="Choose an option" />
@@ -188,12 +153,13 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
                 onChange={(e) => {
                   let obj = {
                     ...formValue,
-                    creationTime: moment(e[0]).format('YYYY-MM-DD'),
+                    expectedDate: moment(e[0]).format('YYYY-MM-DD'),
                   };
                   setFormValues(obj);
                 }}
               >
                 <DatePickerInput
+                  id="expectedDate"
                   labelText="Expected Date"
                   placeholder="mm/dd/yyyy"
                 />
@@ -202,26 +168,27 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
 
             <Column sm={2} md={4} lg={8}>
               <TextInput
-                id="sn"
+                id="expectedQuantity"
                 labelText="Ecpected Quantity"
                 placeholder="Ecpected Quantity"
-                value={formValue.sn}
+                value={formValue.expectedQuantity}
                 onChange={onFormValueChange}
               />
             </Column>
           </Grid>
         </Modal>
-      )}
-      {/* <AddDepartmentModal
-        addModal={addDepartmentModal}
-        modalTitle={'Department'}
+      }
+      <AddAssetTypeModal
+        addModal={addAssetTypeNameDataModal}
+        modalTitle={'Asset Type Name'}
         changeModalOpen={(data) => {
-          setAddDepartmentModal(false);
+          changeState({ createModalIsopen: true });
+          setAddAssetTypeNameDataModall(false);
         }}
         addConfirm={async (data) => {
-          await handleAddDepartment(data);
+          await addAssetTypeName(data);
         }}
-      /> */}
+      />
     </div>
   );
 };
