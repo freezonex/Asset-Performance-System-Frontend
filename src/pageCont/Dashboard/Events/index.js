@@ -1,44 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar } from '@carbon/icons-react';
 import styles from './index.module.scss';
+import moment from 'moment';
+import { getEventList } from '@/api/dashboard';
 
-function Events() {
-  const [list, setList] = useState([
-    {
-      id: 1,
-      title: 'Create a asset',
-      time: '04 March 2024 | 04:00 PM',
-    },
-    {
-      id: 2,
-      title: 'Mick is assigned a work order.',
-      time: '04 March 2024 | 04:00 PM',
-    },
-    {
-      id: 3,
-      title: 'Add a maintenance record',
-      time: '04 March 2024 | 04:00 PM',
-    },
-    {
-      id: 4,
-      title: 'Add a work-order',
-      time: '04 March 2024 | 04:00 PM',
-    },
-  ]);
+function Events(props) {
+  const { range } = props;
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    getTableList();
+  }, [range]);
+
+  const getTableList = async () => {
+    if (range?.from && range?.to) {
+      const params = {
+        startDate: range?.from && moment(range?.from).format('yyyy-MM-DD'),
+        endDate: range?.to && moment(range?.to).format('yyyy-MM-DD'),
+      };
+
+      let res = await getEventList(params);
+
+      if (res?.data?.code == 200) {
+        const { data } = res?.data;
+        setList(data);
+      }
+    } else {
+      setList([]);
+    }
+  };
 
   const getItem = (item) => {
-    const { id, title, time } = item;
+    const { eventName, eventTime } = item;
 
     return (
-      <div className={styles.listItem} key={id}>
+      <div className={styles.listItem}>
         <div className={styles.heads}></div>
         <div>
-          <div className={styles.title}>{title}</div>
+          <div className={styles.title}>{eventName}</div>
           <div className={styles.aboutTime}>
             <div className={styles.timeIcon}>
               <Calendar />
             </div>
-            <div className={styles.time}>{time}</div>
+            <div className={styles.time}>{eventTime}</div>
           </div>
         </div>
       </div>

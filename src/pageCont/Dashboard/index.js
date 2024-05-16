@@ -6,17 +6,31 @@ import Head from 'next/head';
 import { Breadcrumb, BreadcrumbItem, Heading } from '@carbon/react';
 import TotalAssets from './Charts/TotalAssets';
 import AssetUsed from './Charts/AssetUsed';
-import WorkOrders from './Charts/WorkOrders';
+// import WorkOrders from './Charts/WorkOrders';
 import Alarms from './Alarms';
 import WorkOrderTable from './Table';
 import Events from './Events';
 import Message from './Message';
 import CalendarComp from './Calendar';
+import { addDays } from 'date-fns';
 
 @withRouter
 class Comp extends Component {
+  state = {
+    range : {
+      from: new Date(),
+      to: addDays(new Date(), 4),
+    }
+  };
+
+  changeState = (obj) => {
+    this.setState(obj);
+  };
+
   componentDidMount = () => {};
   render() {
+    const { range } = this.state
+
     return (
       <div>
         <Head>Dashboard</Head>
@@ -77,11 +91,11 @@ class Comp extends Component {
           <div className={styles.right}>
             <div className={styles.rightTop}>
               <div div className={styles.compTitle}>Calendar</div>
-              <CalendarComp/>
+              <CalendarComp range={range} changeState={this.changeState}/>
             </div>
             <div className={styles.rightBottom}>
             <div className={styles.compTitle}>Events</div>
-              <Events/>
+              <Events range={range} />
             </div>
           </div>
         </div>
