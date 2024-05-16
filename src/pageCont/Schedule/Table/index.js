@@ -280,8 +280,7 @@ function TablePage({}) {
             </TableBody>
           </Table>
         </TableContainer>
-      </div>
-      <Pagination
+        <Pagination
         backwardText="Previous page"
         forwardText="Next page"
         itemsPerPageText=""
@@ -295,6 +294,8 @@ function TablePage({}) {
           setPageSize(pageSize);
         }}
       />
+      </div>
+      
     </div>
   );
 }
