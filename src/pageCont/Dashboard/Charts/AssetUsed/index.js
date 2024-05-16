@@ -58,7 +58,7 @@ function AssetUsed() {
   ];
 
   const options = {
-    title: 'Asset used',
+    title: 'Asset Used',
     axes: {
       bottom: {
         mapsTo: 'key',

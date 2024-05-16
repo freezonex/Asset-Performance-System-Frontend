@@ -24,3 +24,11 @@ export const getEventList = (params) => {
     data: params,
   });
 };
+
+//Work orders
+export const getWorkOrders = () => {
+  return request({
+    url: '/apsbackend/dashboard/totalWorkOrders',
+    method: 'post',
+  });
+};
