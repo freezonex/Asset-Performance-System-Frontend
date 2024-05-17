@@ -12,14 +12,14 @@ import WorkOrderTable from './Table';
 import Events from './Events';
 import Message from './Message';
 import CalendarComp from './Calendar';
-import { addDays } from 'date-fns';
+import { subYears } from 'date-fns';
 
 @withRouter
 class Comp extends Component {
   state = {
     range: {
-      from: null,
-      to: null,
+      from: subYears(new Date(), 2),
+      to: new Date(),
     },
   };
 
