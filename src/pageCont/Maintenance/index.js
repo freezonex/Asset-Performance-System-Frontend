@@ -12,11 +12,41 @@ import {
   SelectItem,
 } from '@carbon/react';
 import { Download } from '@carbon/icons-react';
+import Top5 from './Charts/Top5';
+import HistoricalMaintenanceLog from './Table/HistoricalMaintenanceLog';
+import MaintenanceCheckInterval from './Table/MaintenanceCheckInterval';
+import { getSelectItemList } from '@/api/maintenance';
 
 @withRouter
 class Comp extends Component {
-  componentDidMount = () => {};
+  state = {
+    selectedProduct: '',
+    selectItemList: [],
+  };
+
+  changeState = (obj) => {
+    this.setState(obj);
+  };
+
+  componentDidMount = () => {
+    this.getSelectItems();
+  };
+
+  getSelectItems = async () => {
+    let res = await getSelectItemList();
+
+    if (res?.data?.code == 200) {
+      const { data } = res?.data;
+      this.changeState({
+        selectItemList: data,
+        selectedProduct: data?.[0]?.id,
+      });
+    }
+  };
+
   render() {
+    const { selectedProduct, selectItemList } = this.state;
+
     return (
       <div>
         <Head>Maintenance</Head>
@@ -44,12 +74,17 @@ class Comp extends Component {
           </div>
           <div className={styles.headAction}>
             <div className={styles.select}>
-              <Select id="select-1" labelText="" helperText="" size="md">
-                <SelectItem value="" text="Select a Product" />
-                <SelectItem value="Option 1" text="Option 1" />
-                <SelectItem value="Option 2" text="Option 2" />
-                <SelectItem value="Option 3" text="Option 3" />
-                <SelectItem value="Option 4" text="Option 4" />
+              <Select
+                labelText=""
+                value={selectedProduct}
+                size="md"
+                onChange={(v) => {
+                  this.setState({ selectedProduct: v.target.value });
+                }}
+              >
+                {selectItemList.map((item, i) => {
+                  return <SelectItem value={item.id} text={item.assetType} key={item.id}/>;
+                })}
               </Select>
             </div>
             <div className={styles.button}>
@@ -68,14 +103,20 @@ class Comp extends Component {
         <div className={styles.content}>
           {/* 第一行 */}
           <div className={styles.top}>
-            <div className={styles.top5}></div>
+            <div className={styles.top5}>
+              <Top5 />
+            </div>
             <div className={styles.assetValueDepreciationModel}></div>
           </div>
 
           {/* 第二行 */}
           <div className={styles.bottom}>
-            <div className={styles.historicalMaintenanceLog}></div>
-            <div className={styles.maintenanceCheckInterval}></div>
+            <div className={styles.historicalMaintenanceLog}>
+              <HistoricalMaintenanceLog />
+            </div>
+            <div className={styles.maintenanceCheckInterval}>
+              <MaintenanceCheckInterval />
+            </div>
           </div>
         </div>
       </div>
