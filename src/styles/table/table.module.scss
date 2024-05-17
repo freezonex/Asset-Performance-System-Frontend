@@ -26,5 +26,16 @@
     .cds--date-picker__input {
       background-color: #e6e6e6;
     }
+    .cds--data-table tbody{
+      background-color: #fff;
+    }
+
+    .cds--pagination{
+      background-color: #fff;
+      border: 1px solid var(--cds-border-subtle);
+    }
+    .cds--data-table td, .cds--data-table tbody th{
+      background-color: #fff
+    }
   }
 }

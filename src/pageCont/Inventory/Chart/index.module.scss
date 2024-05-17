@@ -1,5 +1,10 @@
 .container{
     width:100%;
+    :global{
+        .cds--cc--grid rect.chart-grid-backdrop{
+            fill: var(--cds-layer);
+        }
+    }
 }
 
 .header{
@@ -29,4 +34,5 @@
     background-color: #fff;
     padding:0 10px;
     padding-bottom:10px;
+    background-color: var(--cds-layer);
 }
