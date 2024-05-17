@@ -166,7 +166,7 @@ const HeaderWSideNav = (props) => {
         </SideNav>
       </Theme>
 
-      <Theme theme={theme.contentTheme} style={{ height: '100%' }}>
+      <Theme theme={theme.contentTheme} style={{ minHeight: '100vh' }}>
         <Content style={{ height: '100%' }}>
           <div className={styles.body}>
             <div className={styles.bodyCont}>{props.children}</div>

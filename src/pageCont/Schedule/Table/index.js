@@ -265,9 +265,11 @@ function TablePage({}) {
                             style={{
                               backgroundColor: color,
                               // width: '117px',
-                              height: '3rem',
+                              minHeight: '3rem',
                             }}
-                          ></div>
+                          >
+                            <div style={{paddingLeft:'1rem',paddingRight:'1rem',opacity:'0'}}>{row['groupName']}</div>
+                          </div>
                         </TableCell>
                       );
                     }

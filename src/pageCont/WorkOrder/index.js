@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import styles from './index.module.scss';
 import Head from 'next/head';
 import WorkOrderTable from './Table';
-import CreateModal from './Modal/CreateModal'
+import CreateModal from './Modal/CreateModal';
 
 import {
   Button,
@@ -43,7 +43,7 @@ class Comp extends Component {
         type: '',
         creationTime: '',
       },
-      isSearchClicked:false,
+      isSearchClicked: false,
     });
   };
 
@@ -61,7 +61,7 @@ class Comp extends Component {
       isSearchClicked,
       createModalIsopen,
       createModaType,
-      tableData
+      tableData,
     } = this.state;
     return (
       <div>
@@ -103,74 +103,80 @@ class Comp extends Component {
           </Button>
         </div>
         {/* 搜索框 */}
-        <div className="flex mt-12 space-x-4 items-end">
-          <TextInput
-            className="flex-auto w-20"
-            labelText="Work Order"
-            id="orderId"
-            placeholder="Work Order"
-            value={formValue.asset_id}
-            onChange={(e) => {
-              this.FormValueChange(e);
-            }}
-          />
-          <TextInput
-            className="flex-auto w-20"
-            labelText="Order Name"
-            id="orderName"
-            placeholder="Order Name"
-            value={formValue.asset}
-            onChange={(e) => {
-              this.FormValueChange(e);
-            }}
-          />
-          <TextInput
-            className="flex-auto w-20"
-            labelText="Type"
-            id="type"
-            placeholder="Type"
-            value={formValue.type}
-            onChange={(e) => {
-              this.FormValueChange(e);
-            }}
-          />
-          <TextInput
-            className="flex-auto w-20"
-            labelText="Creation Time"
-            id="creationTime"
-            placeholder="Creation Time"
-            value={formValue.person}
-            onChange={(e) => {
-              this.FormValueChange(e);
-            }}
-          />
-          <Button
-            onClick={() => {
-              this.setState({
-                isSearchClicked: true,
-              })
-            }}
-            style={{ backgroundColor: '#393939' }}
-            isExpressive
-            size="md"
-            renderIcon={Search}
-            iconDescription="Search"
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => {
-              //清空搜索条件
-              this.initFormValue();
-            }}
-            style={{ backgroundColor: '#C6C6C6' }}
-            isExpressive
-            size="md"
-            renderIcon={Close}
-            iconDescription="Close"
-          >
-            Cancet
-          </Button>
+        <div className={styles.searchInputParent}>
+          <div className={styles.searchInput}>
+            <TextInput
+              className={styles.searchInputChild}
+              labelText="Work Order"
+              id="orderId"
+              placeholder="Work Order"
+              value={formValue.asset_id}
+              onChange={(e) => {
+                this.FormValueChange(e);
+              }}
+            />
+            <TextInput
+              className={styles.searchInputChild}
+              labelText="Order Name"
+              id="orderName"
+              placeholder="Order Name"
+              value={formValue.asset}
+              onChange={(e) => {
+                this.FormValueChange(e);
+              }}
+            />
+          </div>
+          <div className={styles.searchInput}>
+            <TextInput
+              className={styles.searchInputChild}
+              labelText="Type"
+              id="type"
+              placeholder="Type"
+              value={formValue.type}
+              onChange={(e) => {
+                this.FormValueChange(e);
+              }}
+            />
+            <TextInput
+             className={styles.searchInputChild}
+              labelText="Creation Time"
+              id="creationTime"
+              placeholder="Creation Time"
+              value={formValue.person}
+              onChange={(e) => {
+                this.FormValueChange(e);
+              }}
+            />
+          </div>
+          <div  className={styles.searchBtnParent}>
+            <Button
+              onClick={() => {
+                this.setState({
+                  isSearchClicked: true,
+                });
+              }}
+              style={{ backgroundColor: '#393939' }}
+              isExpressive
+              size="md"
+              renderIcon={Search}
+              iconDescription="Search"
+            >
+              Search
+            </Button>
+            <Button
+              onClick={() => {
+                //清空搜索条件
+                this.initFormValue();
+              }}
+              style={{ backgroundColor: '#C6C6C6' }}
+              isExpressive
+              size="md"
+              renderIcon={Close}
+              iconDescription="Close"
+            >
+              Cancet
+            </Button>
+          </div>
         </div>
         {/* table 表格 */}
         <div className="mt-12">
@@ -183,12 +189,14 @@ class Comp extends Component {
         </div>
 
         {/* Create a Asset modal */}
-        {<CreateModal
-          createModalIsopen = {createModalIsopen}
-          createModaType={createModaType}
-          tableData={tableData}
-          changeState = {this.changeState}
-        />}
+        {
+          <CreateModal
+            createModalIsopen={createModalIsopen}
+            createModaType={createModaType}
+            tableData={tableData}
+            changeState={this.changeState}
+          />
+        }
       </div>
     );
   }
