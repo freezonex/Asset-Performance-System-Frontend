@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "cross-env PROJECT_ENV=dev next dev",
-    "build": "cross-env PROJECT_ENV=dev next build",
+    "build": "cross-env PROJECT_ENV=dev next build && next export",
     "build-dev": "cross-env PROJECT_ENV=dev next build",
     "build-test": "cross-env PROJECT_ENV=test next build",
     "export": "cross-env PROJECT_ENV=dev STATIC_EXPORT=1  next build",

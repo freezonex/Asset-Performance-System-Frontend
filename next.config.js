@@ -27,10 +27,11 @@ if(process.env.STATIC_EXPORT){
 }
 
 const nextConfig = {
+  output: 'export',
 
   ...next,
 
-  basePath: '/apsfrontend',
+  basePath: '/apps/freezonex-aps/apsfrontend',
 
   // 开启 webpack5
   webpack5: true,
