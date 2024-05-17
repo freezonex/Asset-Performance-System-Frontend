@@ -28,6 +28,7 @@ class Comp extends Component {
       this.getList({
         pageNum: 1,
         pageSize: 10,
+        defaultPage:true,
       })
     })
   }
@@ -49,6 +50,7 @@ class Comp extends Component {
       pageNum,
       pageSize,
       "assetTypeId": this.props.data.assetTypeId,
+      currentId:this.props.data.id,
     };
     reqData = { ...reqData, ...params };
 
@@ -60,6 +62,8 @@ class Comp extends Component {
       this.setState({
         tabList: data.list,
         total: parseInt(data.total),
+        pageSize: parseInt(data.pageSize),
+        pageNum: parseInt(data.pageNum),
         isSHow: true,
       });
     }
@@ -160,6 +164,7 @@ class Comp extends Component {
                 this.getList({
                   pageNum: page,
                   pageSize: pageSize,
+                  defaultPage:false,
                 })
               })
 
