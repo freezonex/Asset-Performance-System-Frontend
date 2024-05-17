@@ -23,6 +23,7 @@ import {
   InventoryManagement,
   OrderDetails,
   EventSchedule,
+  LicenseMaintenance,
 } from '@carbon/icons-react';
 import styles from './index.module.scss';
 import { usePathname } from 'next/navigation';
@@ -161,6 +162,17 @@ const HeaderWSideNav = (props) => {
               isActive={isCurrentPath('/schedule')}
             >
               Schedule
+            </SideNavLink>
+            <SideNavLink
+              className="cursor-pointer"
+              isSideNavExpanded={isSideNavExpanded}
+              renderIcon={LicenseMaintenance}
+              onClick={() => {
+                router.push(`/maintenance`);
+              }}
+              isActive={isCurrentPath('/maintenance')}
+            >
+              Maintenance
             </SideNavLink>
           </SideNavItems>
         </SideNav>

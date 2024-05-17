@@ -1,0 +1,61 @@
+.headAction {
+  display: flex;
+  align-items: flex-end;
+
+  .select {
+    margin-right: 20px;
+
+    :global {
+      .cds--select-input {
+        border-bottom: none;
+        width: 158px;
+      }
+    }
+  }
+}
+
+.content {
+  width: 100%;
+  margin-top: 40px;
+
+  .top {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+
+    .top5 {
+      min-width: 447px;
+      width: 30%;
+      height: 360px;
+      margin-right: 20px;
+      background-color: #fff;
+    }
+
+    .assetValueDepreciationModel {
+      min-width: 920px;
+      width: 70%;
+      height: 360px;
+      background-color: #fff;
+    }
+  }
+
+  .bottom {
+    width: 100%;
+    display: flex;
+
+    .historicalMaintenanceLog {
+      min-width: 680px;
+      width: 50%;
+      height: 360px;
+      margin-right: 20px;
+      background-color: #fff;
+    }
+
+    .maintenanceCheckInterval {
+      min-width: 680px;
+      width: 50%;
+      height: 360px;
+      background-color: #fff;
+    }
+  }
+}
