@@ -1,0 +1,41 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .titleName {
+    font-family: IBM Plex Sans;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: left;
+  }
+
+  .titleAction {
+    display: flex;
+    align-items: center;
+
+    .search {
+      margin-right: 10px;
+    }
+
+    .add {
+      cursor: pointer;
+    }
+  }
+}
+.table {
+  tbody {
+    display: block;
+    height: 208px;
+    overflow-y: auto;
+  }
+
+  thead,
+  tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+}
