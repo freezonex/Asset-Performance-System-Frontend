@@ -74,11 +74,11 @@ function HistoricalMaintenanceLog(props) {
     }
   };
 
-  const handleSearch = (e) =>{
+  const handleSearch = (e) => {
     const value = e.target.value;
     setSearch(value);
     getTableList(page, pageSize, value);
-  }
+  };
 
   const showAdd = () => {
     let obj = {
@@ -184,11 +184,11 @@ function HistoricalMaintenanceLog(props) {
                 id="search-expandable-1"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.keyCode === 13) {
-                    handleSearch(e)
+                    handleSearch(e);
                   }
                 }}
                 onBlur={(e) => {
-                  handleSearch(e)
+                  handleSearch(e);
                 }}
               />
             </div>
@@ -215,7 +215,7 @@ function HistoricalMaintenanceLog(props) {
                 <Table {...getTableProps()} aria-label="sample table">
                   <TableHead>
                     <TableRow>
-                      <th scope="col" style={{ width: '48px' }} />
+                      <TableHeader/>
                       {headers.map((header, i) => (
                         <TableHeader
                           key={i}
@@ -226,7 +226,7 @@ function HistoricalMaintenanceLog(props) {
                           {header.header}
                         </TableHeader>
                       ))}
-                      <th scope="col" style={{ width: '150px' }} />
+                      {/* <th scope="col" style={{ width: '150px' }} /> */}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -266,6 +266,7 @@ function HistoricalMaintenanceLog(props) {
                                 if (cell.id.includes('content')) {
                                   return (
                                     <TableCell key={cell.id}>
+                                      <div className={styles.addMaintenanceInput}>
                                       <TextInput
                                         id={cell.id}
                                         onChange={(e) =>
@@ -276,31 +277,34 @@ function HistoricalMaintenanceLog(props) {
                                           )
                                         }
                                       />
+                                      <div className={styles.actions}>
+                                        <span
+                                          className={styles.save}
+                                          onClick={() => handleSubmit(row.id)}
+                                        >
+                                          Save
+                                        </span>
+                                        <span
+                                          className={styles.cancel}
+                                          onClick={() => handleCancel(row.id)}
+                                        >
+                                          Cancel
+                                        </span>
+                                      </div>
+                                      </div>
+                                      
                                     </TableCell>
                                   );
                                 }
-                                return (
-                                  <TableCell key={cell.id}>
-                                    {cell.value}
-                                  </TableCell>
-                                );
+                                // return (
+                                //   <TableCell key={cell.id}>
+                                //     {cell.value}
+                                //   </TableCell>
+                                // );
                               })}
-                              <td style={{ width: '150px' }}>
-                                <div className={styles.actions}>
-                                  <span
-                                    className={styles.save}
-                                    onClick={() => handleSubmit(row.id)}
-                                  >
-                                    Save
-                                  </span>
-                                  <span
-                                    className={styles.cancel}
-                                    onClick={() => handleCancel(row.id)}
-                                  >
-                                    Cancel
-                                  </span>
-                                </div>
-                              </td>
+                              {/* <td style={{ width: '150px' }}>
+                                
+                              </td> */}
                             </>
                           ) : (
                             <>
@@ -316,7 +320,7 @@ function HistoricalMaintenanceLog(props) {
                                   {cell.value}
                                 </TableCell>
                               ))}
-                              <td style={{ width: '150px' }}></td>
+                              {/* <td style={{ width: '150px' }}></td> */}
                             </>
                           )}
                         </TableRow>
