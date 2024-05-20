@@ -32,7 +32,7 @@ class Comp extends Component {
     const { range } = this.state;
 
     return (
-      <div>
+      <div className={styles.dashboard}>
         <Head>Dashboard</Head>
         <Breadcrumb>
           <BreadcrumbItem
@@ -40,7 +40,7 @@ class Comp extends Component {
               // this.props.router.push(`/assets`);
             }}
           >
-            Home
+            Dashboard
           </BreadcrumbItem>
         </Breadcrumb>
         <div className="bx--col-lg-16 flex justify-between items-center">
