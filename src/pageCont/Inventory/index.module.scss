@@ -18,7 +18,22 @@
     }
 
     .right{
-        min-width:538px;
+        min-width:416px;
         width:40%;
     }
 }
+
+@media screen and (max-width: 1140px) {
+    .chart{
+        flex-direction: column;
+        .left{
+            width:100%;
+            margin-bottom: 20px;
+        }
+    
+        .right{
+            min-width:416px;
+            width:100%;
+        }
+    }
+  }
