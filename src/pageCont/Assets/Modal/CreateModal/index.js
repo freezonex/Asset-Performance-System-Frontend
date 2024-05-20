@@ -118,29 +118,32 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
 
   // 提交
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const newValidation = {
-      assetNameInvalid: !formValue.assetName || formValue.assetName === '',
-      assetIdInvalid: !formValue.assetId || formValue.assetId === '',
-      snInvalid: !formValue.sn || formValue.sn === '',
-    };
-    setFieldValidation(newValidation);
-    // 所有必填项都已经填写
-    if (!Object.values(newValidation).some((v) => v)) {
+    // e.preventDefault();
+    // const newValidation = {
+    //   assetNameInvalid: !formValue.assetName || formValue.assetName === '',
+    //   assetIdInvalid: !formValue.assetId || formValue.assetId === '',
+    //   snInvalid: !formValue.sn || formValue.sn === '',
+    // };
+    // setFieldValidation(newValidation);
+    // // 所有必填项都已经填写
+    // if (!Object.values(newValidation).some((v) => v)) {
       createAsset(formValue);
-      return;
-    }
+    //   return;
+    // }
   };
   // 提交接口
   const createAsset = async () => {
     let res = await addAsset(formValue);
     if (res.data?.code == 200) {
       handleCancelClicked();
+    }else {
+      message.error('Failed to add Asset');
     }
   };
 
   // 上传文件
   const uploadFile = async (file) => {
+    setIsUploading(true);
     const formData = new FormData();
     formData.append('file', file);
     let res = await addFile(formData);
@@ -151,7 +154,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
         attachmentName: data.attachmentName,
       };
       setFormValues({ ...formValue, ...obj });
-      setIsUploading(true);
+      setIsUploading(false);
     } else {
       setFile(null);
       message.error('Upload failure');
@@ -171,7 +174,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           secondaryButtonText="Cancel"
           onRequestClose={handleCancelClicked}
           onRequestSubmit={handleSubmit}
-          primaryButtonDisabled={!isUploading}
+          primaryButtonDisabled={isUploading}
         >
           <Grid className="pl-0 pr-0">
             <Column sm={2} md={4} lg={8}>
@@ -181,8 +184,8 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
                 labelText="Asset Name"
                 placeholder="Asset Name"
                 required
-                invalid={fieldValidation.assetNameInvalid}
-                invalidText="This field cannot be empty"
+                // invalid={fieldValidation.assetNameInvalid}
+                // invalidText="This field cannot be empty"
                 value={formValue.assetName}
                 onChange={onFormValueChange}
                 onFocus={(e) => {
@@ -199,8 +202,8 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
                 labelText="Asset Id"
                 placeholder="house#1"
                 required
-                invalid={fieldValidation.assetIdInvalid}
-                invalidText="This field cannot be empty"
+                // invalid={fieldValidation.assetIdInvalid}
+                // invalidText="This field cannot be empty"
                 value={formValue.assetId}
                 onChange={onFormValueChange}
               />
@@ -212,8 +215,8 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
                 labelText="SN"
                 placeholder="SN"
                 required
-                invalid={fieldValidation.snInvalid}
-                invalidText="This field cannot be empty"
+                // invalid={fieldValidation.snInvalid}
+                // invalidText="This field cannot be empty"
                 value={formValue.sn}
                 onChange={onFormValueChange}
               />
@@ -355,7 +358,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
                     setFile(null);
                   }}
                   size="md"
-                  status={isUploading ? 'edit' : 'uploading'}
+                  status={isUploading ? 'uploading' : 'edit'}
                 />
               )}
             </Column>
