@@ -173,7 +173,7 @@ function HistoricalMaintenanceLog(props) {
   return (
     <>
       <div className={styles.title}>
-        <div className={styles.titleName}>Historical Maintenance Log</div>
+        <div className={styles.titleName}>Maintenance Check Interval</div>
         {rows?.length > 0 && (
           <div className={styles.titleAction}>
             <div className={styles.search}>
