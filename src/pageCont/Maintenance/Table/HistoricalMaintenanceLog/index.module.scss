@@ -7,16 +7,16 @@
   margin-bottom: 10px;
 }
 .table {
-  tbody {
-    display: block;
-    height: 208px;
-    overflow-y: auto;
-  }
+  // tbody {
+  //   display: block;
+  //   height: 208px;
+  //   overflow-y: auto;
+  // }
 
-  thead,
-  tbody tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-  }
+  // thead,
+  // tbody tr {
+  //   display: table;
+  //   width: 100%;
+  //   table-layout: fixed;
+  // }
 }

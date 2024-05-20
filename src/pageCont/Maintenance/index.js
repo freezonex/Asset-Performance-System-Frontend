@@ -22,6 +22,7 @@ class Comp extends Component {
   state = {
     selectedProduct: '',
     selectItemList: [],
+    logTableReload: false,
   };
 
   changeState = (obj) => {
@@ -45,7 +46,7 @@ class Comp extends Component {
   };
 
   render() {
-    const { selectedProduct, selectItemList } = this.state;
+    const { selectedProduct, selectItemList, logTableReload } = this.state;
 
     return (
       <div>
@@ -83,7 +84,13 @@ class Comp extends Component {
                 }}
               >
                 {selectItemList.map((item, i) => {
-                  return <SelectItem value={item.id} text={item.assetType} key={item.id}/>;
+                  return (
+                    <SelectItem
+                      value={item.id}
+                      text={item.assetType}
+                      key={item.id}
+                    />
+                  );
                 })}
               </Select>
             </div>
@@ -112,10 +119,21 @@ class Comp extends Component {
           {/* 第二行 */}
           <div className={styles.bottom}>
             <div className={styles.historicalMaintenanceLog}>
-              <HistoricalMaintenanceLog />
+              {selectedProduct && (
+                <HistoricalMaintenanceLog
+                  selectedProduct={selectedProduct}
+                  changeState={this.changeState}
+                  logTableReload={logTableReload}
+                />
+              )}
             </div>
             <div className={styles.maintenanceCheckInterval}>
-              <MaintenanceCheckInterval />
+              {selectedProduct && (
+                <MaintenanceCheckInterval
+                  selectedProduct={selectedProduct}
+                  changeState={this.changeState}
+                />
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './index.module.scss';
 
 import {
@@ -11,42 +11,53 @@ import {
   TableRow,
   TableHeader,
 } from '@carbon/react';
+import { getMaintenancelist } from '@/api/maintenance';
 
-function HistoricalMaintenanceLog() {
+function HistoricalMaintenanceLog(props) {
+  const { selectedProduct, changeState, logTableReload } = props;
+
   const headers = [
-    { key: 'date', header: 'Date' },
+    { key: 'scheduledDate', header: 'Date' },
     { key: 'content', header: 'Maintenance Content' },
   ];
 
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const [total, setTotal] = useState(6);
-  const [rows, setRows] = useState([
-    {
-      date: '2024.05.01',
-      content: 'Content',
-    },
-    {
-      date: '2024.05.01',
-      content: 'Content',
-    },
-    {
-      date: '2024.05.01',
-      content: 'Content',
-    },
-    {
-      date: '2024.05.01',
-      content: 'Content',
-    },
-    {
-      date: '2024.05.01',
-      content: 'Content',
-    },
-    {
-      date: '2024.05.01',
-      content: 'Content',
-    },
-  ]);
+  const [pageSize, setPageSize] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    getTableList(page, pageSize);
+  }, [selectedProduct]);
+
+  useEffect(() => {
+    if (logTableReload) {
+      getTableList(page, pageSize);
+      changeState({
+        logTableReload: false,
+      });
+    }
+  }, [logTableReload]);
+
+  const getTableList = async (num, size) => {
+    let params = {
+      assetTypeId: selectedProduct,
+      pageNum: num,
+      pageSize: size,
+      status: 1,
+    };
+
+    let res = await getMaintenancelist(params);
+
+    if (res?.data?.code == 200) {
+      const { list, total } = res?.data?.data;
+      setRows(list);
+      setTotal(total);
+      setPage(num);
+      setPageSize(size);
+    }
+  };
+
   return (
     <>
       <div className={styles.title}>Historical Maintenance Log</div>
@@ -84,11 +95,10 @@ function HistoricalMaintenanceLog() {
           page={page}
           pageNumberText="Page Number"
           pageSize={pageSize}
-          pageSizes={[5, 10, 20, 30, 40, 50]}
+          pageSizes={[10, 20, 30, 40, 50]}
           totalItems={total}
           onChange={({ page, pageSize }) => {
-            setPage(page);
-            setPageSize(pageSize);
+            getTableList(page, pageSize);
           }}
         />
       </div>

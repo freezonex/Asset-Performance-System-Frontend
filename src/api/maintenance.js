@@ -14,3 +14,30 @@ export const getTop5Data = () => {
     method: 'post',
   });
 };
+
+//maintenance list
+export const getMaintenancelist = (params) => {
+  return request({
+    url: '/apsbackend/maintenance/list',
+    method: 'post',
+    data: params
+  });
+};
+
+//maintenance create
+export const createMaintenance = (params) => {
+  return request({
+    url: '/apsbackend/maintenance/create',
+    method: 'post',
+    data: params
+  });
+};
+
+//maintenance completed
+export const completedMaintenance = (params) => {
+  return request({
+    url: '/apsbackend/maintenance/completed',
+    method: 'post',
+    data: params
+  });
+};
