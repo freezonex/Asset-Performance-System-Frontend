@@ -26,20 +26,24 @@
   }
 }
 .table {
-  // tbody {
-  //   display: block;
-  //   height: 208px;
-  //   overflow-y: auto;
-  // }
-
-  // thead,
-  // tbody tr {
-  //   display: table;
-  //   width: 100%;
-  //   table-layout: fixed;
-  // }
+  :global{
+    .cds--data-table tbody{
+      background-color: #fff;
+    }
+    .cds--data-table td, .cds--data-table tbody th{
+      background-color: #fff;
+    }
+    .cds--pagination{
+      background-color: #fff;
+    }
+  }
+  .addMaintenanceInput{
+    display: flex;
+    align-items: center;
+  }
 
   .actions {
+    margin-left: 15px;
     .save {
       color: #0f62fe;
       cursor: pointer;

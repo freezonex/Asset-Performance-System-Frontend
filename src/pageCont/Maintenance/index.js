@@ -65,7 +65,7 @@ class Comp extends Component {
               // this.props.router.push(`/assets`);
             }}
           >
-            Home
+            Maintenance
           </BreadcrumbItem>
         </Breadcrumb>
         <div className="bx--col-lg-16 flex justify-between items-center">

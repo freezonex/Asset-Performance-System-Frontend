@@ -57,7 +57,7 @@ class Comp extends Component {
     var rs = await queryByAssetTypeList(reqData);
     console.log(rs)
     // 成功
-    if (rs.data.code == 200) {
+    if (rs?.data?.code == 200) {
       var data = rs.data.data
       this.setState({
         tabList: data.list,
