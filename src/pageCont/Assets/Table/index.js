@@ -70,11 +70,21 @@ function TablePage({
     if (isSearchClicked) {
       let obj = { ...formValue, pageNum: 1, pageSize: 10 };
       getTableList(obj);
-    } else {
-      // 无搜索条件 调用接口
-      getTableList({ pageNum: 1, pageSize: 10 });
+      changeState({ isSearchClicked: false });
     }
-  }, [isSearchClicked, createModalIsopen, editModalIsopen]);
+  }, [isSearchClicked]);
+
+  useEffect(() => {
+    changeState({
+      formValue: {
+        assetId: '',
+        assetName: '',
+        assetType: '',
+        responsiblePerson: '',
+      }
+    });
+    getTableList({ pageNum: 1, pageSize: 10 });
+  }, [createModalIsopen, editModalIsopen]);
 
   useEffect(() => {
     if (!createModalIsopen && !editModalIsopen && !modalTableIsopen)

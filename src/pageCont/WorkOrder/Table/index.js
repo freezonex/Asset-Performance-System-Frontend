@@ -12,19 +12,10 @@ import {
   TableHeader,
 } from '@carbon/react';
 import classNames from 'classnames';
-// import ModalTable from '../Modal/ModalTable';
 import tableStyles from '@/styles/table/table.module.scss';
 import styles from './index.module.scss';
 import DelModal from '@/pageCont/components/DelModal';
 import { getWorkOrderList, workOrderDelete } from '@/api/workOrder';
-
-// import ShelfLocationModal from '../Modal/ShelfLocationModal';
-// import {
-//   deleteWarehouse,
-//   fetchWarehouses,
-//   fetchWarehousesWithFilters,
-// } from '@/actions/actions';
-// import EditWarehouseModal from '../Modal/EditWarehouseModal';
 
 function TablePage({
   formValue,
@@ -72,15 +63,25 @@ function TablePage({
   const [deleteModalIsopen, setDeleteModalIsopen] = useState(false);
   const [selectRowData, setSelectRowData] = useState({}); //选中的row data
   useEffect(() => {
+    changeState({
+      formValue: {
+        orderId: '',
+        orderName: '',
+        orderType: '',
+        creationTime: '',
+      },
+    });
+    // 无搜索条件 调用接口
+    getTableList({ pageNum: 1, pageSize: 10 });
+  }, [createModalIsopen]);
+  useEffect(() => {
     // 是否携带搜索条件
     if (isSearchClicked) {
       let obj = { ...formValue, pageNum: 1, pageSize: 10 };
       getTableList(obj);
-    } else {
-      // 无搜索条件 调用接口
-      getTableList({ pageNum: 1, pageSize: 10 });
+      changeState({ isSearchClicked: false });
     }
-  }, [isSearchClicked, createModalIsopen]);
+  }, [isSearchClicked]);
 
   const getTableList = async (filters) => {
     let reqData = {

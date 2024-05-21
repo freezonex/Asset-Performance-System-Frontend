@@ -42,7 +42,7 @@ class Comp extends Component {
         assetType: '',
         responsiblePerson: '',
       },
-      isSearchClicked: false,
+      isSearchClicked: true,
     });
   };
 
@@ -146,8 +146,6 @@ class Comp extends Component {
                 this.setState({
                   isSearchClicked: true,
                 });
-                //搜索
-                console.log(this.state.formValue, 'formValue');
               }}
               style={{ backgroundColor: '#393939' }}
               isExpressive

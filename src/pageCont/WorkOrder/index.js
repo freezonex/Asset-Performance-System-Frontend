@@ -21,7 +21,7 @@ class Comp extends Component {
     formValue: {
       orderId: '',
       orderName: '',
-      type: '',
+      orderType: '',
       creationTime: '',
     },
     isSearchClicked: false, //是否搜索
@@ -40,10 +40,10 @@ class Comp extends Component {
       formValue: {
         orderId: '',
         orderName: '',
-        type: '',
+        orderType: '',
         creationTime: '',
       },
-      isSearchClicked: false,
+      isSearchClicked: true,
     });
   };
 
@@ -110,7 +110,7 @@ class Comp extends Component {
               labelText="Work Order"
               id="orderId"
               placeholder="Work Order"
-              value={formValue.asset_id}
+              value={formValue.orderId}
               onChange={(e) => {
                 this.FormValueChange(e);
               }}
@@ -120,7 +120,7 @@ class Comp extends Component {
               labelText="Order Name"
               id="orderName"
               placeholder="Order Name"
-              value={formValue.asset}
+              value={formValue.orderName}
               onChange={(e) => {
                 this.FormValueChange(e);
               }}
@@ -130,25 +130,25 @@ class Comp extends Component {
             <TextInput
               className={styles.searchInputChild}
               labelText="Type"
-              id="type"
+              id="orderType"
               placeholder="Type"
-              value={formValue.type}
+              value={formValue.orderType}
               onChange={(e) => {
                 this.FormValueChange(e);
               }}
             />
             <TextInput
-             className={styles.searchInputChild}
+              className={styles.searchInputChild}
               labelText="Creation Time"
               id="creationTime"
               placeholder="Creation Time"
-              value={formValue.person}
+              value={formValue.creationTime}
               onChange={(e) => {
                 this.FormValueChange(e);
               }}
             />
           </div>
-          <div  className={styles.searchBtnParent}>
+          <div className={styles.searchBtnParent}>
             <Button
               onClick={() => {
                 this.setState({
