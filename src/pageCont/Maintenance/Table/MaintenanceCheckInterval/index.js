@@ -18,7 +18,7 @@ import {
   DatePickerInput,
   RadioButton,
 } from '@carbon/react';
-import { Add } from '@carbon/icons-react';
+import { AddAlt } from '@carbon/icons-react';
 import { message } from 'antd';
 import {
   getMaintenancelist,
@@ -174,29 +174,33 @@ function HistoricalMaintenanceLog(props) {
     <>
       <div className={styles.title}>
         <div className={styles.titleName}>Maintenance Check Interval</div>
-        {rows?.length > 0 && (
-          <div className={styles.titleAction}>
-            <div className={styles.search}>
-              <ExpandableSearch
-                size="sm"
-                labelText="Search"
-                closeButtonLabelText="Clear search input"
-                id="search-expandable-1"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.keyCode === 13) {
-                    handleSearch(e);
-                  }
-                }}
-                onBlur={(e) => {
+        <div className={styles.titleAction}>
+          <div className={styles.search}>
+            <ExpandableSearch
+              size="sm"
+              labelText="Search"
+              closeButtonLabelText="Clear search input"
+              id="search-expandable-1"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.keyCode === 13) {
                   handleSearch(e);
-                }}
-              />
-            </div>
-            <div className={styles.add}>
-              <Add onClick={showAdd} />
-            </div>
+                }
+              }}
+              onBlur={(e) => {
+                handleSearch(e);
+              }}
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+            />
           </div>
-        )}
+          {rows?.length > 0 && (
+            <div className={styles.add}>
+              <AddAlt onClick={showAdd} />
+            </div>
+          )}
+        </div>
       </div>
 
       {rows?.length > 0 ? (
@@ -269,13 +273,13 @@ function HistoricalMaintenanceLog(props) {
                                       <div className={styles.addMaintenanceInput}>
                                       <TextInput
                                         id={cell.id}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                           onFormValueChange(
                                             e.target.value,
                                             'content',
                                             row.id,
-                                          )
-                                        }
+                                          );
+                                        }}
                                       />
                                       <div className={styles.actions}>
                                         <span
@@ -347,7 +351,7 @@ function HistoricalMaintenanceLog(props) {
         </div>
       ) : (
         <div className={styles.addArea}>
-          <Add className={styles.icon} onClick={showAdd} />
+          <AddAlt className={styles.icon} onClick={showAdd} />
         </div>
       )}
     </>

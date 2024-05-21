@@ -4,8 +4,12 @@ import { DocumentDownload } from '@carbon/icons-react';
 import classNames from 'classnames';
 import modalStyles from '@/styles/modal/modal.module.scss';
 import styles from './index.module.scss';
-import { assetsDownload } from '@/api/assets';
-const ModalPages = ({ modalTableIsopen, setModalTableIsopen ,tableRowData}) => {
+
+const ModalPages = ({
+  modalTableIsopen,
+  setModalTableIsopen,
+  tableRowData,
+}) => {
   const headers = [
     { key: 'department', header: 'Department' },
     { key: 'location', header: 'Location' },
@@ -15,6 +19,27 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen ,tableRowData}) => {
   ];
   const onRequestClose = () => {
     setModalTableIsopen(false);
+  };
+
+  const download = async (e, id) => {
+    e.preventDefault();
+
+    let fileName = '';
+    fetch(`${process.env.apiUrl}/apsbackend/asset/download?id=${id}`)
+      .then((response) => {
+        const arr = response.headers.get('Content-Disposition').split(';');
+        fileName = window.decodeURI(arr[1]?.split('=')[1]);
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.download = fileName;
+        a.href = url;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a = null;
+      });
   };
 
   return (
@@ -33,10 +58,12 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen ,tableRowData}) => {
                   <div className={styles.Left}>{'arrachments'}</div>
                   <div className={styles.Right}>
                     <Link
-                      href={`${process.env.apiUrl}/apsbackend/asset/download?id=${tableRowData.id}`}
+                      // href={`${process.env.apiUrl}/apsbackend/asset/download?id=${tableRowData.id}`}
                       renderIcon={() => (
                         <DocumentDownload aria-label="Arrow Right" />
                       )}
+                      style={{ cursor:'pointer' }}
+                      onClick={(e) => download(e, tableRowData.id)}
                     >
                       Download
                     </Link>

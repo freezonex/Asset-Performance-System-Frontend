@@ -20,7 +20,7 @@ export const getMaintenancelist = (params) => {
   return request({
     url: '/apsbackend/maintenance/list',
     method: 'post',
-    data: params
+    data: params,
   });
 };
 
@@ -29,7 +29,7 @@ export const createMaintenance = (params) => {
   return request({
     url: '/apsbackend/maintenance/create',
     method: 'post',
-    data: params
+    data: params,
   });
 };
 
@@ -38,6 +38,23 @@ export const completedMaintenance = (params) => {
   return request({
     url: '/apsbackend/maintenance/completed',
     method: 'post',
-    data: params
+    data: params,
+  });
+};
+
+//maintenance download
+export const download = (params) => {
+  return request({
+    url: `/apsbackend/maintenance/download?type=${params?.type}`,
+    method: 'get',
+  });
+};
+
+//value model
+export const getModelChartData = (params) => {
+  return request({
+    url: '/apsbackend/maintenance/valueModelData',
+    method: 'post',
+    data: params,
   });
 };

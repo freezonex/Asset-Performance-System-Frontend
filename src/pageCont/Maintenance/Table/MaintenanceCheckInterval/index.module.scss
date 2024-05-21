@@ -59,6 +59,7 @@
 
 .addArea {
   min-height: 258px;
+  height: calc(100% - 40px);
   background-color: #f4f4f4;
   display: flex;
   align-items: center;

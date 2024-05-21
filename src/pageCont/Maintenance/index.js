@@ -13,8 +13,10 @@ import {
 } from '@carbon/react';
 import { Download } from '@carbon/icons-react';
 import Top5 from './Charts/Top5';
+import AssetValueDepreciationModel from './Charts/AssetValueDepreciationModel';
 import HistoricalMaintenanceLog from './Table/HistoricalMaintenanceLog';
 import MaintenanceCheckInterval from './Table/MaintenanceCheckInterval';
+import DownloadModal from './Modal/DownloadModal';
 import { getSelectItemList } from '@/api/maintenance';
 
 @withRouter
@@ -23,6 +25,7 @@ class Comp extends Component {
     selectedProduct: '',
     selectItemList: [],
     logTableReload: false,
+    downloadModalIsOpen: false,
   };
 
   changeState = (obj) => {
@@ -46,7 +49,12 @@ class Comp extends Component {
   };
 
   render() {
-    const { selectedProduct, selectItemList, logTableReload } = this.state;
+    const {
+      selectedProduct,
+      selectItemList,
+      logTableReload,
+      downloadModalIsOpen,
+    } = this.state;
 
     return (
       <div>
@@ -96,7 +104,11 @@ class Comp extends Component {
             </div>
             <div className={styles.button}>
               <Button
-                onClick={() => {}}
+                onClick={() => {
+                  this.changeState({
+                    downloadModalIsOpen: true,
+                  });
+                }}
                 isExpressive
                 size="md"
                 renderIcon={Download}
@@ -113,7 +125,17 @@ class Comp extends Component {
             <div className={styles.top5}>
               <Top5 />
             </div>
-            <div className={styles.assetValueDepreciationModel}></div>
+            <div className={styles.assetValueDepreciationModel}>
+              <AssetValueDepreciationModel
+                selectedProduct={selectedProduct}
+                selectedProductName={
+                  selectItemList?.filter(
+                    (item) => item.id == selectedProduct,
+                  )?.[0]?.assetType
+                }
+                selectItemList={selectItemList}
+              />
+            </div>
           </div>
 
           {/* 第二行 */}
@@ -137,6 +159,11 @@ class Comp extends Component {
             </div>
           </div>
         </div>
+
+        <DownloadModal
+          downloadModalIsOpen={downloadModalIsOpen}
+          changeState={this.changeState}
+        />
       </div>
     );
   }
