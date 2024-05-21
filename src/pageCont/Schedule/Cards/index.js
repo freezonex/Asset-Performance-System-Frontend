@@ -38,7 +38,7 @@ function Cards() {
             </div>
         </div>
         <div className={styles.card}>
-            <div className={styles.cardHeader}>usage Rate</div>
+            <div className={styles.cardHeader}>Usage Rate</div>
             <div className={styles.cardBottom}>
                 <div className={styles.bottomLeft}>{data.usageRate}</div>
             </div>

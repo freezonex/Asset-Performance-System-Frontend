@@ -12,7 +12,7 @@ import {
   TableRow,
   TableHeader,
 } from '@carbon/react';
-import ModalTable from '../Modal/ModalTable';
+import MoreModal from '../Modal/MoreModal';
 import classNames from 'classnames';
 import tableStyles from '@/styles/table/table.module.scss';
 import styles from './index.module.scss';
@@ -227,7 +227,7 @@ function TablePage({
       </div>
       {/* more modal */}
       {
-        <ModalTable
+        <MoreModal
           modalTableIsopen={modalTableIsopen}
           setModalTableIsopen={setModalTableIsopen}
           tableRowData={tableRowData}

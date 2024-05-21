@@ -21,6 +21,11 @@ function Alarms() {
       content:
         'Department04 Very busy and the workload is about to reach saturation.',
     },
+    {
+      id: 4,
+      content:
+        'Department05 could not be assigned any new tasks today.',
+    },
   ]);
 
   const deleteItem = (id) => {

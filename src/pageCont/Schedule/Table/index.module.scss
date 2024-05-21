@@ -40,6 +40,20 @@
       }
     }
   }
+
+  .activeTableHeaderBorder{
+    border:2px solid #0F62FE !important;
+    border-bottom:none!important;
+  }
+  .activeTableBorder{
+    border-left:2px solid #0F62FE !important;
+  }
+  .activeTableBorderBottom{
+    border-bottom:2px solid #0F62FE !important;
+  }
+  .activeTableBorder + td {
+    border-left:2px solid #0F62FE !important;
+  }
   :global {
 
     .cds--data-table td {
