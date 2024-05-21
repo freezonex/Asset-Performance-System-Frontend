@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Modal, RadioButtonGroup, RadioButton } from '@carbon/react';
 import modalStyles from '@/styles/modal/modal.module.scss';
 import classNames from 'classnames';
@@ -6,9 +6,7 @@ import styles from './index.module.scss';
 
 function DownloadModal(props) {
   const { downloadModalIsOpen, changeState } = props;
-
   const [value, setValue] = useState(1);
-  const linkRef = useRef(null);
 
   const handleCancelClicked = () => {
     setValue(1);
@@ -19,19 +17,23 @@ function DownloadModal(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    linkRef.current.click();
 
-    // fetch(`${process.env.apiUrl}/apsbackend/maintenance/download?type=${value}`)
-    //   .then((response) => response.blob())
-    //   .then((blob) => {
-    //     const url = window.URL.createObjectURL(blob);
-    //     const a = document.createElement('a');
-    //     a.href = url;
-    //     a.download = 'file.txt';
-    //     document.body.appendChild(a);
-    //     a.click();
-    //     window.URL.revokeObjectURL(url);
-    //   });
+    let fileName = '';
+    fetch(`${process.env.apiUrl}/apsbackend/maintenance/download?type=${value}`)
+      .then((response) => {
+        const arr = response.headers.get('Content-Disposition').split(';');
+        fileName = window.decodeURI(arr[1]?.split('=')[1]);
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.download = fileName;
+        a.href = url;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a = null;
+      });
   };
 
   return (
@@ -72,13 +74,6 @@ function DownloadModal(props) {
             />
           </RadioButtonGroup>
         </div>
-
-        <a
-          style={{ visibility: 'hidden' }}
-          href={`${process.env.apiUrl}/apsbackend/maintenance/download?type=${value}`}
-          ref={linkRef}
-          // target='_blank'
-        ></a>
       </Modal>
     </div>
   );
