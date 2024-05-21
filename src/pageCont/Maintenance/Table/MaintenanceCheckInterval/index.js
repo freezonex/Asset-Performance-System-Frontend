@@ -18,7 +18,7 @@ import {
   DatePickerInput,
   RadioButton,
 } from '@carbon/react';
-import { Add } from '@carbon/icons-react';
+import { AddAlt } from '@carbon/icons-react';
 import { message } from 'antd';
 import {
   getMaintenancelist,
@@ -74,11 +74,11 @@ function HistoricalMaintenanceLog(props) {
     }
   };
 
-  const handleSearch = (e) =>{
+  const handleSearch = (e) => {
     const value = e.target.value;
     setSearch(value);
     getTableList(page, pageSize, value);
-  }
+  };
 
   const showAdd = () => {
     let obj = {
@@ -174,29 +174,33 @@ function HistoricalMaintenanceLog(props) {
     <>
       <div className={styles.title}>
         <div className={styles.titleName}>Maintenance Check Interval</div>
-        {rows?.length > 0 && (
-          <div className={styles.titleAction}>
-            <div className={styles.search}>
-              <ExpandableSearch
-                size="sm"
-                labelText="Search"
-                closeButtonLabelText="Clear search input"
-                id="search-expandable-1"
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.keyCode === 13) {
-                    handleSearch(e)
-                  }
-                }}
-                onBlur={(e) => {
-                  handleSearch(e)
-                }}
-              />
-            </div>
-            <div className={styles.add}>
-              <Add onClick={showAdd} />
-            </div>
+        <div className={styles.titleAction}>
+          <div className={styles.search}>
+            <ExpandableSearch
+              size="sm"
+              labelText="Search"
+              closeButtonLabelText="Clear search input"
+              id="search-expandable-1"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.keyCode === 13) {
+                  handleSearch(e);
+                }
+              }}
+              onBlur={(e) => {
+                handleSearch(e);
+              }}
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+            />
           </div>
-        )}
+          {rows?.length > 0 && (
+            <div className={styles.add}>
+              <AddAlt onClick={showAdd} />
+            </div>
+          )}
+        </div>
       </div>
 
       {rows?.length > 0 ? (
@@ -268,13 +272,13 @@ function HistoricalMaintenanceLog(props) {
                                     <TableCell key={cell.id}>
                                       <TextInput
                                         id={cell.id}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                           onFormValueChange(
                                             e.target.value,
                                             'content',
                                             row.id,
-                                          )
-                                        }
+                                          );
+                                        }}
                                       />
                                     </TableCell>
                                   );
@@ -343,7 +347,7 @@ function HistoricalMaintenanceLog(props) {
         </div>
       ) : (
         <div className={styles.addArea}>
-          <Add className={styles.icon} onClick={showAdd} />
+          <AddAlt className={styles.icon} onClick={showAdd} />
         </div>
       )}
     </>
