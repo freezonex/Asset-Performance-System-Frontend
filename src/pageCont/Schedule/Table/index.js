@@ -97,7 +97,6 @@ function TablePage({}) {
       return obj;
     });
     setTabelList(newArr);
-    console.log('newArr: ', newArr);
   };
 
   const activeTableBorderBottom = (params)=>{
@@ -249,8 +248,11 @@ function TablePage({}) {
           pageSizes={[10, 20, 30, 40, 50]}
           totalItems={total}
           onChange={({ page, pageSize }) => {
-            setPage(page);
-            setPageSize(pageSize);
+            getList({
+              pageNum: page,
+              pageSize: pageSize,
+              selectDate: moment(dataPickValue).format('yyyy-MM-DD'),
+            });
           }}
         />
       </div>
