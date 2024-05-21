@@ -41,12 +41,15 @@ function HistoricalMaintenanceLog(props) {
   const [search, setSearch] = useState('');
   const [addList, setAddList] = useState([]);
   const [addIndex, setAddIndex] = useState(1);
+  const [disable, setDisAble] = useState(false);
 
   useEffect(() => {
     getTableList(page, pageSize, search);
   }, [selectedProduct]);
 
   const getTableList = async (num, size, search, deletAddId) => {
+    setDisAble(true);
+
     let params = {
       searchContent: search,
       assetTypeId: selectedProduct,
@@ -72,6 +75,8 @@ function HistoricalMaintenanceLog(props) {
       setPage(num);
       setPageSize(size);
     }
+
+    setDisAble(false);
   };
 
   const handleSearch = (e) => {
@@ -81,6 +86,10 @@ function HistoricalMaintenanceLog(props) {
   };
 
   const showAdd = () => {
+    if(disable){
+      return;
+    }
+
     let obj = {
       id: `add-${addIndex}`,
       scheduledDate: '',
@@ -117,6 +126,10 @@ function HistoricalMaintenanceLog(props) {
   };
 
   const handleSubmit = (id) => {
+    if(disable){
+      return;
+    }
+
     const obj = rows?.filter((item) => item.id === id)?.[0];
 
     if (!obj.scheduledDate || obj.scheduledDate === '') {
@@ -131,6 +144,8 @@ function HistoricalMaintenanceLog(props) {
   };
 
   const handleCreateMaintenance = async (id) => {
+    setDisAble(true)
+
     const obj = rows?.filter((item) => item.id === id)?.[0];
 
     let params = {
@@ -146,14 +161,22 @@ function HistoricalMaintenanceLog(props) {
     } else {
       message.error('Operation Failed');
     }
+
+    setDisAble(false)
   };
 
   const handleCancel = (id) => {
+    if(disable){
+      return;
+    }
+
     setAddList(addList.filter((item) => item.id !== id));
     setRows(rows.filter((item) => item.id !== id));
   };
 
   const handleCompletedMaintenance = async (id) => {
+    setDisAble(true);
+
     let params = {
       id,
     };
@@ -168,6 +191,8 @@ function HistoricalMaintenanceLog(props) {
     } else {
       message.error('Operation Failed');
     }
+
+    setDisAble(false)
   };
 
   return (
@@ -193,10 +218,11 @@ function HistoricalMaintenanceLog(props) {
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
+              disabled={disable}
             />
           </div>
           {rows?.length > 0 && (
-            <div className={styles.add}>
+            <div style={{ cursor: disable ? 'not-allowed' : 'pointer' }}>
               <AddAlt onClick={showAdd} />
             </div>
           )}
@@ -250,6 +276,7 @@ function HistoricalMaintenanceLog(props) {
                                   return (
                                     <TableCell key={cell.id}>
                                       <DatePicker
+                                        readOnly={disable}
                                         datePickerType="single"
                                         onChange={(e) => {
                                           onFormValueChange(
@@ -272,6 +299,7 @@ function HistoricalMaintenanceLog(props) {
                                     <TableCell key={cell.id}>
                                       <div className={styles.addMaintenanceInput}>
                                       <TextInput
+                                        disabled={disable}
                                         id={cell.id}
                                         onChange={(e) => {
                                           onFormValueChange(
@@ -285,12 +313,14 @@ function HistoricalMaintenanceLog(props) {
                                         <span
                                           className={styles.save}
                                           onClick={() => handleSubmit(row.id)}
+                                          style={{ cursor: disable ? 'not-allowed' : 'pointer' }}
                                         >
                                           Save
                                         </span>
                                         <span
                                           className={styles.cancel}
                                           onClick={() => handleCancel(row.id)}
+                                          style={{ cursor: disable ? 'not-allowed' : 'pointer' }}
                                         >
                                           Cancel
                                         </span>
@@ -314,6 +344,7 @@ function HistoricalMaintenanceLog(props) {
                             <>
                               <td style={{ width: '48px' }}>
                                 <RadioButton
+                                  disabled={disable}
                                   onClick={() =>
                                     handleCompletedMaintenance(row.id)
                                   }
@@ -347,10 +378,11 @@ function HistoricalMaintenanceLog(props) {
             onChange={({ page, pageSize }) => {
               getTableList(page, pageSize, search);
             }}
+            disabled={disable}
           />
         </div>
       ) : (
-        <div className={styles.addArea}>
+        <div className={styles.addArea}  style={{ cursor: disable ? 'not-allowed' : 'pointer' }}>
           <AddAlt className={styles.icon} onClick={showAdd} />
         </div>
       )}

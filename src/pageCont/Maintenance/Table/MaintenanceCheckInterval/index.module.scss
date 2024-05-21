@@ -21,7 +21,7 @@
     }
 
     .add {
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 }
@@ -46,13 +46,13 @@
     margin-left: 15px;
     .save {
       color: #0f62fe;
-      cursor: pointer;
+      // cursor: pointer;
       margin-right: 16px;
     }
 
     .cancel {
       color: #5a5a5a;
-      cursor: pointer;
+      // cursor: pointer;
     }
   }
 }
@@ -64,7 +64,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  // cursor: pointer;
 
   .icon {
     width: 110px;

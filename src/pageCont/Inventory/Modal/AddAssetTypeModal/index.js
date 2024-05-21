@@ -86,7 +86,7 @@ const ModalPages = ({ addModal, modalTitle, changeModalOpen, addConfirm }) => {
               id="priceValue"
               min={0}
               value={formValue.priceValue}
-              label="NumberInput label"
+              label="Price At Purchase"
               placeholder="Price At Purchase"
               onChange={onFormValueChange}
             />
