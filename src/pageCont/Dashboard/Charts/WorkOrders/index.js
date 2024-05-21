@@ -15,7 +15,7 @@ function WorkOrders() {
     'In Progress': '#d0e2ff',
     'Pending Review': '#e8daff',
     Dued: '#ffd6e8',
-    Closed: '#ffd7d9',
+    Closed: '#FFC9CB',
   };
 
   const getData = async () => {
