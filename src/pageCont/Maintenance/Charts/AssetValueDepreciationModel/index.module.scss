@@ -17,7 +17,9 @@
 
     :global {
       .cds--select-input {
+        border-bottom: none;
         height: 23px;
+        background-color: #f4f4f4;
       }
     }
   }
