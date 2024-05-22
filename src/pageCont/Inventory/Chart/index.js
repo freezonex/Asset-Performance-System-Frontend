@@ -160,8 +160,10 @@ class Comp extends Component {
 			"timeScale": {
 				"addSpaceOnEdges": 0
 			},
-			"height": "300px",
-			
+			"height": "284px",
+			toolbar: {
+				enabled: false,
+			},
 		}
 	};
 

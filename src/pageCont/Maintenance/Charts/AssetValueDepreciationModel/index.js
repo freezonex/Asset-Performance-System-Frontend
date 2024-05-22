@@ -80,7 +80,7 @@ function AssetValueDepreciationModel(props) {
             scaleType: 'linear',
           },
         },
-        height: '285px',
+        height: '272px',
         color: {
           scale: colorScale,
         },
@@ -89,6 +89,9 @@ function AssetValueDepreciationModel(props) {
           filled: true,
         },
         curve: 'curveMonotoneX',
+        toolbar: {
+          enabled: false,
+        },
       });
 
       const { dataList } = res?.data?.data;

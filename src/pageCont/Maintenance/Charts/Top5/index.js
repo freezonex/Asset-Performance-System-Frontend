@@ -44,6 +44,9 @@ function Top5() {
           alignment: 'center',
         },
         height: '320px',
+        toolbar: {
+          enabled: false,
+        },
       });
     }
   };

@@ -73,14 +73,17 @@ function AssetUsed() {
     color: {
       scale: {
         'Product 1': '#0F62FE',
-        'Product 2': '#9F1853'
-      }
+        'Product 2': '#9F1853',
+      },
     },
     points: {
       fillOpacity: 1,
       filled: true,
-  },
-  curve : "curveMonotoneX"
+    },
+    curve: 'curveMonotoneX',
+    toolbar: {
+      enabled: false,
+    },
   };
 
   return (
