@@ -44,11 +44,20 @@ function TablePage({}) {
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(5);
   const [dataPickValue, setDataPickValue] = useState(new Date());
-  const [selectIsActiveTable, setSelectIsActiveTable] = useState(null);//表格中和选中时间一致的，表头名称
+  const [selectIsActiveTable, setSelectIsActiveTable] = useState(null); //表格中和选中时间一致的，表头名称
+  const [activeBorderFlag, setActiveBorderFlag] = useState(true); // 是否展示篮框选中样式
   const [tabelList, setTabelList] = useState([]);
   useEffect(() => {
     getList({ selectDate: moment(dataPickValue).format('yyyy-MM-DD') });
   }, []);
+
+  useEffect(() => {
+    if (activeBorderFlag) {
+      setTimeout(() => {
+        setActiveBorderFlag(false);
+      }, 3000);
+    }
+  }, [activeBorderFlag]);
 
   const getList = async (params = {}) => {
     let res = await getScheduleList({
@@ -63,6 +72,7 @@ function TablePage({}) {
       setPageSize(data.pageData.pageSize);
       getHeader(data.dates);
       getTableList(data.pageData.list, params.selectDate);
+      setActiveBorderFlag(true)
     }
   };
 
@@ -90,7 +100,7 @@ function TablePage({}) {
         const day = new Date(value.date).getDate();
         if (pickDay == day) {
           obj.isActive = value.date;
-          setSelectIsActiveTable(value.date)
+          setSelectIsActiveTable(value.date);
         }
         obj[value.date] = value.colorType;
       });
@@ -99,16 +109,16 @@ function TablePage({}) {
     setTabelList(newArr);
   };
 
-  const activeTableBorderBottom = (params)=>{
-    let  flag = false;
-    const {index,header,isActive} = params
-    if(index == tabelList.length-1){
-      if(header == isActive){
-        flag = true
+  const activeTableBorderBottom = (params) => {
+    let flag = false;
+    const { index, header, isActive } = params;
+    if (index == tabelList.length - 1) {
+      if (header == isActive && activeBorderFlag) {
+        flag = true;
       }
     }
-    return flag
-  }
+    return flag;
+  };
 
   return (
     <div className={styles.scheduleTable}>
@@ -173,12 +183,12 @@ function TablePage({}) {
                     <TableHeader
                       key={`${header.key}_head`}
                       style={{ minWidth: '120px' }}
-                      className={classNames(
-                        {
-                          [styles.activeTableHeaderBorder]:
-                            header.key == selectIsActiveTable,
-                        },
-                      )}
+                      className={classNames({
+                        [styles.activeTableHeaderBorder]:
+                          header.key == selectIsActiveTable && activeBorderFlag,
+                        [styles.activeHeaderColor]:
+                          header.key == selectIsActiveTable,
+                      })}
                     >
                       {header.header}
                     </TableHeader>
@@ -198,14 +208,15 @@ function TablePage({}) {
                           className={classNames(
                             {
                               [styles.activeTableBorder]:
-                                header.key == row['isActive'],
+                                header.key == row['isActive'] &&
+                                activeBorderFlag,
                             },
                             {
                               [styles.activeTableBorderBottom]:
                                 activeTableBorderBottom({
                                   index: i,
                                   header: header.key,
-                                  isActive:row['isActive'],
+                                  isActive: row['isActive'],
                                 }),
                             },
                           )}
@@ -213,24 +224,29 @@ function TablePage({}) {
                           <div
                             style={{
                               backgroundColor: color,
-                              minHeight: '3rem',
+                              width: 120,
+                              height: 48,
+                              minWidth: 120,
+                              minheight: 48,
                             }}
-                          >
-                            <div
-                              style={{
-                                paddingLeft: '1rem',
-                                paddingRight: '1rem',
-                                opacity: '0',
-                              }}
-                            >
-                              {row['groupName']}
-                            </div>
-                          </div>
+                          ></div>
                         </TableCell>
                       );
                     }
                     return (
-                      <TableCell key={header.key}>{row[header.key]}</TableCell>
+                      <TableCell key={header.key}>
+                        <div
+                          style={{
+                            width: 120,
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                          }}
+                          title={row[header.key]}
+                        >
+                          {row[header.key]}
+                        </div>
+                      </TableCell>
                     );
                   })}
                 </TableRow>

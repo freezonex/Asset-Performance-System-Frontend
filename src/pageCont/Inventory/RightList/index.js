@@ -46,7 +46,7 @@ class Comp extends Component {
     // 成功
     if (rs?.data?.code == 200) {
       var data = rs.data.data
-      console.log(data)
+      console.log(data,"pppp")
       this.setState({
         list:data.list
       })
@@ -56,13 +56,14 @@ class Comp extends Component {
 
   getIcon = (key) => {
     var maps = {
-      'Pen': Pen,
-      'Ruler': Ruler,
-      'Laptop': Laptop,
-      'Keyboard': Keyboard,
-      'Clock': Alarm,
-      'Bicycle': Bicycle,
-      'Camera': Camera,
+      '1': Pen,
+      '2': Ruler,
+      '3': Laptop,
+      '4': Keyboard,
+      '5': Alarm,
+      '6': Bicycle,
+      '7': Camera,
+      '8': Bicycle,
     }
     
     if(!maps[key]) return Pen 
@@ -85,7 +86,7 @@ class Comp extends Component {
               {
                 list.map((item,i)=>{
                   return (
-                    <ContainedListItem key={i} renderIcon={this.getIcon(item.assetType)}>
+                    <ContainedListItem key={i} renderIcon={this.getIcon(i+1)}>
                       {item.assetType}
                     </ContainedListItem>
                   )
