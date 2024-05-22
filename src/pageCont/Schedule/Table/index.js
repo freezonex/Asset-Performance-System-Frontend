@@ -45,7 +45,7 @@ function TablePage({}) {
   const [total, setTotal] = useState(5);
   const [dataPickValue, setDataPickValue] = useState(new Date());
   const [selectIsActiveTable, setSelectIsActiveTable] = useState(null); //表格中和选中时间一致的，表头名称
-  const [activeBorderFlag, setActiveBorderFlag] = useState(true); // 是否展示篮框选中样式
+  const [activeBorderFlag, setActiveBorderFlag] = useState(false); // 是否展示篮框选中样式
   const [tabelList, setTabelList] = useState([]);
   useEffect(() => {
     getList({ selectDate: moment(dataPickValue).format('yyyy-MM-DD') });
@@ -172,17 +172,21 @@ function TablePage({}) {
                   if (header.key == 'groupName') {
                     return (
                       <TableHeader
-                        style={{ minWidth: '120px' }}
+                      
                         key={`${header.key}_head`}
                       >
+                        <div style={{ minWidth: '120px', maxWidth: '120px' ,width: '120px'}}>
                         {header.header}
+                        </div>
+                        
                       </TableHeader>
                     );
                   }
                   return (
                     <TableHeader
                       key={`${header.key}_head`}
-                      style={{ minWidth: '120px' }}
+                      // style={{ minWidth: '120px', maxWidth: '120px' ,width: '120px'}}
+                     
                       className={classNames({
                         [styles.activeTableHeaderBorder]:
                           header.key == selectIsActiveTable && activeBorderFlag,
@@ -190,7 +194,10 @@ function TablePage({}) {
                           header.key == selectIsActiveTable,
                       })}
                     >
+                      <div  style={{ minWidth: '92px', maxWidth: '92px' ,width: '92px'}}>
                       {header.header}
+                      </div>
+                      
                     </TableHeader>
                   );
                 })}
@@ -224,9 +231,9 @@ function TablePage({}) {
                           <div
                             style={{
                               backgroundColor: color,
-                              width: 120,
-                              height: 48,
-                              minWidth: 120,
+                              // width: 120,
+                              height: 53,
+                              // minWidth: 120,
                               minheight: 48,
                             }}
                           ></div>
@@ -237,7 +244,8 @@ function TablePage({}) {
                       <TableCell key={header.key}>
                         <div
                           style={{
-                            width: 120,
+                            // width: 120,
+                            maxWidth: 130,
                             overflow: 'hidden',
                             whiteSpace: 'nowrap',
                             textOverflow: 'ellipsis',

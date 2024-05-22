@@ -8,15 +8,7 @@ import ModalTable from '../Modal/ModalTable'
 
 import { assetTypeList } from '@/api/common';
 
-import {
-  Pen,
-  Ruler,
-  Laptop,
-  Keyboard,
-  Alarm,
-  Bicycle,
-  Camera,
-} from '@carbon/icons-react';
+import { Product,} from '@carbon/icons-react';
 
 
 class Comp extends Component {
@@ -54,21 +46,7 @@ class Comp extends Component {
     }
   };
 
-  getIcon = (key) => {
-    var maps = {
-      '1': Pen,
-      '2': Ruler,
-      '3': Laptop,
-      '4': Keyboard,
-      '5': Alarm,
-      '6': Bicycle,
-      '7': Camera,
-      '8': Bicycle,
-    }
-    
-    if(!maps[key]) return Pen 
-    return maps[key]
-  }
+
 
   render() {
     const { modalTableIsopen ,list } = this.state
@@ -86,7 +64,7 @@ class Comp extends Component {
               {
                 list.map((item,i)=>{
                   return (
-                    <ContainedListItem key={i} renderIcon={this.getIcon(i+1)}>
+                    <ContainedListItem key={i} renderIcon={Product}>
                       {item.assetType}
                     </ContainedListItem>
                   )
