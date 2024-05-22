@@ -205,7 +205,7 @@ function TablePage({
                       let label = statusList[row[header.key]]?.label;
                       return (
                         <TableCell key={header.key}>
-                          <Tag type={type}>{label}</Tag>
+                          {label && <Tag type={type}>{label}</Tag>}
                         </TableCell>
                       );
                     }

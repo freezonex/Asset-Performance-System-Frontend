@@ -185,7 +185,7 @@ function TablePage({
                           style={{ width: 120 }}
                           key={`${row.assetId}-${header.key}`}
                         >
-                          <Tag type={type}>{label}</Tag>
+                          {label && <Tag type={type}>{label}</Tag>}
                         </TableCell>
                       );
                     }
