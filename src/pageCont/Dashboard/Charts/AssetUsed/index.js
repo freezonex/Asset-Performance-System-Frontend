@@ -69,7 +69,7 @@ function AssetUsed() {
         scaleType: 'linear',
       },
     },
-    height: '188px',
+    height: '185px',
     color: {
       scale: {
         'Product 1': '#0F62FE',
