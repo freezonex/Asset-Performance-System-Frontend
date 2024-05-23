@@ -10,7 +10,7 @@ import {
   Link,
 } from '@carbon/react';
 import classNames from 'classnames';
-import { DocumentDownload, NonCertified } from '@carbon/icons-react';
+import { DocumentDownload } from '@carbon/icons-react';
 import tableStyles from '@/styles/table/table.module.scss';
 import styles from './index.module.scss';
 
@@ -53,11 +53,11 @@ function ChildrenTable({ tableList, isOpen }) {
         )}
         style={{
           height: isOpen ? 194 : 0,
-          margin:isOpen ? '15px 0' : 0,
-          boxShadow:isOpen? '0px 0px 15px 6px rgba(0, 0, 0, 0.2)':'none',
+          margin: isOpen ? '15px 0' : 0,
+          boxShadow: isOpen ? '0px 0px 15px 6px rgba(0, 0, 0, 0.2)' : 'none',
         }}
       >
-        <div className={styles.boxShowa}>
+        <div>
           <TableContainer>
             <Table>
               <TableHead>
@@ -123,12 +123,19 @@ function ChildrenTable({ tableList, isOpen }) {
               <TableBody>
                 <TableRow>
                   <TableCell colSpan="9">
-                    <div>11111</div>
+                    {/* <div className={styles.table3D}>
+                    {isOpen&&<ThreejsPage/>}
+                    </div> */}
+                    111111
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
+            
           </TableContainer>
+          {/* <div> */}
+              {/* <ThreejsPage /> */}
+            {/* </div> */}
         </div>
       </div>
     </>

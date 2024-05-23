@@ -150,7 +150,7 @@ function TablePage({
                   if (header.key == 'status') {
                     return (
                       <TableHeader
-                        style={{ minWidth: '108px' }}
+                        style={{ minWidth: '150px' }}
                         key={`${header.key}_head`}
                       >
                         {header.header}
