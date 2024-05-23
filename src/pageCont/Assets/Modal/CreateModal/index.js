@@ -528,7 +528,7 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                   onDelete={() => {
                     setFormValues((prevValues) => ({
                       ...prevValues,
-                      attachmentName: '',
+                      attachmentDir: '',
                       attachmentName: '',
                     }));
                   }}
