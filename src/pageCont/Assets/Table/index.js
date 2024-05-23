@@ -13,6 +13,7 @@ import {
   TableHeader,
 } from '@carbon/react';
 import MoreModal from '../Modal/MoreModal';
+import ChildrenTable from './ChildrenTable';
 import classNames from 'classnames';
 import tableStyles from '@/styles/table/table.module.scss';
 import styles from './index.module.scss';
@@ -60,10 +61,11 @@ function TablePage({
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(5);
   const [modalTableIsopen, setModalTableIsopen] = useState(false);
+  const [detailIsOpen, setDetailIsOpen] = useState({});
   const [deleteModalIsopen, setDeleteModalIsopen] = useState(false);
   const [selectRowData, setSelectRowData] = useState({}); //选中的row data
   const [tableRowData, setTableRowData] = useState({}); //table row data
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState([]); //table 数据
 
   useEffect(() => {
     // 是否携带搜索条件
@@ -81,7 +83,7 @@ function TablePage({
         assetName: '',
         assetType: '',
         responsiblePerson: '',
-      }
+      },
     });
     getTableList({ pageNum: 1, pageSize: 10 });
   }, [createModalIsopen, editModalIsopen]);
@@ -90,6 +92,10 @@ function TablePage({
     if (!createModalIsopen && !editModalIsopen && !modalTableIsopen)
       setTableRowData({});
   }, [editModalIsopen, modalTableIsopen]);
+
+  // useEffect(()=>{
+  //   cellPadding()
+  // },[detailIsOpen])
 
   const getTableList = async (filters) => {
     let reqData = {
@@ -122,6 +128,17 @@ function TablePage({
       }
     }
   };
+
+  const childrenTableIsOpen = (row) => {
+    let obj = { ...detailIsOpen };
+    if (obj[row.id]) {
+      obj[row.id] = false;
+    } else {
+      obj[row.id] = true;
+    }
+    setDetailIsOpen(obj);
+  };
+
   return (
     <>
       <div className={classNames(tableStyles.tableStyle, styles.assets)}>
@@ -150,70 +167,88 @@ function TablePage({
             </TableHead>
             <TableBody>
               {rows.map((row, index) => (
-                <TableRow key={row.id}>
-                  {headers.map((header) => {
-                    if (header.key === 'more') {
-                      return (
-                        <TableCell key={header.key}>
-                          <Link
-                            onClick={() => {
-                              setTableRowData(row);
-                              setTimeout(() => {
-                                setModalTableIsopen(true);
-                              });
-                            }}
-                          >
-                            ...
-                          </Link>
-                        </TableCell>
-                      );
-                    }
-                    if (header.key === 'edit') {
-                      return (
-                        <TableCell key={header.key}>
-                          <span
-                            className={classNames(styles.editText, {
-                              [styles.disableEdit]: row.usedStatus == 1,
-                            })}
-                            onClick={() => {
-                              if (row.usedStatus == 1) return;
-                              setTableRowData(row);
-                              // 延迟打开弹窗
-                              setTimeout(() => {
-                                changeState({
-                                  editModalIsopen: true,
+                <>
+                  <TableRow key={row.id}>
+                    {headers.map((header) => {
+                      if (header.key === 'more') {
+                        return (
+                          <TableCell key={header.key}>
+                            <div
+                              className={styles.tableDetail}
+                              onClick={() => {
+                                childrenTableIsOpen(row);
+                              }}
+                            >
+                              Detail
+                            </div>
+                          </TableCell>
+                        );
+                      }
+                      if (header.key === 'edit') {
+                        return (
+                          <TableCell key={header.key}>
+                            <span
+                              className={classNames(styles.editText, {
+                                [styles.disableEdit]: row.usedStatus == 1,
+                              })}
+                              onClick={() => {
+                                if (row.usedStatus == 1) return;
+                                setTableRowData(row);
+                                // 延迟打开弹窗
+                                setTimeout(() => {
+                                  changeState({
+                                    editModalIsopen: true,
+                                  });
                                 });
-                              });
-                            }}
-                          >
-                            Edit
-                          </span>
-                          <span
-                            className={styles.delText}
-                            onClick={() => {
-                              setSelectRowData(row);
-                              setDeleteModalIsopen(true);
-                            }}
-                          >
-                            Delete
-                          </span>
-                        </TableCell>
-                      );
-                    }
-                    if (header.key === 'status') {
-                      let type = statusList[row[header.key]]?.type;
-                      let label = statusList[row[header.key]]?.label;
+                              }}
+                            >
+                              Edit
+                            </span>
+                            <span
+                              className={styles.delText}
+                              onClick={() => {
+                                setSelectRowData(row);
+                                setDeleteModalIsopen(true);
+                              }}
+                            >
+                              Delete
+                            </span>
+                          </TableCell>
+                        );
+                      }
+                      if (header.key === 'status') {
+                        let type = statusList[row[header.key]]?.type;
+                        let label = statusList[row[header.key]]?.label;
+                        return (
+                          <TableCell key={header.key}>
+                            {label && <Tag type={type}>{label}</Tag>}
+                          </TableCell>
+                        );
+                      }
                       return (
                         <TableCell key={header.key}>
-                          {label && <Tag type={type}>{label}</Tag>}
+                          {row[header.key]}
                         </TableCell>
                       );
-                    }
-                    return (
-                      <TableCell key={header.key}>{row[header.key]}</TableCell>
-                    );
-                  })}
-                </TableRow>
+                    })}
+                  </TableRow>
+                  {/* 展开的table */}
+                  <TableRow
+                    className={styles.ChildrenTableTr}
+                    style={{ height: 'auto' }}
+                  >
+                    <TableCell
+                      className={styles.ChildrenTableTd}
+                      style={{ padding: 0 }}
+                      colSpan="9"
+                    >
+                      <ChildrenTable
+                        tableList={[row]}
+                        isOpen={detailIsOpen[row.id] ? true : false}
+                      />
+                    </TableCell>
+                  </TableRow>
+                </>
               ))}
             </TableBody>
           </Table>
