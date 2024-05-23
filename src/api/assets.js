@@ -71,3 +71,11 @@ export const assetDelete = (data) => {
     data: data,
   });
 };
+// 修改
+export const assetUpdate = (data) => {
+  return request({
+    url: '/apsbackend/asset/update',
+    method: 'post',
+    data: data,
+  });
+};

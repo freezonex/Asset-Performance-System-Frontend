@@ -45,9 +45,17 @@
       background-color: var(--cds-field-02, #ffffff);
       border: none;
     }
-    .cds--file__selected-file{
+    .cds--file__selected-file {
       background-color: var(--cds-field-02, #ffffff);
       max-width: 100%;
+    }
+    .cds--radio-button-group {
+      .cds--label {
+        margin-bottom: 24px;
+      }
+    }
+    .cds--modal-container {
+      left: 0;
     }
   }
 }

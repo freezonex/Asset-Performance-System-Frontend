@@ -17,7 +17,7 @@ import classNames from 'classnames';
 import tableStyles from '@/styles/table/table.module.scss';
 import styles from './index.module.scss';
 import DelModal from '@/pageCont/components/DelModal';
-import EditModal from '../Modal/EditModal';
+import CreateModal from '../Modal/CreateModal';
 import { getAssetList, assetDelete } from '@/api/assets';
 
 function TablePage({
@@ -52,7 +52,7 @@ function TablePage({
       type: 'red',
     },
     4: {
-      label: 'Scheduled Stop',
+      label: 'Stop',
       type: 'purple',
     },
   };
@@ -81,7 +81,7 @@ function TablePage({
         assetName: '',
         assetType: '',
         responsiblePerson: '',
-      }
+      },
     });
     getTableList({ pageNum: 1, pageSize: 10 });
   }, [createModalIsopen, editModalIsopen]);
@@ -133,7 +133,7 @@ function TablePage({
                   if (header.key == 'status') {
                     return (
                       <TableHeader
-                        style={{ minWidth: '108px' }}
+                        style={{ minWidth: '125px' }}
                         key={`${header.key}_head`}
                       >
                         {header.header}
@@ -172,11 +172,8 @@ function TablePage({
                       return (
                         <TableCell key={header.key}>
                           <span
-                            className={classNames(styles.editText, {
-                              [styles.disableEdit]: row.usedStatus == 1,
-                            })}
+                            className={classNames(styles.editText)}
                             onClick={() => {
-                              if (row.usedStatus == 1) return;
                               setTableRowData(row);
                               // 延迟打开弹窗
                               setTimeout(() => {
@@ -206,6 +203,23 @@ function TablePage({
                       return (
                         <TableCell key={header.key}>
                           {label && <Tag type={type}>{label}</Tag>}
+                        </TableCell>
+                      );
+                    }
+                    if (header.key === 'description') {
+                      return (
+                        <TableCell key={header.key}>
+                          <div
+                            style={{
+                              width: '500px',
+                              overflow: 'hidden',
+                              whiteSpace: 'nowrap',
+                              textOverflow: 'ellipsis',
+                            }}
+                            title={row[header.key]}
+                          >
+                            {row[header.key]}
+                          </div>
                         </TableCell>
                       );
                     }
@@ -244,10 +258,11 @@ function TablePage({
         />
       }
       {/* eidit modal */}
-      <EditModal
-        tableRowData={tableRowData}
-        editModalIsopen={editModalIsopen}
+      <CreateModal
+        createModalIsopen={editModalIsopen}
         changeState={changeState}
+        type={'edit'}
+        tableRowData={tableRowData}
       />
       {/* del modal */}
       <DelModal
