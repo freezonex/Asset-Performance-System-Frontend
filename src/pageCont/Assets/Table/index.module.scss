@@ -6,8 +6,36 @@
   .delText {
     color: #da1e28;
   }
-  .disableEdit{
+  .disableEdit {
     color: #c6c6c6;
     cursor: not-allowed;
   }
+  .tableDetail{
+    width: 68px;
+    height: 24px;
+    line-height: 24px;
+    background:#D9D9D9 ;
+    text-align: center;;
+    color:#161616;
+    font-weight: 400;
+  }
+
+  .ChildrenTableTr {
+    .ChildrenTableTd {
+      background: #fff;
+    }
+    :global {
+      
+      .cds--data-table tbody tr:hover td {
+        background: #fff;
+      }
+      .cds--data-table tbody th{
+        background: #e6e6e6;
+      }
+    }
+  }
+  .ChildrenTableTr:hover{
+    background: #fff;
+  }
+  
 }
