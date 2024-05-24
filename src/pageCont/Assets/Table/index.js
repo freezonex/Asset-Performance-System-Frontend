@@ -93,10 +93,6 @@ function TablePage({
       setTableRowData({});
   }, [editModalIsopen, modalTableIsopen]);
 
-  // useEffect(()=>{
-  //   cellPadding()
-  // },[detailIsOpen])
-
   const getTableList = async (filters) => {
     let reqData = {
       pageNum: page,
@@ -129,11 +125,16 @@ function TablePage({
     }
   };
 
+  // detail table是否展开
   const childrenTableIsOpen = (row) => {
     let obj = { ...detailIsOpen };
+    
     if (obj[row.id]) {
       obj[row.id] = false;
     } else {
+      Object.keys(obj).forEach(item=>{
+        obj[item] = false;
+      })
       obj[row.id] = true;
     }
     setDetailIsOpen(obj);
@@ -256,7 +257,9 @@ function TablePage({
                   >
                     <TableCell
                       className={styles.ChildrenTableTd}
-                      style={{ padding: 0 }}
+                      style={{ padding: 0,
+                        borderBottom:detailIsOpen[row.id]?'1px solid #c6c6c6':'1px solid rgba(0,0,0,0)',
+                      }}
                       colSpan="9"
                     >
                       <ChildrenTable

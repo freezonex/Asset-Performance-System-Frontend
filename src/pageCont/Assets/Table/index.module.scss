@@ -32,10 +32,22 @@
       .cds--data-table tbody th{
         background: #e6e6e6;
       }
+      .cds--data-table th{
+        background-color: #f0f0f0;
+      }
     }
   }
   .ChildrenTableTr:hover{
     background: #fff;
   }
-  
+  :global{
+    .cds--data-table tbody tr td, .cds--data-table tbody tr th{
+      color:#161616;
+    }
+    .cds--data-table tbody tr:hover td, .cds--data-table tbody tr:hover th{
+      // border-top:1px solid #c6c6c6;
+      border-bottom:1px solid #c6c6c6;
+    }
+    
+  }
 }

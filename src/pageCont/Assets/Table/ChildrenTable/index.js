@@ -11,7 +11,7 @@ import {
 } from '@carbon/react';
 import classNames from 'classnames';
 import { DocumentDownload } from '@carbon/icons-react';
-import tableStyles from '@/styles/table/table.module.scss';
+import ThreePage from './threeJs/threes';
 import styles from './index.module.scss';
 
 function ChildrenTable({ tableList, isOpen }) {
@@ -48,95 +48,79 @@ function ChildrenTable({ tableList, isOpen }) {
     <>
       <div
         className={classNames(
-          tableStyles.tableStyle,
           styles.assetsChildrenTable,
         )}
         style={{
-          height: isOpen ? 194 : 0,
-          margin: isOpen ? '15px 0' : 0,
-          boxShadow: isOpen ? '0px 0px 15px 6px rgba(0, 0, 0, 0.2)' : 'none',
+          height: isOpen ? 500 : 0,
+          marginBottom: isOpen ? '10px' : 0,
+          boxShadow: isOpen
+            ? '0px 4px 4px 0px rgba(0, 0, 0, 0.2509803922)'
+            : 'none',
         }}
       >
-        <div>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  {childrenHeaders.map((header, index) => {
-                    if (header.key == 'status') {
-                      return (
-                        <TableHeader
-                          style={{ minWidth: '108px' }}
-                          key={`${header.key}_head_child`}
-                        >
-                          {header.header}
-                        </TableHeader>
-                      );
-                    }
-                    return (
-                      <TableHeader key={`${header.key}_head_child`}>
-                        {header.header}
-                      </TableHeader>
-                    );
-                  })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tableList.map((row, i) => {
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                {childrenHeaders.map((header, index) => {
                   return (
-                    <TableRow key={row.id}>
-                      {childrenHeaders.map((header) => {
-                        if (header.key === 'attachments') {
-                          return (
-                            <TableCell key={header.key}>
-                              <Link
-                                // href={`${process.env.apiUrl}/apsbackend/asset/download?id=${tableRowData.id}`}
-                                renderIcon={() => (
-                                  <DocumentDownload aria-label="Arrow Right" />
-                                )}
-                                style={{ cursor: 'pointer' }}
-                                onClick={(e) => download(e, row.id)}
-                              >
-                                Download
-                              </Link>
-                            </TableCell>
-                          );
-                        }
-                        return (
-                          <TableCell key={header.key}>
-                            {row[header.key]}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
+                    <TableHeader key={`${header.key}_head_child`}>
+                      {header.header}
+                    </TableHeader>
                   );
                 })}
-              </TableBody>
-            </Table>
-            {/* 3d展示table */}
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableHeader>{'3D'}</TableHeader>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell colSpan="9">
-                    {/* <div className={styles.table3D}>
-                    {isOpen&&<ThreejsPage/>}
-                    </div> */}
-                    111111
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-            
-          </TableContainer>
-          {/* <div> */}
-              {/* <ThreejsPage /> */}
-            {/* </div> */}
-        </div>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {tableList.map((row, i) => {
+                return (
+                  <TableRow key={row.id}>
+                    {childrenHeaders.map((header) => {
+                      if (header.key === 'attachments') {
+                        return (
+                          <TableCell key={header.key}>
+                            <Link
+                              // href={`${process.env.apiUrl}/apsbackend/asset/download?id=${tableRowData.id}`}
+                              renderIcon={() => (
+                                <DocumentDownload aria-label="Arrow Right" />
+                              )}
+                              style={{ cursor: 'pointer' }}
+                              onClick={(e) => download(e, row.id)}
+                            >
+                              Download
+                            </Link>
+                          </TableCell>
+                        );
+                      }
+                      return (
+                        <TableCell key={header.key}>
+                          {row[header.key]}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+          {/* 3d展示table */}
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableHeader>{'3D'}</TableHeader>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan="9">
+                  <div className={styles.table3D}>
+                    {isOpen && <ThreePage glbUrl ={tableList[0].glbUrl}/>}
+                  </div>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </>
   );
