@@ -10,8 +10,9 @@ import {
   TableRow,
   TableHeader,
 } from '@carbon/react';
-import styles from '@/styles/modal/modal.module.scss';
+import modalStyles from '@/styles/modal/modal.module.scss';
 import stylesTable from '@/styles/table/table.module.scss';
+import styles  from './index.module.scss'
 
 import { assetTypeQuantityList } from '@/api/common';
 
@@ -52,7 +53,7 @@ const ModalPages = ({ modalTableIsopen, setModalTableIsopen }) => {
   }, []);
 
   return (
-    <div className={styles.ModalFromStyle}>
+    <div className = {`${modalStyles.ModalFromStyle} ${styles.viewTablePage}`}>
       <Modal
         open={modalTableIsopen}
         modalHeading="Safety Level Stock Spare Parts"

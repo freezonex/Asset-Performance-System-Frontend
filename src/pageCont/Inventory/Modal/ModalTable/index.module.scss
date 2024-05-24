@@ -1,0 +1,8 @@
+.viewTablePage{
+    :global{
+        .cds--modal .cds--pagination, .cds--modal .cds--pagination__control-buttons, .cds--modal .cds--text-input, .cds--modal .cds--text-area, .cds--modal .cds--search-input, .cds--modal .cds--select-input, .cds--modal .cds--dropdown, .cds--modal .cds--dropdown-list, .cds--modal .cds--number input[type=number], .cds--modal .cds--date-picker__input, .cds--modal .cds--multi-select, .cds--modal .cds--number__control-btn::before, .cds--modal .cds--number__control-btn::after{
+            background-color: #fff;
+        }
+    }
+}
+
