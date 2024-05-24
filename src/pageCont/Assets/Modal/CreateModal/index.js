@@ -26,7 +26,7 @@ import {
   assetUpdate,
 } from '@/api/assets';
 
-const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
+const ModalPages = ({ createModalIsopen, changeState, type, tableRowData, reloadingData }) => {
   const [assetTypeData, setAssetTypeData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
   const [addDepartmentModal, setAddDepartmentModal] = useState(false); // 添加 department 弹窗
@@ -166,6 +166,7 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
     let res = await addAsset(formValue);
     if (res?.data?.code == 200) {
       handleCancelClicked();
+      reloadingData();
     } else {
       message.error('Failed to add Asset');
     }
@@ -229,6 +230,7 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
     let res = await assetUpdate(param);
     if (res?.data?.code == 200) {
       handleCancelClicked();
+      reloadingData(type);
     } else {
       message.error('Failed to edit Asset');
     }

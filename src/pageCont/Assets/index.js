@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import styles from './index.module.scss';
 import Head from 'next/head';
 import AssetsTable from './Table';
-import CreateModal from './Modal/CreateModal';
 
 import {
   Button,
@@ -180,14 +179,6 @@ class Comp extends Component {
             createModalIsopen={createModalIsopen}
           />
         </div>
-
-        {/* Create a Asset modal */}
-        {
-          <CreateModal
-            createModalIsopen={createModalIsopen}
-            changeState={this.changeState}
-          />
-        }
       </div>
     );
   }

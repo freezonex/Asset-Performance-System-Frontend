@@ -76,17 +76,37 @@ function TablePage({
     }
   }, [isSearchClicked]);
 
-  useEffect(() => {
-    changeState({
-      formValue: {
-        assetId: '',
-        assetName: '',
-        assetType: '',
-        responsiblePerson: '',
-      },
-    });
-    getTableList({ pageNum: 1, pageSize: 10 });
-  }, [createModalIsopen, editModalIsopen]);
+  // useEffect(() => {
+  //   changeState({
+  //     formValue: {
+  //       assetId: '',
+  //       assetName: '',
+  //       assetType: '',
+  //       responsiblePerson: '',
+  //     },
+  //   });
+  //   getTableList({ pageNum: 1, pageSize: 10 });
+  // }, [createModalIsopen, editModalIsopen]);
+
+  useEffect(()=>{
+    reloadingData()
+  }, [])
+
+  const reloadingData = (type) => {
+    if(type === 'edit'){
+      getTableList({ page, pageSize });
+    }else{
+      changeState({
+        formValue: {
+          assetId: '',
+          assetName: '',
+          assetType: '',
+          responsiblePerson: '',
+        },
+      });
+      getTableList({ pageNum: 1, pageSize: 10 });
+    }
+  }
 
   useEffect(() => {
     if (!createModalIsopen && !editModalIsopen && !modalTableIsopen)
@@ -304,6 +324,14 @@ function TablePage({
           }}
         />
       </div>
+      {/* Create a Asset modal */}
+      {
+          <CreateModal
+            createModalIsopen={createModalIsopen}
+            changeState={changeState}
+            reloadingData={reloadingData}
+          />
+        }
       {/* more modal */}
       {
         <MoreModal
@@ -318,6 +346,7 @@ function TablePage({
         changeState={changeState}
         type={'edit'}
         tableRowData={tableRowData}
+        reloadingData={reloadingData}
       />
       {/* del modal */}
       <DelModal
