@@ -180,7 +180,7 @@ const ModalPages = ({
           primaryButtonDisabled={modalSaveIsDisablee}
         >
           <Grid className="pl-0 pr-0">
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <TextInput
                 className="mb-8"
                 id="orderName"
@@ -198,7 +198,7 @@ const ModalPages = ({
                 }}
               />
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <TextInput
                 className="mb-8"
                 id="orderId"
@@ -211,7 +211,7 @@ const ModalPages = ({
                 onChange={onFormValueChange}
               />
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <TextInput
                 className="mb-8"
                 id="assetId"
@@ -229,7 +229,7 @@ const ModalPages = ({
                 }}
               />
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <TextInput
                 className="mb-8"
                 id="orderType"
@@ -239,7 +239,7 @@ const ModalPages = ({
                 onChange={onFormValueChange}
               />
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <Select
                 className="mb-8"
                 id="status"
@@ -254,7 +254,7 @@ const ModalPages = ({
                 })}
               </Select>
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <Select
                 className="mb-8"
                 id="priority"
@@ -270,7 +270,7 @@ const ModalPages = ({
                 <SelectItem value="3" text="3" />
               </Select>
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <DatePicker
                 className="mb-8"
                 datePickerType="single"
@@ -286,7 +286,7 @@ const ModalPages = ({
                 />
               </DatePicker>
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <DatePicker
                 className="mb-8"
                 datePickerType="single"
@@ -302,7 +302,7 @@ const ModalPages = ({
                 />
               </DatePicker>
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <Select
                 className="mb-8"
                 id="assignedTo"
@@ -333,7 +333,7 @@ const ModalPages = ({
                 })}
               </Select>
             </Column>
-            <Column sm={2} md={4} lg={16}>
+            <Column sm={4} md={4} lg={16}>
               <TextInput
                 id="description"
                 labelText="Description"

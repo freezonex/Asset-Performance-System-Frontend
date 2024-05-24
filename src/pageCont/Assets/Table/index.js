@@ -188,11 +188,8 @@ function TablePage({
                         return (
                           <TableCell key={header.key}>
                             <span
-                              className={classNames(styles.editText, {
-                                [styles.disableEdit]: row.usedStatus == 1,
-                              })}
+                              className={classNames(styles.editText)}
                               onClick={() => {
-                                if (row.usedStatus == 1) return;
                                 setTableRowData(row);
                                 // 延迟打开弹窗
                                 setTimeout(() => {
@@ -231,6 +228,23 @@ function TablePage({
                             <div
                               style={{
                                 width: '300px',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                              }}
+                              title={row[header.key]}
+                            >
+                              {row[header.key]}
+                            </div>
+                          </TableCell>
+                        );
+                      }
+                      if (header.key === 'assetName' || header.key === 'assetType' ) {
+                        return (
+                          <TableCell key={header.key}>
+                            <div
+                              style={{
+                                width: '100px',
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
                                 textOverflow: 'ellipsis',
