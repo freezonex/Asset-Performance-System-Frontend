@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import styles from './index.module.scss';
+import classNames from 'classnames';
+import modalStyles from '@/styles/modal/modal.module.scss';
 import {
   Modal,
   TextInput,
@@ -12,11 +15,8 @@ import {
   RadioButton,
 } from '@carbon/react';
 import { AddAlt } from '@carbon/icons-react';
-import classNames from 'classnames';
-import { message } from 'antd';
-import modalStyles from '@/styles/modal/modal.module.scss';
+import { message, Spin } from 'antd';
 import AddDepartmentModal from '@/pageCont/components/AddModal';
-import styles from './index.module.scss';
 import {
   addAsset,
   addFile,
@@ -30,12 +30,6 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
   const [assetTypeData, setAssetTypeData] = useState([]);
   const [departmentData, setDepartmentData] = useState([]);
   const [addDepartmentModal, setAddDepartmentModal] = useState(false); // 添加 department 弹窗
-  const [isUploading, setIsUploading] = useState(false);
-  const [fieldValidation, setFieldValidation] = useState({
-    assetNameInvalid: false,
-    assetIdInvalid: false,
-    snInvalid: false,
-  });
   const [formValue, setFormValues] = useState({
     assetName: '',
     assetId: '',
@@ -54,9 +48,9 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
     gblDir: '',
     gblFileName: '',
   });
-  const [file, setFile] = useState(null);
-  const [glbFile, setGlbFile] = useState(null);
   const [radioDisable, setRadioDisable] = useState(false);
+  const [fileLoading, setFileLoading] = useState(false);
+  const [glbFileLoading, setGlbFileLoading] = useState(false);
 
   useEffect(() => {
     getAssetTypeData();
@@ -86,6 +80,25 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
     }
   };
 
+  // 修改回显数据
+  const setinitValue = () => {
+    const { usedStatus, departmentId, status } = tableRowData;
+    let obj = {...tableRowData}
+
+    if (usedStatus === 1) {
+      setRadioDisable(true);
+    }
+    if(!status){
+      obj.status = ''
+    }
+    if(!departmentId){
+      obj.departmentId = ''
+    }
+    setFormValues({
+      ...obj,
+    });
+  };
+
   //添加departmentData
   const handleAddDepartment = async (data) => {
     let reqObj = {
@@ -98,16 +111,6 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
       message.error('Failed to add Department');
     }
     setAddDepartmentModal(false);
-  };
-
-  const setinitValue = () => {
-    const { usedStatus } = tableRowData;
-    if (usedStatus === 1) {
-      setRadioDisable(true);
-    }
-    setFormValues({
-      ...tableRowData,
-    });
   };
 
   const onFormValueChange = (e) => {
@@ -139,14 +142,9 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
       gblDir: '',
       gblFileName: '',
     });
-    setFieldValidation({
-      assetNameInvalid: false,
-      assetIdInvalid: false,
-      snInvalid: false,
-    });
-    setFile(null);
-    setGlbFile(null);
-    setIsUploading(false);
+    setRadioDisable(false);
+    setFileLoading(false);
+    setGlbFileLoading(false);
     if (type === 'edit') {
       changeState({ editModalIsopen: false });
     } else {
@@ -156,19 +154,6 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
 
   // 提交
   const handleSubmit = (e) => {
-    // e.preventDefault();
-    // const newValidation = {
-    //   assetNameInvalid: !formValue.assetName || formValue.assetName === '',
-    //   assetIdInvalid: !formValue.assetId || formValue.assetId === '',
-    //   snInvalid: !formValue.sn || formValue.sn === '',
-    // };
-    // setFieldValidation(newValidation);
-    // // 所有必填项都已经填写
-    // if (!Object.values(newValidation).some((v) => v)) {
-    // createAsset(formValue);
-    //   return;
-    // }
-
     if (type === 'edit') {
       editAsset();
     } else {
@@ -179,7 +164,7 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
   // 创建数据
   const createAsset = async () => {
     let res = await addAsset(formValue);
-    if (res.data?.code == 200) {
+    if (res?.data?.code == 200) {
       handleCancelClicked();
     } else {
       message.error('Failed to add Asset');
@@ -188,26 +173,61 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
 
   // 修改数据
   const editAsset = async () => {
-    let filterFormValue = {};
-    Object.keys(formValue).forEach((key) => {
-      if (formValue[key]) {
-        filterFormValue[key] = formValue[key];
-      }
-    });
+    const {
+      assetName,
+      sn,
+      assetTypeId,
+      status,
+      departmentId,
+      location,
+      value,
+      responsiblePerson,
+      description,
+      usedStatus,
+      modelUrl,
+      gblDir,
+      gblFileName,
+      attachmentDir,
+      attachmentName,
+    } = formValue;
 
-    const {assetTypeId, departmentId } = filterFormValue
-    const assetObj = assetTypeData.filter((item)=>item.id == assetTypeId)[0]
-    const departmentObj = departmentData.filter((item)=>item.id == departmentId)[0]
+    let filterFormValue = {
+      assetName,
+      sn,
+      assetTypeId,
+      status,
+      departmentId,
+      location,
+      value,
+      responsiblePerson,
+      description,
+      usedStatus,
+      modelUrl,
+      gblDir,
+      gblFileName,
+      attachmentDir,
+      attachmentName,
+    };
+
+    const assetObj = assetTypeData.filter(
+      (item) => item.id == assetTypeId,
+    )?.[0];
+    const departmentObj = departmentData.filter(
+      (item) => item.id == departmentId,
+    )?.[0];
+
+    if (gblFileName === '') {
+      filterFormValue.glbUrl = '';
+    }
 
     const param = {
       ...tableRowData,
       ...filterFormValue,
-      assetType: assetObj.assetType,
-      department: departmentObj.departmentName
-
+      assetType: assetObj?.assetType || '',
+      department: departmentObj?.departmentName || '',
     };
     let res = await assetUpdate(param);
-    if (res.data?.code == 200) {
+    if (res?.data?.code == 200) {
       handleCancelClicked();
     } else {
       message.error('Failed to edit Asset');
@@ -216,7 +236,12 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
 
   // 上传文件
   const uploadFile = async (file, dir, name) => {
-    setIsUploading(true);
+    if (name === 'gblFileName') {
+      setGlbFileLoading(true);
+    }
+    if (name === 'attachmentName') {
+      setFileLoading(true);
+    }
     const formData = new FormData();
     formData.append('file', file);
     let res = await addFile(formData);
@@ -226,10 +251,23 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
         [dir]: data.attachmentDir,
         [name]: data.attachmentName,
       };
-      setFormValues({ ...formValue, ...obj });
-      setIsUploading(false);
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        ...obj,
+      }));
+      if (name === 'gblFileName') {
+        setGlbFileLoading(false);
+      }
+      if (name === 'attachmentName') {
+        setFileLoading(false);
+      }
     } else {
-      setFile(null);
+      if (name === 'gblFileName') {
+        setGlbFileLoading(false);
+      }
+      if (name === 'attachmentName') {
+        setFileLoading(false);
+      }
       message.error('Upload failure');
     }
   };
@@ -238,7 +276,6 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
     <div
       className={classNames([modalStyles.ModalFromStyle, styles.createModal])}
     >
-      {/* <Toast /> */}
       {!addDepartmentModal && (
         <Modal
           open={createModalIsopen}
@@ -247,7 +284,7 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
           secondaryButtonText="Cancel"
           onRequestClose={handleCancelClicked}
           onRequestSubmit={handleSubmit}
-          primaryButtonDisabled={isUploading}
+          primaryButtonDisabled={fileLoading || glbFileLoading}
         >
           <Grid className="pl-0 pr-0">
             <Column sm={4} md={4} lg={8}>
@@ -257,15 +294,8 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                 labelText="Asset Name"
                 placeholder="Asset Name"
                 required
-                // invalid={fieldValidation.assetNameInvalid}
-                // invalidText="This field cannot be empty"
                 value={formValue.assetName}
                 onChange={onFormValueChange}
-                onFocus={(e) => {
-                  // 可以自定义正则校验
-                  // 校验不成功，可以修改fieldValidation 为true
-                  // console.log('e: ', e.target.value);
-                }}
               />
             </Column>
             {type !== 'edit' && (
@@ -276,8 +306,6 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                   labelText="Asset ID"
                   placeholder="house#1"
                   required
-                  // invalid={fieldValidation.assetIdInvalid}
-                  // invalidText="This field cannot be empty"
                   value={formValue.assetId}
                   onChange={onFormValueChange}
                 />
@@ -290,8 +318,6 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                 labelText="SN"
                 placeholder="SN"
                 required
-                // invalid={fieldValidation.snInvalid}
-                // invalidText="This field cannot be empty"
                 value={formValue.sn}
                 onChange={onFormValueChange}
               />
@@ -302,7 +328,6 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                 id="assetTypeId"
                 labelText="Asset Type"
                 value={formValue.assetTypeId}
-                // placeholder="Choose an option"
                 onChange={onFormValueChange}
               >
                 <SelectItem value="" text="Choose an option" />
@@ -323,7 +348,6 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                 id="status"
                 labelText="Status"
                 value={formValue.status}
-                // placeholder="Choose an option"
                 onChange={onFormValueChange}
               >
                 <SelectItem value="" text="Choose an option" />
@@ -349,7 +373,6 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                   </div>
                 }
                 value={formValue.departmentId}
-                // placeholder="Choose an option"
                 onChange={onFormValueChange}
               >
                 <SelectItem value="" text="Choose an option" />
@@ -434,7 +457,7 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                     id="usedStatus"
                     disabled={radioDisable}
                   >
-                    <RadioButton labelText="Yes" value={1} id="radio-1"/>
+                    <RadioButton labelText="Yes" value={1} id="radio-1" />
                     <RadioButton labelText="No" value={0} id="radio-2" />
                   </RadioButtonGroup>
                 </div>
@@ -453,27 +476,30 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
             <Column sm={4} md={8} lg={16} style={{ marginBottom: '16px' }}>
               <p className={styles.cds_file_label}>3D-Glb</p>
               {!formValue.gblFileName && (
-                <div style={{ width: '100%', position: 'relative' }}>
-                  <FileUploaderDropContainer
-                    accept=".glb" // 限制上传文件类型为 glb
-                    labelText={
-                      <div className={styles.uploadDocument}>
-                        <AddAlt size={16} />
-                        <span style={{ marginLeft: 10 }}>Upload Document</span>
-                      </div>
-                    }
-                    multiple={false}
-                    onAddFiles={(e) => {
-                      setGlbFile(e.target.files);
-                      // 调用上传接口
-                      uploadFile(e.target.files[0], 'gblDir', 'gblFileName');
-                    }}
-                  />
-                  <div className={styles.cds_label_description}>
-                    <div>Supported Formats:</div>
-                    <div className={styles.fileType}>Glb</div>
+                <Spin tip="Loading..." spinning={glbFileLoading}>
+                  <div style={{ width: '100%', position: 'relative' }}>
+                    <FileUploaderDropContainer
+                      accept=".glb" // 限制上传文件类型为 glb
+                      labelText={
+                        <div className={styles.uploadDocument}>
+                          <AddAlt size={16} />
+                          <span style={{ marginLeft: 10 }}>
+                            Upload Document
+                          </span>
+                        </div>
+                      }
+                      multiple={false}
+                      onAddFiles={(e) => {
+                        // 调用上传接口
+                        uploadFile(e.target.files[0], 'gblDir', 'gblFileName');
+                      }}
+                    />
+                    <div className={styles.cds_label_description}>
+                      <div>Supported Formats:</div>
+                      <div className={styles.fileType}>Glb</div>
+                    </div>
                   </div>
-                </div>
+                </Spin>
               )}
               {formValue.gblFileName && (
                 <FileUploaderItem
@@ -487,39 +513,42 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                     }));
                   }}
                   size="md"
-                  status={isUploading ? 'uploading' : 'edit'}
+                  status={'edit'}
                 />
               )}
             </Column>
-            <Column sm={4} md={4} lg={16}>
+            <Column sm={4} md={8} lg={16}>
               <p className={styles.cds_file_label}>Attachments</p>
               {!formValue.attachmentName && (
-                <div style={{ width: '100%', position: 'relative' }}>
-                  <FileUploaderDropContainer
-                    accept=".pdf,.docx" // 限制上传文件类型为 PDF 和 Word 文档
-                    labelText={
-                      <div className={styles.uploadDocument}>
-                        <AddAlt size={16} />{' '}
-                        <span style={{ marginLeft: 10 }}>Upload Document</span>
-                      </div>
-                    }
-                    multiple={false}
-                    onAddFiles={(e) => {
-                      setFile(e.target.files);
-                      // 调用上传接口
-                      uploadFile(
-                        e.target.files[0],
-                        'attachmentDir',
-                        'attachmentName',
-                      );
-                    }}
-                  />
-                  <div className={styles.cds_label_description}>
-                    <div>Supported Formats:</div>
-                    <div className={styles.fileType}>PDF</div>
-                    <div className={styles.fileType}>Word</div>
+                <Spin tip="Loading..." spinning={fileLoading}>
+                  <div style={{ width: '100%', position: 'relative' }}>
+                    <FileUploaderDropContainer
+                      accept=".pdf,.docx" // 限制上传文件类型为 PDF 和 Word 文档
+                      labelText={
+                        <div className={styles.uploadDocument}>
+                          <AddAlt size={16} />{' '}
+                          <span style={{ marginLeft: 10 }}>
+                            Upload Document
+                          </span>
+                        </div>
+                      }
+                      multiple={false}
+                      onAddFiles={(e) => {
+                        // 调用上传接口
+                        uploadFile(
+                          e.target.files[0],
+                          'attachmentDir',
+                          'attachmentName',
+                        );
+                      }}
+                    />
+                    <div className={styles.cds_label_description}>
+                      <div>Supported Formats:</div>
+                      <div className={styles.fileType}>PDF</div>
+                      <div className={styles.fileType}>Word</div>
+                    </div>
                   </div>
-                </div>
+                </Spin>
               )}
               {formValue.attachmentName && (
                 <FileUploaderItem
@@ -533,7 +562,7 @@ const ModalPages = ({ createModalIsopen, changeState, type, tableRowData }) => {
                     }));
                   }}
                   size="md"
-                  status={isUploading ? 'uploading' : 'edit'}
+                  status={'edit'}
                 />
               )}
             </Column>

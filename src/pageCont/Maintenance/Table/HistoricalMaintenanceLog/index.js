@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './index.module.scss';
+import classNames from 'classnames';
+import tableStyles from '@/styles/table/table.module.scss';
 
 import {
   Pagination,
@@ -59,7 +61,7 @@ function HistoricalMaintenanceLog(props) {
   };
 
   return (
-    <>
+    <div className={classNames(tableStyles.tableStyle)}>
       <div className={styles.title}>Historical Maintenance Log</div>
       <div className={styles.table}>
         <TableContainer>
@@ -102,7 +104,7 @@ function HistoricalMaintenanceLog(props) {
           }}
         />
       </div>
-    </>
+    </div>
   );
 }
 
