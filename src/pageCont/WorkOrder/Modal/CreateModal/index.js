@@ -202,7 +202,7 @@ const ModalPages = ({
               <TextInput
                 className="mb-8"
                 id="orderId"
-                labelText="work Order Id"
+                labelText="Work Order Id"
                 placeholder="house#1"
                 required
                 invalid={fieldValidation.orderIdInvalid}
