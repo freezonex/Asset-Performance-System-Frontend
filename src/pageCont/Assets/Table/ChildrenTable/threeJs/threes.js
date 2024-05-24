@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import router from 'next/router';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -56,8 +57,8 @@ function ThreeContainer({ glbUrl, ...args }) {
           let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.2; // 放置在模型的上方
           camera.position.set(
             center.x,
-            center.y + maxDim / 2,
-            center.z + cameraZ,
+            center.y,
+            center.z+cameraZ,
           );
           camera.lookAt(center);
        
@@ -90,7 +91,7 @@ function ThreeContainer({ glbUrl, ...args }) {
 
       const initAnimation = () => {
         const originalPosition = new THREE.Vector3().copy(camera.position);
-        const originalLookAt = new THREE.Vector3(0, 0, 0);
+        const originalLookAt = new THREE.Vector3(300,0,0);
         let initialAngle = 0;
         const radius = 450;
 
@@ -98,12 +99,12 @@ function ThreeContainer({ glbUrl, ...args }) {
           angle: initialAngle,
           y: camera.position.y,
         })
-          .to({ angle: Math.PI * 2, y: originalPosition.y }, 6000)
+          .to({ angle: Math.PI, y: originalPosition.y }, 3000)
           .easing(TWEEN.Easing.Cubic.InOut)
           .onUpdate((obj) => {
             camera.position.x = radius * Math.cos(obj.angle);
-            camera.position.z = radius * Math.sin(obj.angle) + 100;
-            camera.position.y = obj.y;
+            camera.position.z = radius * Math.sin(obj.angle);
+            camera.position.y = radius * Math.sin(obj.angle);
             camera.lookAt(scene.position);
           })
           .onComplete(() => {
@@ -117,9 +118,9 @@ function ThreeContainer({ glbUrl, ...args }) {
                 3000,
               )
               .easing(TWEEN.Easing.Cubic.InOut)
-              // .onUpdate(() => {
-              //   camera.lookAt(originalLookAt);
-              // })
+              .onUpdate(() => {
+                camera.lookAt(originalLookAt);
+              })
               .start();
           });
 

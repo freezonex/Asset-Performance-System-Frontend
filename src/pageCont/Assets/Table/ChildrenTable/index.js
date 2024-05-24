@@ -44,6 +44,18 @@ function ChildrenTable({ tableList, isOpen }) {
         a = null;
       });
   };
+
+
+  const getHeight = ()=>{
+    let height = 0;
+    if(!isOpen) return 0;
+    if(isOpen&&tableList[0].glbUrl){
+      height=500;
+    }else{
+      height=97;
+    }
+    return height
+  }
   return (
     <>
       <div
@@ -51,7 +63,7 @@ function ChildrenTable({ tableList, isOpen }) {
           styles.assetsChildrenTable,
         )}
         style={{
-          height: isOpen ? 500 : 0,
+          height:getHeight(),
           marginBottom: isOpen ? '10px' : 0,
           boxShadow: isOpen
             ? '0px 4px 4px 0px rgba(0, 0, 0, 0.2509803922)'
@@ -104,7 +116,7 @@ function ChildrenTable({ tableList, isOpen }) {
             </TableBody>
           </Table>
           {/* 3d展示table */}
-          <Table>
+          {tableList[0].glbUrl&&<Table>
             <TableHead>
               <TableRow>
                 <TableHeader>{'3D'}</TableHeader>
@@ -119,7 +131,7 @@ function ChildrenTable({ tableList, isOpen }) {
                 </TableCell>
               </TableRow>
             </TableBody>
-          </Table>
+          </Table>}
         </TableContainer>
       </div>
     </>
