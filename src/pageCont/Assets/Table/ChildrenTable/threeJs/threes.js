@@ -78,7 +78,7 @@ function ThreeContainer({ glbUrl, ...args }) {
       renderer.toneMappingExposure = 2;
 
       const controls = new OrbitControls(camera, renderer.domElement);
-      controls.target.set(0, 100, 0);
+      controls.target.set(0, 25, 0);
       controls.update();
 
       controls.addEventListener('start', () => {
@@ -127,7 +127,7 @@ function ThreeContainer({ glbUrl, ...args }) {
         orbitTween.start();
       };
 
-      initAnimation();
+      // initAnimation();
 
       renderer.domElement.style.cursor = 'grab';
       renderer.domElement.addEventListener('mousedown', () => {
@@ -141,7 +141,7 @@ function ThreeContainer({ glbUrl, ...args }) {
     }
 
     function animate() {
-      requestAnimationFrame(animate);
+      
       const delta = clock.current.getDelta();
       if (mixer.current) {
         mixer.current.update(delta);
@@ -151,6 +151,7 @@ function ThreeContainer({ glbUrl, ...args }) {
       }
       TWEEN.update();
       renderer.render(scene, camera);
+      requestAnimationFrame(animate);
     }
 
     init();
