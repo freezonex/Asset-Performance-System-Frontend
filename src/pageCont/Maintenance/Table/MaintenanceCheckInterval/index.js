@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './index.module.scss';
 import moment from 'moment';
+import classNames from 'classnames';
+import tableStyles from '@/styles/table/table.module.scss';
 
 import {
   Pagination,
@@ -196,7 +198,7 @@ function HistoricalMaintenanceLog(props) {
   };
 
   return (
-    <>
+    <div className={classNames(tableStyles.tableStyle)}>
       <div className={styles.title}>
         <div className={styles.titleName}>Maintenance Check Interval</div>
         <div className={styles.titleAction}>
@@ -245,7 +247,7 @@ function HistoricalMaintenanceLog(props) {
                 <Table {...getTableProps()} aria-label="sample table">
                   <TableHead>
                     <TableRow>
-                      <TableHeader/>
+                      <TableHeader style={{ borderRight:'none' }}/>
                       {headers.map((header, i) => (
                         <TableHeader
                           key={i}
@@ -270,7 +272,7 @@ function HistoricalMaintenanceLog(props) {
                         >
                           {(row.id + '').includes('add') ? (
                             <>
-                              <td style={{ width: '48px' }}></td>
+                              <td style={{ width: '48px', borderRight:'none' }}></td>
                               {row.cells.map((cell) => {
                                 if (cell.id.includes('scheduledDate')) {
                                   return (
@@ -342,7 +344,7 @@ function HistoricalMaintenanceLog(props) {
                             </>
                           ) : (
                             <>
-                              <td style={{ width: '48px' }}>
+                              <td style={{ width: '48px', borderRight:'none'}}>
                                 <RadioButton
                                   disabled={disable}
                                   onClick={() =>
@@ -386,7 +388,7 @@ function HistoricalMaintenanceLog(props) {
           <AddAlt className={styles.icon} onClick={showAdd} />
         </div>
       )}
-    </>
+    </div>
   );
 }
 

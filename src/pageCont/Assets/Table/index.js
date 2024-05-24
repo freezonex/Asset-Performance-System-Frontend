@@ -239,7 +239,7 @@ function TablePage({
                           </TableCell>
                         );
                       }
-                      if (header.key === 'assetName' || header.key === 'assetType' ) {
+                      if (header.key === 'assetName' || header.key === 'assetType' || header.key === 'assetId' ) {
                         return (
                           <TableCell key={header.key}>
                             <div

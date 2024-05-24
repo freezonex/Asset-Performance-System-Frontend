@@ -109,11 +109,11 @@ class Comp extends Component {
       { key: '1', header: 'Asset Type', width: '12%' },
       { key: '2', header: 'Quantity', width: '8%' },
       { key: '3', header: 'Unit', width: '7%' },
-      { key: '4', header: 'Usage Rate ', width: '8%' },
+      { key: '4', header: 'Usage Rate', width: '11%' },
       { key: '5', header: 'Supplier Name', width: '12%' },
       { key: '6', header: 'Expected Quantity ', width: '15%' },
       { key: '7', header: 'Creation Time', width: '15%' },
-      { key: 'options', header: 'Expected  Date', width: '23%' },
+      { key: 'options', header: 'Expected  Date', width: '20%' },
     ];
 
     return (

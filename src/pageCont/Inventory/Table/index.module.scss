@@ -31,12 +31,12 @@
   .tableHeader {
     display: flex;
     font-weight: bold;
-    background-color: #E0E0E0;
+    background-color: #e6e6e6;
     font-size: 16px;
-    min-width: 924px;
+    min-width: 1200px;
   }
   .tableBody{
-    min-width: 924px;
+    min-width: 1200px;
   }
 
   .tableRow {
@@ -51,7 +51,9 @@
   }
 
   .tableCell {
-    padding: 12px;
+    min-height: 48px;
+    line-height: 48px;
+    padding: 0 16px;
     border-bottom: 1px solid #ccc;
     border-right: 1px solid #ccc;
     font-size: 14px;
