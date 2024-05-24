@@ -12,9 +12,9 @@ class Comp extends Component {
   render() {
     return (
       <div style={{ height: '100%' }}>
-        <Head>
+        {/* <Head>
           <title>Schedule</title>
-        </Head>
+        </Head> */}
         <Schedule/>
       </div>
     );
