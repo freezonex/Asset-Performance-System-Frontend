@@ -159,7 +159,7 @@ class Comp extends Component {
                       ])}
                       style={nextSty}
                     >
-                      {ite[header.dataIndex] == 1 && <Ai size={20}/>}
+                      {ite[header.dataIndex] == 1 && <Ai size={20} />}
                     </div>
                   );
                 }
@@ -183,7 +183,10 @@ class Comp extends Component {
           );
         })}
 
-        <div className={styles.pagination} style={{ width: '35%' }}>
+        <div
+          className={styles.pagination}
+          style={{ width: '35%', borderRight: '1px solid #ccc' }}
+        >
           <Pagination
             backwardText="Previous page"
             forwardText="Next page"
