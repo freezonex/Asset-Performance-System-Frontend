@@ -94,7 +94,8 @@ function TablePage({
 
   const reloadingData = (type) => {
     if(type === 'edit'){
-      getTableList({ page, pageSize });
+      let obj = { ...formValue, pageNum: page, pageSize };
+      getTableList(obj);
     }else{
       changeState({
         formValue: {
@@ -317,10 +318,8 @@ function TablePage({
           pageSizes={[10, 20, 30, 40, 50]}
           totalItems={total}
           onChange={({ page, pageSize }) => {
-            getTableList({
-              pageNum: page,
-              pageSize: pageSize,
-            });
+            let obj = { ...formValue, pageNum: page, pageSize };
+            getTableList(obj);
           }}
         />
       </div>
