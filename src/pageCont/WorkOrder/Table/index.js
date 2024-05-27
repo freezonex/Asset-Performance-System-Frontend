@@ -16,12 +16,15 @@ import tableStyles from '@/styles/table/table.module.scss';
 import styles from './index.module.scss';
 import DelModal from '@/pageCont/components/DelModal';
 import { getWorkOrderList, workOrderDelete } from '@/api/workOrder';
+import CreateModal from '../Modal/CreateModal';
 
 function TablePage({
   formValue,
   changeState,
   isSearchClicked,
   createModalIsopen,
+  createModaType,
+  tableData,
 }) {
   const headers = [
     { key: 'orderId', header: 'Work Order' },
@@ -62,7 +65,24 @@ function TablePage({
   const [rows, setRows] = useState([]);
   const [deleteModalIsopen, setDeleteModalIsopen] = useState(false);
   const [selectRowData, setSelectRowData] = useState({}); //选中的row data
+  // useEffect(() => {
+  //   changeState({
+  //     formValue: {
+  //       orderId: '',
+  //       orderName: '',
+  //       orderType: '',
+  //       creationTime: '',
+  //     },
+  //   });
+  //   // 无搜索条件 调用接口
+  //   getTableList({ pageNum: 1, pageSize: 10 });
+  // }, [createModalIsopen]);
+
   useEffect(() => {
+    reloadingData()
+  }, []);
+
+  const reloadingData = () => {
     changeState({
       formValue: {
         orderId: '',
@@ -73,7 +93,8 @@ function TablePage({
     });
     // 无搜索条件 调用接口
     getTableList({ pageNum: 1, pageSize: 10 });
-  }, [createModalIsopen]);
+  }
+
   useEffect(() => {
     // 是否携带搜索条件
     if (isSearchClicked) {
@@ -222,6 +243,16 @@ function TablePage({
         changeModalOpen={setDeleteModalIsopen}
         delConfirm={deleteAsset}
       />
+      {/* Create a Asset modal */}
+      {
+        <CreateModal
+          createModalIsopen={createModalIsopen}
+          createModaType={createModaType}
+          tableData={tableData}
+          changeState={changeState}
+          reloadingData={reloadingData}
+        />
+      }
     </>
   );
 }

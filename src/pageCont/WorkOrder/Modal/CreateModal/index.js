@@ -22,6 +22,7 @@ const ModalPages = ({
   changeState,
   createModaType,
   tableData,
+  reloadingData
 }) => {
   const [assignedToData, setAssignedToData] = useState([]); // assigned to  data
   const [addassignedToModal, setAddassignedToModal] = useState(false); // 添加 Assigned to 弹窗
@@ -160,6 +161,7 @@ const ModalPages = ({
   const handleCreateWorkOrder = async () => {
     let res =await addWorkOrder(formValue );
     if(res?.data?.code == 200){
+      reloadingData();
       handleCancelClicked();
     }else{
       message.error('Failed to create Work Order');
@@ -272,6 +274,7 @@ const ModalPages = ({
             </Column>
             <Column sm={4} md={4} lg={8}>
               <DatePicker
+                value={moment(formValue.creationTime, 'YYYY-MM-DD').valueOf()}
                 className="mb-8"
                 datePickerType="single"
                 onChange={(e) => {
@@ -288,6 +291,7 @@ const ModalPages = ({
             </Column>
             <Column sm={4} md={4} lg={8}>
               <DatePicker
+                value={moment(formValue.dueTime, 'YYYY-MM-DD').valueOf()}
                 className="mb-8"
                 datePickerType="single"
                 onChange={(e)=>{

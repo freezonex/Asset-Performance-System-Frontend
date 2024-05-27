@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import styles from './index.module.scss';
 import Head from 'next/head';
 import WorkOrderTable from './Table';
-import CreateModal from './Modal/CreateModal';
+// import CreateModal from './Modal/CreateModal';
 
 import {
   Button,
@@ -185,18 +185,20 @@ class Comp extends Component {
             formValue={formValue}
             createModalIsopen={createModalIsopen}
             isSearchClicked={isSearchClicked}
+            createModaType={createModaType}
+            tableData={tableData}
           />
         </div>
 
         {/* Create a Asset modal */}
-        {
+        {/* {
           <CreateModal
             createModalIsopen={createModalIsopen}
             createModaType={createModaType}
             tableData={tableData}
             changeState={this.changeState}
           />
-        }
+        } */}
       </div>
     );
   }
