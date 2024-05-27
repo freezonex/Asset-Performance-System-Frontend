@@ -108,11 +108,12 @@ function TablePage({
     if (res?.data?.code == 200) {
       setDeleteModalIsopen(false);
       setSelectRowData({});
-      if (isSearchClicked) {
-        getTableList({ ...formValue, pageNum: 1, pageSize: 10 });
-      } else {
-        getTableList({ pageNum: 1, pageSize: 10 });
-      }
+      getTableList({ ...formValue, pageNum: page, pageSize });
+      // if (isSearchClicked) {
+      //   getTableList({ ...formValue, pageNum: 1, pageSize: 10 });
+      // } else {
+      //   getTableList({ pageNum: 1, pageSize: 10 });
+      // }
     }
   };
   return (
@@ -210,10 +211,8 @@ function TablePage({
           pageSizes={[10, 20, 30, 40, 50]}
           totalItems={total}
           onChange={({ page, pageSize }) => {
-            getTableList({
-              pageNum: page,
-              pageSize: pageSize,
-            });
+            let obj = { ...formValue, pageNum: page, pageSize };
+            getTableList(obj);
           }}
         />
       </div>
