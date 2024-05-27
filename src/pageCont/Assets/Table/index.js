@@ -138,11 +138,12 @@ function TablePage({
     if (res?.data?.code == 200) {
       setDeleteModalIsopen(false);
       setSelectRowData({});
-      if (isSearchClicked) {
-        getTableList({ ...formValue, pageNum: 1, pageSize: 10 });
-      } else {
-        getTableList({ pageNum: 1, pageSize: 10 });
-      }
+      getTableList({ ...formValue, pageNum: page, pageSize });
+      // if (isSearchClicked) {
+      //   getTableList({ ...formValue, pageNum: 1, pageSize: 10 });
+      // } else {
+      //   getTableList({ pageNum: 1, pageSize: 10 });
+      // }
     }
   };
 
