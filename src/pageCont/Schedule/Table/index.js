@@ -24,16 +24,16 @@ function TablePage({}) {
   ]);
   const colorList = {
     3: {
+      label: 'Busy',
+      bgColor: '#c83837',
+    },
+    2: {
       label: 'Free',
       bgColor: '#18b03d',
     },
-    2: {
+    1: {
       label: 'Assignable',
       bgColor: '#b7ecc1',
-    },
-    1: {
-      label: 'Busy',
-      bgColor: '#c83837',
     },
     0: {
       label: 'Unassignable',
