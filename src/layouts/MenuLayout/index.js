@@ -24,6 +24,7 @@ import {
   OrderDetails,
   EventSchedule,
   LicenseMaintenance,
+  WatsonHealth3DMprToggle
 } from '@carbon/icons-react';
 import styles from './index.module.scss';
 import { usePathname } from 'next/navigation';
@@ -173,6 +174,17 @@ const HeaderWSideNav = (props) => {
               isActive={isCurrentPath('/maintenance')}
             >
               Maintenance
+            </SideNavLink>
+            <SideNavLink
+              className="cursor-pointer"
+              isSideNavExpanded={isSideNavExpanded}
+              renderIcon={WatsonHealth3DMprToggle}
+              onClick={() => {
+                router.push(`/space`);
+              }}
+              isActive={isCurrentPath('/space')}
+            >
+              Space
             </SideNavLink>
           </SideNavItems>
         </SideNav>
