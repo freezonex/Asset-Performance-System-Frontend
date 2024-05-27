@@ -174,7 +174,7 @@ class Comp extends Component {
               renderIcon={Close}
               iconDescription="Close"
             >
-              Cancet
+              Cancel
             </Button>
           </div>
         </div>
