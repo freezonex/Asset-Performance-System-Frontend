@@ -209,7 +209,7 @@ function ThreeContainer({ glbUrl, ...args }) {
 
   return (
     <div className={styles.threePage}>
-      <div ref={containerRef} style={{ width: '300px', height: '300px' }} />
+      <div ref={containerRef} style={{ width: '100%', height: '300px' }} />
       {!isLoading && (
         <div className={styles.loadingDiv}>
           <Loading className={'some-class'} withOverlay={false} />
