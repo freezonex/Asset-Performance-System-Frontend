@@ -150,6 +150,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               <DatePicker
                 className="mb-8"
                 datePickerType="single"
+                value={moment(formValue.expectedDate, 'YYYY-MM-DD').valueOf()}
                 onChange={(e) => {
                   let obj = {
                     ...formValue,
