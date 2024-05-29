@@ -28,7 +28,11 @@ function ChildrenTable({ tableList, isOpen }) {
     e.preventDefault();
 
     let fileName = '';
-    fetch(`${process.env.apiUrl}/apsbackend/asset/download?id=${id}`)
+    let apiUrl =process.env.apiUrl
+    if(!apiUrl) {
+      apiUrl = window.location.origin
+    }
+    fetch(`${apiUrl}/apsbackend/asset/download?id=${id}`)
       .then((response) => {
         const arr = response.headers.get('Content-Disposition').split(';');
         fileName = window.decodeURI(arr[1]?.split('=')[1]);
