@@ -48,19 +48,19 @@ function ThreeContainer({ glbUrl, ...args }) {
           // 执行其他操作，因为现在加载已经完成
           console.log('3D 模型加载完成');
           setIsLoading(true);
-          // 调整相机位置，使其位于模型上方
-          const boundingBox = new THREE.Box3().setFromObject(loadedObject);
-          const center = boundingBox.getCenter(new THREE.Vector3());
-          const size = boundingBox.getSize(new THREE.Vector3());
-          const maxDim = Math.max(size.x, size.y, size.z);
-          const fov = camera.fov * (Math.PI / 180);
-          let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.2; // 放置在模型的上方
-          camera.position.set(
-            center.x,
-            center.y,
-            center.z+cameraZ,
-          );
-          camera.lookAt(center);
+          // // 调整相机位置，使其位于模型上方
+          // const boundingBox = new THREE.Box3().setFromObject(loadedObject);
+          // const center = boundingBox.getCenter(new THREE.Vector3());
+          // const size = boundingBox.getSize(new THREE.Vector3());
+          // const maxDim = Math.max(size.x, size.y, size.z);
+          // const fov = camera.fov * (Math.PI / 180);
+          // let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.2; // 放置在模型的上方
+          // camera.position.set(
+          //   center.x,
+          //   center.y,
+          //   center.z+cameraZ,
+          // );
+          // camera.lookAt(center);
        
         })
         .catch((error) => {
@@ -78,7 +78,7 @@ function ThreeContainer({ glbUrl, ...args }) {
       renderer.toneMappingExposure = 2;
 
       const controls = new OrbitControls(camera, renderer.domElement);
-      controls.target.set(0, 25, 0);
+      // controls.target.set(0, 25, 0);
       controls.update();
 
       controls.addEventListener('start', () => {
@@ -143,9 +143,9 @@ function ThreeContainer({ glbUrl, ...args }) {
     function animate() {
       
       const delta = clock.current.getDelta();
-      if (mixer.current) {
-        mixer.current.update(delta);
-      }
+      // if (mixer.current) {
+      //   mixer.current.update(delta);
+      // }
       if (!isUserInteracting.current) {
         scene.rotation.y += 0.2 * delta;
       }
