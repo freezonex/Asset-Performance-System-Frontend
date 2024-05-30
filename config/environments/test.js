@@ -1,4 +1,4 @@
 module.exports = {
   //接口地址
-  'apiUrl': ' https://supos.app:8080',
+  'apiUrl': ' http://47.236.10.165:3009',
 };
