@@ -48,20 +48,21 @@ function ThreeContainer({ glbUrl, ...args }) {
           // 执行其他操作，因为现在加载已经完成
           console.log('3D 模型加载完成');
           setIsLoading(true);
-          // // 调整相机位置，使其位于模型上方
-          // const boundingBox = new THREE.Box3().setFromObject(loadedObject);
-          // const center = boundingBox.getCenter(new THREE.Vector3());
-          // const size = boundingBox.getSize(new THREE.Vector3());
-          // const maxDim = Math.max(size.x, size.y, size.z);
-          // const fov = camera.fov * (Math.PI / 180);
-          // let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.2; // 放置在模型的上方
-          // camera.position.set(
-          //   center.x,
-          //   center.y,
-          //   center.z+cameraZ,
-          // );
-          // camera.lookAt(center);
-       
+         
+          // 获取模型的包围盒
+          const boundingBox = new THREE.Box3().setFromObject(loadedObject);
+
+          // 计算模型的中心点和尺寸
+          const center = boundingBox.getCenter(new THREE.Vector3());
+          const size = boundingBox.getSize(new THREE.Vector3());
+          const maxDim = Math.max(size.x, size.y, size.z);
+
+          // 根据模型的尺寸动态调整相机的位置和视野
+          const fov = camera.fov * (Math.PI / 180);
+          const cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2)) * 1.2;
+          camera.position.set(center.x, center.y, center.z + cameraZ);
+          // 设置相机的朝向
+          camera.lookAt(center);
         })
         .catch((error) => {
           console.error('加载模型出错:', error);
@@ -78,7 +79,6 @@ function ThreeContainer({ glbUrl, ...args }) {
       renderer.toneMappingExposure = 2;
 
       const controls = new OrbitControls(camera, renderer.domElement);
-      // controls.target.set(0, 25, 0);
       controls.update();
 
       controls.addEventListener('start', () => {
@@ -91,32 +91,22 @@ function ThreeContainer({ glbUrl, ...args }) {
 
       const initAnimation = () => {
         const originalPosition = new THREE.Vector3().copy(camera.position);
-        const originalLookAt = new THREE.Vector3(300,0,0);
+        const originalLookAt = new THREE.Vector3(0, 0, 0);
         let initialAngle = 0;
         const radius = 450;
 
-        const orbitTween = new TWEEN.Tween({
-          angle: initialAngle,
-          y: camera.position.y,
-        })
-          .to({ angle: Math.PI, y: originalPosition.y }, 3000)
+        const orbitTween = new TWEEN.Tween({ angle: initialAngle, y: camera.position.y })
+          .to({ angle: Math.PI * 2, y: originalPosition.y }, 6000)
           .easing(TWEEN.Easing.Cubic.InOut)
           .onUpdate((obj) => {
             camera.position.x = radius * Math.cos(obj.angle);
-            camera.position.z = radius * Math.sin(obj.angle);
-            camera.position.y = radius * Math.sin(obj.angle);
+            camera.position.z = radius * Math.sin(obj.angle) + 100;
+            camera.position.y = obj.y;
             camera.lookAt(scene.position);
           })
           .onComplete(() => {
             const returnTween = new TWEEN.Tween(camera.position)
-              .to(
-                {
-                  x: originalPosition.x,
-                  y: originalPosition.y,
-                  z: originalPosition.z
-                },
-                3000,
-              )
+              .to({ x: originalPosition.x, y: originalPosition.y, z: originalPosition.z + 100 }, 3000)
               .easing(TWEEN.Easing.Cubic.InOut)
               .onUpdate(() => {
                 camera.lookAt(originalLookAt);
@@ -127,7 +117,7 @@ function ThreeContainer({ glbUrl, ...args }) {
         orbitTween.start();
       };
 
-      // initAnimation();
+      initAnimation();
 
       renderer.domElement.style.cursor = 'grab';
       renderer.domElement.addEventListener('mousedown', () => {
@@ -141,14 +131,13 @@ function ThreeContainer({ glbUrl, ...args }) {
     }
 
     function animate() {
-      
       const delta = clock.current.getDelta();
-      // if (mixer.current) {
-      //   mixer.current.update(delta);
-      // }
+      if (mixer.current) {
+        mixer.current.update(delta);
+      }
       if (!isUserInteracting.current) {
         scene.rotation.y += 0.2 * delta;
-      }
+      }  
       TWEEN.update();
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
@@ -170,7 +159,6 @@ function ThreeContainer({ glbUrl, ...args }) {
         fileUrl,
         (gltf) => {
           const object = gltf.scene;
-          object.position.y -= 10;
           if (gltf.animations.length > 0) {
             mixer.current = new THREE.AnimationMixer(object);
             const action = mixer.current.clipAction(gltf.animations[0]);
@@ -203,7 +191,7 @@ function ThreeContainer({ glbUrl, ...args }) {
     if (isMobile) {
       object.scale.set(100, 120, 100);
     } else {
-      object.scale.set(170, 120, 170);
+      object.scale.set(120, 120, 120);
     }
   };
 
