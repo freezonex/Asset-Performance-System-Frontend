@@ -1,7 +1,18 @@
 import React, { useRef, useEffect } from 'react';
 import { getWorkOrders } from '@/api/dashboard';
 
-import * as echarts from 'echarts';
+// import * as echarts from 'echarts';
+import * as echarts from 'echarts/core';
+import { PieChart } from 'echarts/charts';
+import { TooltipComponent, LegendComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+
+echarts.use([
+  TooltipComponent,
+  LegendComponent,
+  PieChart,
+  CanvasRenderer,
+])
 
 function WorkOrders() {
   const chartRef = useRef();
