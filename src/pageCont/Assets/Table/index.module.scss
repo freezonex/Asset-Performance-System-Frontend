@@ -6,8 +6,48 @@
   .delText {
     color: #da1e28;
   }
-  .disableEdit{
+  .disableEdit {
     color: #c6c6c6;
     cursor: not-allowed;
+  }
+  .tableDetail{
+    width: 68px;
+    height: 24px;
+    line-height: 24px;
+    background:#D9D9D9 ;
+    text-align: center;;
+    color:#161616;
+    font-weight: 400;
+  }
+
+  .ChildrenTableTr {
+    .ChildrenTableTd {
+      background: #fff;
+    }
+    :global {
+      
+      .cds--data-table tbody tr:hover td {
+        background: #fff;
+      }
+      .cds--data-table tbody th{
+        background: #e6e6e6;
+      }
+      .cds--data-table th{
+        background-color: #f0f0f0;
+      }
+    }
+  }
+  .ChildrenTableTr:hover{
+    background: #fff;
+  }
+  :global{
+    .cds--data-table tbody tr td, .cds--data-table tbody tr th{
+      color:#161616;
+    }
+    .cds--data-table tbody tr:hover td, .cds--data-table tbody tr:hover th{
+      // border-top:1px solid #c6c6c6;
+      border-bottom:1px solid #c6c6c6;
+    }
+    
   }
 }

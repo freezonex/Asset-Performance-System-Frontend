@@ -1,0 +1,90 @@
+.headAction {
+  display: flex;
+  align-items: flex-end;
+
+  .select {
+    margin-right: 20px;
+
+    :global {
+      .cds--select-input {
+        border-bottom: none;
+        width: 158px;
+      }
+    }
+  }
+}
+
+.content {
+  width: 100%;
+  margin-top: 40px;
+
+  .top {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+
+    .top5 {
+      width: 30%;
+      height: 360px;
+      margin-right: 20px;
+      background-color: #fff;
+      padding: 16px 24px 24px;
+      box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3019607843);
+    }
+
+    .assetValueDepreciationModel {
+      width: 70%;
+      height: 360px;
+      background-color: #fff;
+      box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3019607843);
+    }
+  }
+
+  .bottom {
+    width: 100%;
+    display: flex;
+
+    .historicalMaintenanceLog {
+      width: 50%;
+      margin-right: 20px;
+      background-color: #fff;
+      padding: 16px 24px 24px;
+      box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3019607843);
+    }
+
+    .maintenanceCheckInterval {
+      width: 50%;
+      background-color: #fff;
+      padding: 16px 24px 24px;
+      box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3019607843);
+    }
+  }
+}
+
+@media screen and (max-width: 1185px) {
+  .content{
+    .top{
+      flex-direction: column;
+      .top5{
+        margin-right: 0px;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .assetValueDepreciationModel {
+        width: 100%;
+      }
+    }
+    .bottom{
+      flex-direction: column;
+      .historicalMaintenanceLog{
+        width: 100%;
+        margin-right: 0px;
+        margin-bottom: 20px;
+      }
+      .maintenanceCheckInterval{
+        width: 100%;
+      }
+    }
+  }
+}
+

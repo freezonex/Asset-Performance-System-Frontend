@@ -12,21 +12,20 @@ import {
   TableHeader,
 } from '@carbon/react';
 import classNames from 'classnames';
-// import ModalTable from '../Modal/ModalTable';
 import tableStyles from '@/styles/table/table.module.scss';
 import styles from './index.module.scss';
 import DelModal from '@/pageCont/components/DelModal';
 import { getWorkOrderList, workOrderDelete } from '@/api/workOrder';
+import CreateModal from '../Modal/CreateModal';
 
-// import ShelfLocationModal from '../Modal/ShelfLocationModal';
-// import {
-//   deleteWarehouse,
-//   fetchWarehouses,
-//   fetchWarehousesWithFilters,
-// } from '@/actions/actions';
-// import EditWarehouseModal from '../Modal/EditWarehouseModal';
-
-function TablePage({ formValue, changeState, isSearchClicked ,createModalIsopen}) {
+function TablePage({
+  formValue,
+  changeState,
+  isSearchClicked,
+  createModalIsopen,
+  createModaType,
+  tableData,
+}) {
   const headers = [
     { key: 'orderId', header: 'Work Order' },
     { key: 'orderName', header: 'Order Name' },
@@ -66,16 +65,44 @@ function TablePage({ formValue, changeState, isSearchClicked ,createModalIsopen}
   const [rows, setRows] = useState([]);
   const [deleteModalIsopen, setDeleteModalIsopen] = useState(false);
   const [selectRowData, setSelectRowData] = useState({}); //选中的row data
+  // useEffect(() => {
+  //   changeState({
+  //     formValue: {
+  //       orderId: '',
+  //       orderName: '',
+  //       orderType: '',
+  //       creationTime: '',
+  //     },
+  //   });
+  //   // 无搜索条件 调用接口
+  //   getTableList({ pageNum: 1, pageSize: 10 });
+  // }, [createModalIsopen]);
+
+  useEffect(() => {
+    reloadingData()
+  }, []);
+
+  const reloadingData = () => {
+    changeState({
+      formValue: {
+        orderId: '',
+        orderName: '',
+        orderType: '',
+        creationTime: '',
+      },
+    });
+    // 无搜索条件 调用接口
+    getTableList({ pageNum: 1, pageSize: 10 });
+  }
+
   useEffect(() => {
     // 是否携带搜索条件
     if (isSearchClicked) {
       let obj = { ...formValue, pageNum: 1, pageSize: 10 };
       getTableList(obj);
-    } else {
-      // 无搜索条件 调用接口
-      getTableList({ pageNum: 1, pageSize: 10 });
+      changeState({ isSearchClicked: false });
     }
-  }, [isSearchClicked,createModalIsopen]);
+  }, [isSearchClicked]);
 
   const getTableList = async (filters) => {
     let reqData = {
@@ -96,17 +123,18 @@ function TablePage({ formValue, changeState, isSearchClicked ,createModalIsopen}
 
   const deleteAsset = async () => {
     if (Object.keys(selectRowData).length < 1) return;
-    const { id} = selectRowData;
+    const { id } = selectRowData;
     // 调用接口
     let res = await workOrderDelete({ id });
     if (res?.data?.code == 200) {
       setDeleteModalIsopen(false);
       setSelectRowData({});
-      if (isSearchClicked) {
-        getTableList({ ...formValue, pageNum: 1, pageSize: 10 });
-      } else {
-        getTableList({ pageNum: 1, pageSize: 10 });
-      }
+      getTableList({ ...formValue, pageNum: page, pageSize });
+      // if (isSearchClicked) {
+      //   getTableList({ ...formValue, pageNum: 1, pageSize: 10 });
+      // } else {
+      //   getTableList({ pageNum: 1, pageSize: 10 });
+      // }
     }
   };
   return (
@@ -130,9 +158,7 @@ function TablePage({ formValue, changeState, isSearchClicked ,createModalIsopen}
                     );
                   }
                   return (
-                    <TableHeader  key={header.key}>
-                      {header.header}
-                    </TableHeader>
+                    <TableHeader key={header.key}>{header.header}</TableHeader>
                   );
                 })}
               </TableRow>
@@ -161,12 +187,15 @@ function TablePage({ formValue, changeState, isSearchClicked ,createModalIsopen}
                           >
                             Edit
                           </span> */}
-                          <span className={styles.delText}
-                          onClick={()=>{
-                            setSelectRowData(row);
+                          <span
+                            className={styles.delText}
+                            onClick={() => {
+                              setSelectRowData(row);
                               setDeleteModalIsopen(true);
-                          }}
-                          >Delete</span>
+                            }}
+                          >
+                            Delete
+                          </span>
                         </TableCell>
                       );
                     }
@@ -174,13 +203,18 @@ function TablePage({ formValue, changeState, isSearchClicked ,createModalIsopen}
                       let type = statusList[row[header.key]]?.type;
                       let label = statusList[row[header.key]]?.label;
                       return (
-                        <TableCell style={{ width: 120 }}  key={`${row.assetId}-${header.key}`}>
-                          <Tag type={type}>{label}</Tag>
+                        <TableCell
+                          style={{ width: 120 }}
+                          key={`${row.assetId}-${header.key}`}
+                        >
+                          {label && <Tag type={type}>{label}</Tag>}
                         </TableCell>
                       );
                     }
                     return (
-                      <TableCell  key={`${row.assetId}-${header.key}`}>{row[header.key]}</TableCell>
+                      <TableCell key={`${row.assetId}-${header.key}`}>
+                        {row[header.key]}
+                      </TableCell>
                     );
                   })}
                 </TableRow>
@@ -198,8 +232,8 @@ function TablePage({ formValue, changeState, isSearchClicked ,createModalIsopen}
           pageSizes={[10, 20, 30, 40, 50]}
           totalItems={total}
           onChange={({ page, pageSize }) => {
-            setPage(page);
-            setPageSize(pageSize);
+            let obj = { ...formValue, pageNum: page, pageSize };
+            getTableList(obj);
           }}
         />
       </div>
@@ -209,6 +243,16 @@ function TablePage({ formValue, changeState, isSearchClicked ,createModalIsopen}
         changeModalOpen={setDeleteModalIsopen}
         delConfirm={deleteAsset}
       />
+      {/* Create a Asset modal */}
+      {
+        <CreateModal
+          createModalIsopen={createModalIsopen}
+          createModaType={createModaType}
+          tableData={tableData}
+          changeState={changeState}
+          reloadingData={reloadingData}
+        />
+      }
     </>
   );
 }

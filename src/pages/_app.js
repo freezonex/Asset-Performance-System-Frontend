@@ -1,5 +1,6 @@
 // 全局样式（应用于所有页面和组件）
 import '@/styles/global/index.scss'
+import Head from 'next/head';
 import React from 'react'
 import GlobalLayout from "@/layouts/GlobalLayout";
 import { message } from 'antd'; // 导入 Ant Design Message 组件
@@ -30,6 +31,9 @@ export default function App(params) {
   
   return (
     <GlobalLayout>
+      <Head>
+        <title>SUPCON APM</title>
+      </Head>
         {getLayout(<Component {...pageProps} />)}
     </GlobalLayout>
   );

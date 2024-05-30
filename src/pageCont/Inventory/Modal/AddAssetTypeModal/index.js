@@ -52,7 +52,7 @@ const ModalPages = ({ addModal, modalTitle, changeModalOpen, addConfirm }) => {
         primaryButtonDisabled={primaryButtonDisabled}
       >
         <Grid className="pl-0 pr-0">
-          <Column sm={2} md={4} lg={8}>
+          <Column sm={4} md={4} lg={8}>
             <TextInput
               className="mb-8"
               id="assetType"
@@ -62,7 +62,7 @@ const ModalPages = ({ addModal, modalTitle, changeModalOpen, addConfirm }) => {
               onChange={onFormValueChange}
             />
           </Column>
-          <Column sm={2} md={4} lg={8}>
+          <Column sm={4} md={4} lg={8}>
             <TextInput
               className="mb-8"
               id="unit"
@@ -72,8 +72,9 @@ const ModalPages = ({ addModal, modalTitle, changeModalOpen, addConfirm }) => {
               onChange={onFormValueChange}
             />
           </Column>
-          <Column sm={2} md={4} lg={8}>
+          <Column sm={4} md={4} lg={8}>
             <TextInput
+              className="mb-8"
               id="supplierName"
               labelText="SupplierName"
               placeholder="SupplierName"
@@ -81,12 +82,13 @@ const ModalPages = ({ addModal, modalTitle, changeModalOpen, addConfirm }) => {
               onChange={onFormValueChange}
             />
           </Column>
-          <Column sm={2} md={4} lg={8}>
+          <Column sm={4} md={4} lg={8}>
             <NumberInput
+              className="mb-8"
               id="priceValue"
               min={0}
               value={formValue.priceValue}
-              label="NumberInput label"
+              label="Price At Purchase"
               placeholder="Price At Purchase"
               onChange={onFormValueChange}
             />

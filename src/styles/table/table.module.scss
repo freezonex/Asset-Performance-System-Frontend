@@ -2,12 +2,15 @@
   cursor: pointer;
   :global {
     .cds--data-table tr {
-      border-left: 1px solid #c6c6c6;
-      border-right: 1px solid #c6c6c6;
+      // border-left: 1px solid #c6c6c6;
+      // border-right: 1px solid #c6c6c6;
+      border: 1px solid #c6c6c6;
+      border-bottom: none;
     }
     .cds--data-table td,
     .cds--data-table tbody th {
       border-right: 1px solid #c6c6c6;
+      border-bottom: 1px solid #c6c6c6;
     }
     .cds--data-table th {
       font-weight: 600;
@@ -32,10 +35,15 @@
 
     .cds--pagination{
       background-color: #fff;
-      border: 1px solid var(--cds-border-subtle);
+      border: 1px solid #c6c6c6;
+      border-top: none;
+      width:100%;
     }
-    .cds--data-table td, .cds--data-table tbody th{
+    .cds--data-table td{
       background-color: #fff
+    }
+    .cds--data-table th{
+      border-bottom: 1px solid #c6c6c6;
     }
   }
 }

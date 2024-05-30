@@ -21,34 +21,19 @@ import styles from './index.module.scss';
 function TablePage({}) {
   const [headers, setHeaders] = useState([
     { key: 'groupName', header: 'Department' },
-    // { key: 'MonJan5', header: 'Mon,Jan 5' },
-    // { key: 'TueJan6', header: 'Tue,Jan 6' },
-    // { key: 'WedJan7', header: 'Wed,Jan 7' },
-    // { key: 'ThuJan8', header: 'Thu,Jan 8' },
-    // { key: 'FriJan9', header: 'Fri,Jan 9' },
-    // { key: 'SatJan10', header: 'Sat,Jan 10' },
-    // { key: 'SunJan11', header: 'Sun,Jan 11' },
-    // { key: 'MonJan12', header: 'Mon,Jan 12' },
-    // { key: 'TueJan13', header: 'Tue,Jan 13' },
-    // { key: 'WedJan14', header: 'Wed,Jan 14' },
-    // { key: 'ThuJan15', header: 'Thu,Jan 15' },
-    // { key: 'FriJan16', header: 'Fri,Jan 16' },
-    // { key: 'SatJan17', header: 'Sat,Jan 17' },
-    // { key: 'SunJan18', header: 'Sun,Jan 18' },
-    // { key: 'MonJan19', header: 'Mon,Jan 19' },
   ]);
   const colorList = {
     3: {
+      label: 'Busy',
+      bgColor: '#c83837',
+    },
+    2: {
       label: 'Free',
       bgColor: '#18b03d',
     },
-    2: {
+    1: {
       label: 'Assignable',
       bgColor: '#b7ecc1',
-    },
-    1: {
-      label: 'Busy',
-      bgColor: '#c83837',
     },
     0: {
       label: 'Unassignable',
@@ -59,93 +44,26 @@ function TablePage({}) {
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(5);
   const [dataPickValue, setDataPickValue] = useState(new Date());
-  const [tabelList, setTabelList] = useState([
-    // {
-    //   id: '001',
-    //   groupName: 'LaptopLaptop',
-    //   MonJan5: '1',
-    //   TueJan6: '2',
-    //   WedJan7: '4',
-    //   ThuJan8: '1',
-    //   FriJan9: '3',
-    //   SatJan10: '4',
-    //   SunJan11: '2',
-    //   MonJan12: '1',
-    //   TueJan13: '2',
-    //   WedJan14: '3',
-    //   ThuJan15: '1',
-    //   FriJan16: '3',
-    //   SatJan17: '4',
-    //   SunJan18: '2',
-    //   MonJan19: '1',
-    // },
-    // {
-    //   id: '002',
-    //   groupName: 'Laptop',
-    //   MonJan5: '4',
-    //   TueJan6: '1',
-    //   WedJan7: '3',
-    //   ThuJan8: '2',
-    //   FriJan9: '3',
-    //   SatJan10: '1',
-    //   SunJan11: '4',
-    //   MonJan12: '1',
-    //   TueJan13: '3',
-    //   WedJan14: '3',
-    //   ThuJan15: '1',
-    //   FriJan16: '3',
-    //   SatJan17: '4',
-    //   SunJan18: '2',
-    //   MonJan19: '1',
-    // },
-    // {
-    //   id: '004',
-    //   groupName: 'Laptop',
-    //   MonJan5: '1',
-    //   TueJan6: '4',
-    //   WedJan7: '4',
-    //   ThuJan8: '3',
-    //   FriJan9: '2',
-    //   SatJan10: '1',
-    //   SunJan11: '3',
-    //   MonJan12: '4',
-    //   TueJan13: '2',
-    //   WedJan14: '1',
-    //   ThuJan15: '2',
-    //   FriJan16: '4',
-    //   SatJan17: '1',
-    //   SunJan18: '2',
-    //   MonJan19: '1',
-    // },
-    // {
-    //   id: '003',
-    //   groupName: 'Laptop',
-    //   MonJan5: '1',
-    //   TueJan6: '3',
-    //   WedJan7: '1',
-    //   ThuJan8: '1',
-    //   FriJan9: '3',
-    //   SatJan10: '4',
-    //   SunJan11: '2',
-    //   MonJan12: '1',
-    //   TueJan13: '2',
-    //   WedJan14: '3',
-    //   ThuJan15: '1',
-    //   FriJan16: '3',
-    //   SatJan17: '4',
-    //   SunJan18: '2',
-    //   MonJan19: '1',
-    // },
-  ]);
+  const [selectIsActiveTable, setSelectIsActiveTable] = useState(null); //表格中和选中时间一致的，表头名称
+  const [activeBorderFlag, setActiveBorderFlag] = useState(false); // 是否展示篮框选中样式
+  const [tabelList, setTabelList] = useState([]);
   useEffect(() => {
-    getList({ selectDate: moment(dataPickValue[0]).format('yyyy-MM-DD') });
+    getList({ selectDate: moment(dataPickValue).format('yyyy-MM-DD') });
   }, []);
 
-  const getList = async (data = {}) => {
+  useEffect(() => {
+    if (activeBorderFlag) {
+      setTimeout(() => {
+        setActiveBorderFlag(false);
+      }, 3000);
+    }
+  }, [activeBorderFlag]);
+
+  const getList = async (params = {}) => {
     let res = await getScheduleList({
       pageNum: page,
       pageSize: pageSize,
-      ...data,
+      ...params,
     });
     if (res?.data?.code == 200) {
       const { data } = res?.data;
@@ -153,7 +71,8 @@ function TablePage({}) {
       setPage(data.pageData.pageNum);
       setPageSize(data.pageData.pageSize);
       getHeader(data.dates);
-      getTableList(data.pageData.list);
+      getTableList(data.pageData.list, params.selectDate);
+      setActiveBorderFlag(true)
     }
   };
 
@@ -162,25 +81,43 @@ function TablePage({}) {
     let newArr = data.map((val) => {
       return { key: val, header: val };
     });
-    let arr = [{ key: 'groupName', header: 'Department' }]
+    let arr = [{ key: 'groupName', header: 'Department' }];
     let newHeaders = arr.concat(newArr);
     setHeaders(newHeaders);
   };
 
-  const getTableList = (data) => {
+  const getTableList = (data, date) => {
     let id = 1;
+    let pickDay = new Date(date).getDate();
     let newArr = data.map((val) => {
       id += 1;
       let obj = {
         id,
         groupName: val.groupName,
+        isActive: null,
       };
       val.dataList.forEach((value) => {
+        const day = new Date(value.date).getDate();
+        if (pickDay == day) {
+          obj.isActive = value.date;
+          setSelectIsActiveTable(value.date);
+        }
         obj[value.date] = value.colorType;
       });
       return obj;
     });
     setTabelList(newArr);
+  };
+
+  const activeTableBorderBottom = (params) => {
+    let flag = false;
+    const { index, header, isActive } = params;
+    if (index == tabelList.length - 1) {
+      if (header == isActive && activeBorderFlag) {
+        flag = true;
+      }
+    }
+    return flag;
   };
 
   return (
@@ -235,19 +172,32 @@ function TablePage({}) {
                   if (header.key == 'groupName') {
                     return (
                       <TableHeader
-                        style={{ minWidth: '120px' }}
+                      
                         key={`${header.key}_head`}
                       >
+                        <div style={{ minWidth: '120px', maxWidth: '120px' ,width: '120px'}}>
                         {header.header}
+                        </div>
+                        
                       </TableHeader>
                     );
                   }
                   return (
                     <TableHeader
                       key={`${header.key}_head`}
-                      style={{ minWidth: '120px' }}
+                      // style={{ minWidth: '120px', maxWidth: '120px' ,width: '120px'}}
+                     
+                      className={classNames({
+                        [styles.activeTableHeaderBorder]:
+                          header.key == selectIsActiveTable && activeBorderFlag,
+                        [styles.activeHeaderColor]:
+                          header.key == selectIsActiveTable,
+                      })}
                     >
+                      <div  style={{ minWidth: '92px', maxWidth: '92px' ,width: '92px'}}>
                       {header.header}
+                      </div>
+                      
                     </TableHeader>
                   );
                 })}
@@ -260,19 +210,51 @@ function TablePage({}) {
                     if (header.key != 'groupName') {
                       let color = colorList[row[header.key]]?.bgColor;
                       return (
-                        <TableCell key={header.key}>
+                        <TableCell
+                          key={header.key}
+                          className={classNames(
+                            {
+                              [styles.activeTableBorder]:
+                                header.key == row['isActive'] &&
+                                activeBorderFlag,
+                            },
+                            {
+                              [styles.activeTableBorderBottom]:
+                                activeTableBorderBottom({
+                                  index: i,
+                                  header: header.key,
+                                  isActive: row['isActive'],
+                                }),
+                            },
+                          )}
+                        >
                           <div
                             style={{
                               backgroundColor: color,
-                              // width: '117px',
-                              height: '3rem',
+                              // width: 120,
+                              height: 53,
+                              // minWidth: 120,
+                              minheight: 48,
                             }}
                           ></div>
                         </TableCell>
                       );
                     }
                     return (
-                      <TableCell key={header.key}>{row[header.key]}</TableCell>
+                      <TableCell key={header.key}>
+                        <div
+                          style={{
+                            // width: 120,
+                            maxWidth: 130,
+                            overflow: 'hidden',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                          }}
+                          title={row[header.key]}
+                        >
+                          {row[header.key]}
+                        </div>
+                      </TableCell>
                     );
                   })}
                 </TableRow>
@@ -281,21 +263,23 @@ function TablePage({}) {
           </Table>
         </TableContainer>
         <Pagination
-        backwardText="Previous page"
-        forwardText="Next page"
-        itemsPerPageText=""
-        page={page}
-        pageNumberText="Page Number"
-        pageSize={pageSize}
-        pageSizes={[10, 20, 30, 40, 50]}
-        totalItems={total}
-        onChange={({ page, pageSize }) => {
-          setPage(page);
-          setPageSize(pageSize);
-        }}
-      />
+          backwardText="Previous page"
+          forwardText="Next page"
+          itemsPerPageText=""
+          page={page}
+          pageNumberText="Page Number"
+          pageSize={pageSize}
+          pageSizes={[10, 20, 30, 40, 50]}
+          totalItems={total}
+          onChange={({ page, pageSize }) => {
+            getList({
+              pageNum: page,
+              pageSize: pageSize,
+              selectDate: moment(dataPickValue).format('yyyy-MM-DD'),
+            });
+          }}
+        />
       </div>
-      
     </div>
   );
 }

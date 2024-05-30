@@ -1,0 +1,74 @@
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .titleName {
+    font-family: IBM Plex Sans;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: left;
+  }
+
+  .titleAction {
+    display: flex;
+    align-items: center;
+
+    .search {
+      margin-right: 10px;
+    }
+
+    .add {
+      // cursor: pointer;
+    }
+  }
+}
+.table {
+  :global{
+    .cds--data-table tbody{
+      background-color: #fff;
+    }
+    .cds--data-table td, .cds--data-table tbody th{
+      background-color: #fff;
+    }
+    .cds--pagination{
+      background-color: #fff;
+    }
+  }
+  .addMaintenanceInput{
+    display: flex;
+    align-items: center;
+  }
+
+  .actions {
+    margin-left: 15px;
+    .save {
+      color: #0f62fe;
+      // cursor: pointer;
+      margin-right: 16px;
+    }
+
+    .cancel {
+      color: #5a5a5a;
+      // cursor: pointer;
+    }
+  }
+}
+
+.addArea {
+  min-height: 258px;
+  height: calc(100% - 40px);
+  background-color: #f4f4f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // cursor: pointer;
+
+  .icon {
+    width: 110px;
+    height: 110px;
+    color: #a3a3a3;
+  }
+}

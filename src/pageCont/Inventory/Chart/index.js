@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.module.scss';
+import moment from 'moment';
 
 import { ComboChart } from '@carbon/charts-react'
 import '@carbon/charts-react/styles.css'
@@ -124,7 +125,7 @@ class Comp extends Component {
 					"mapsTo": "value"
 				},
 				"bottom": {
-					"scaleType": "time",
+					"scaleType": "labels",
 					"mapsTo": "key"
 				},
 				// "right": {
@@ -159,8 +160,10 @@ class Comp extends Component {
 			"timeScale": {
 				"addSpaceOnEdges": 0
 			},
-			"height": "300px",
-			
+			"height": "284px",
+			toolbar: {
+				enabled: false,
+			},
 		}
 	};
 
@@ -199,7 +202,7 @@ class Comp extends Component {
 			data.dataList.forEach((item, i) => {
 				list.push({
 					"group": "ExpectedQuantity",
-					"key": item.date,
+					"key":  moment(item.date).format('MM-DD'),
 					"value": item.expectedQuantity || 0
 				})
 			})
@@ -207,7 +210,7 @@ class Comp extends Component {
 			data.dataList.forEach((item, i) => {
 				list.push({
 					"group": "Quantity",
-					"key": item.date,
+					"key": moment(item.date).format('MM-DD'),
 					"value": item.quantity || 0
 				})
 			})

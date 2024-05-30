@@ -12,12 +12,13 @@ import {
   TableRow,
   TableHeader,
 } from '@carbon/react';
-import ModalTable from '../Modal/ModalTable';
+import MoreModal from '../Modal/MoreModal';
+import ChildrenTable from './ChildrenTable';
 import classNames from 'classnames';
 import tableStyles from '@/styles/table/table.module.scss';
 import styles from './index.module.scss';
 import DelModal from '@/pageCont/components/DelModal';
-import EditModal from '../Modal/EditModal';
+import CreateModal from '../Modal/CreateModal';
 import { getAssetList, assetDelete } from '@/api/assets';
 
 function TablePage({
@@ -52,7 +53,7 @@ function TablePage({
       type: 'red',
     },
     4: {
-      label: 'Scheduled Stop',
+      label: 'Stop',
       type: 'purple',
     },
   };
@@ -60,21 +61,53 @@ function TablePage({
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(5);
   const [modalTableIsopen, setModalTableIsopen] = useState(false);
+  const [detailIsOpen, setDetailIsOpen] = useState({});
   const [deleteModalIsopen, setDeleteModalIsopen] = useState(false);
   const [selectRowData, setSelectRowData] = useState({}); //选中的row data
   const [tableRowData, setTableRowData] = useState({}); //table row data
-  const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState([]); //table 数据
 
   useEffect(() => {
     // 是否携带搜索条件
     if (isSearchClicked) {
       let obj = { ...formValue, pageNum: 1, pageSize: 10 };
       getTableList(obj);
-    } else {
-      // 无搜索条件 调用接口
+      changeState({ isSearchClicked: false });
+    }
+  }, [isSearchClicked]);
+
+  // useEffect(() => {
+  //   changeState({
+  //     formValue: {
+  //       assetId: '',
+  //       assetName: '',
+  //       assetType: '',
+  //       responsiblePerson: '',
+  //     },
+  //   });
+  //   getTableList({ pageNum: 1, pageSize: 10 });
+  // }, [createModalIsopen, editModalIsopen]);
+
+  useEffect(()=>{
+    reloadingData()
+  }, [])
+
+  const reloadingData = (type) => {
+    if(type === 'edit'){
+      let obj = { ...formValue, pageNum: page, pageSize };
+      getTableList(obj);
+    }else{
+      changeState({
+        formValue: {
+          assetId: '',
+          assetName: '',
+          assetType: '',
+          responsiblePerson: '',
+        },
+      });
       getTableList({ pageNum: 1, pageSize: 10 });
     }
-  }, [isSearchClicked, createModalIsopen, editModalIsopen]);
+  }
 
   useEffect(() => {
     if (!createModalIsopen && !editModalIsopen && !modalTableIsopen)
@@ -105,13 +138,30 @@ function TablePage({
     if (res?.data?.code == 200) {
       setDeleteModalIsopen(false);
       setSelectRowData({});
-      if (isSearchClicked) {
-        getTableList({ ...formValue, pageNum: 1, pageSize: 10 });
-      } else {
-        getTableList({ pageNum: 1, pageSize: 10 });
-      }
+      getTableList({ ...formValue, pageNum: page, pageSize });
+      // if (isSearchClicked) {
+      //   getTableList({ ...formValue, pageNum: 1, pageSize: 10 });
+      // } else {
+      //   getTableList({ pageNum: 1, pageSize: 10 });
+      // }
     }
   };
+
+  // detail table是否展开
+  const childrenTableIsOpen = (row) => {
+    let obj = { ...detailIsOpen };
+    
+    if (obj[row.id]) {
+      obj[row.id] = false;
+    } else {
+      Object.keys(obj).forEach(item=>{
+        obj[item] = false;
+      })
+      obj[row.id] = true;
+    }
+    setDetailIsOpen(obj);
+  };
+
   return (
     <>
       <div className={classNames(tableStyles.tableStyle, styles.assets)}>
@@ -123,7 +173,7 @@ function TablePage({
                   if (header.key == 'status') {
                     return (
                       <TableHeader
-                        style={{ minWidth: '108px' }}
+                        style={{ minWidth: '125px' }}
                         key={`${header.key}_head`}
                       >
                         {header.header}
@@ -140,70 +190,121 @@ function TablePage({
             </TableHead>
             <TableBody>
               {rows.map((row, index) => (
-                <TableRow key={row.id}>
-                  {headers.map((header) => {
-                    if (header.key === 'more') {
-                      return (
-                        <TableCell key={header.key}>
-                          <Link
-                            onClick={() => {
-                              setTableRowData(row);
-                              setTimeout(() => {
-                                setModalTableIsopen(true);
-                              });
-                            }}
-                          >
-                            ...
-                          </Link>
-                        </TableCell>
-                      );
-                    }
-                    if (header.key === 'edit') {
-                      return (
-                        <TableCell key={header.key}>
-                          <span
-                            className={classNames(styles.editText, {
-                              [styles.disableEdit]: row.usedStatus == 1,
-                            })}
-                            onClick={() => {
-                              if (row.usedStatus == 1) return;
-                              setTableRowData(row);
-                              // 延迟打开弹窗
-                              setTimeout(() => {
-                                changeState({
-                                  editModalIsopen: true,
+                <>
+                  <TableRow key={row.id}>
+                    {headers.map((header) => {
+                      if (header.key === 'more') {
+                        return (
+                          <TableCell key={header.key}>
+                            <div
+                              className={styles.tableDetail}
+                              onClick={() => {
+                                childrenTableIsOpen(row);
+                              }}
+                            >
+                              Detail
+                            </div>
+                          </TableCell>
+                        );
+                      }
+                      if (header.key === 'edit') {
+                        return (
+                          <TableCell key={header.key}>
+                            <span
+                              className={classNames(styles.editText)}
+                              onClick={() => {
+                                setTableRowData(row);
+                                // 延迟打开弹窗
+                                setTimeout(() => {
+                                  changeState({
+                                    editModalIsopen: true,
+                                  });
                                 });
-                              });
-                            }}
-                          >
-                            Edit
-                          </span>
-                          <span
-                            className={styles.delText}
-                            onClick={() => {
-                              setSelectRowData(row);
-                              setDeleteModalIsopen(true);
-                            }}
-                          >
-                            Delete
-                          </span>
-                        </TableCell>
-                      );
-                    }
-                    if (header.key === 'status') {
-                      let type = statusList[row[header.key]]?.type;
-                      let label = statusList[row[header.key]]?.label;
+                              }}
+                            >
+                              Edit
+                            </span>
+                            <span
+                              className={styles.delText}
+                              onClick={() => {
+                                setSelectRowData(row);
+                                setDeleteModalIsopen(true);
+                              }}
+                            >
+                              Delete
+                            </span>
+                          </TableCell>
+                        );
+                      }
+                      if (header.key === 'status') {
+                        let type = statusList[row[header.key]]?.type;
+                        let label = statusList[row[header.key]]?.label;
+                        return (
+                          <TableCell key={header.key}>
+                            {label && <Tag type={type}>{label}</Tag>}
+                          </TableCell>
+                        );
+                      }
+                      if (header.key === 'description') {
+                        return (
+                          <TableCell key={header.key}>
+                            <div
+                              style={{
+                                width: '300px',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                              }}
+                              title={row[header.key]}
+                            >
+                              {row[header.key]}
+                            </div>
+                          </TableCell>
+                        );
+                      }
+                      if (header.key === 'assetName' || header.key === 'assetType' || header.key === 'assetId' ) {
+                        return (
+                          <TableCell key={header.key}>
+                            <div
+                              style={{
+                                width: '100px',
+                                overflow: 'hidden',
+                                whiteSpace: 'nowrap',
+                                textOverflow: 'ellipsis',
+                              }}
+                              title={row[header.key]}
+                            >
+                              {row[header.key]}
+                            </div>
+                          </TableCell>
+                        );
+                      }
                       return (
                         <TableCell key={header.key}>
-                          <Tag type={type}>{label}</Tag>
+                          {row[header.key]}
                         </TableCell>
                       );
-                    }
-                    return (
-                      <TableCell key={header.key}>{row[header.key]}</TableCell>
-                    );
-                  })}
-                </TableRow>
+                    })}
+                  </TableRow>
+                  {/* 展开的table */}
+                  <TableRow
+                    className={styles.ChildrenTableTr}
+                    style={{ height: 'auto' }}
+                  >
+                    <TableCell
+                      className={styles.ChildrenTableTd}
+                      style={{ padding: 0,
+                        borderBottom:detailIsOpen[row.id]?'1px solid #c6c6c6':'1px solid rgba(0,0,0,0)',
+                      }}
+                      colSpan="9"
+                    >
+                      <ChildrenTable
+                        tableList={[row]}
+                        isOpen={detailIsOpen[row.id] ? true : false}
+                      />
+                    </TableCell>
+                  </TableRow>
+                </>
               ))}
             </TableBody>
           </Table>
@@ -218,26 +319,34 @@ function TablePage({
           pageSizes={[10, 20, 30, 40, 50]}
           totalItems={total}
           onChange={({ page, pageSize }) => {
-            getTableList({
-              pageNum: page,
-              pageSize: pageSize,
-            });
+            let obj = { ...formValue, pageNum: page, pageSize };
+            getTableList(obj);
           }}
         />
       </div>
+      {/* Create a Asset modal */}
+      {
+          <CreateModal
+            createModalIsopen={createModalIsopen}
+            changeState={changeState}
+            reloadingData={reloadingData}
+          />
+        }
       {/* more modal */}
       {
-        <ModalTable
+        <MoreModal
           modalTableIsopen={modalTableIsopen}
           setModalTableIsopen={setModalTableIsopen}
           tableRowData={tableRowData}
         />
       }
       {/* eidit modal */}
-      <EditModal
-        tableRowData={tableRowData}
-        editModalIsopen={editModalIsopen}
+      <CreateModal
+        createModalIsopen={editModalIsopen}
         changeState={changeState}
+        type={'edit'}
+        tableRowData={tableRowData}
+        reloadingData={reloadingData}
       />
       {/* del modal */}
       <DelModal

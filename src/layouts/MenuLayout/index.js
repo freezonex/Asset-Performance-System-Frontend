@@ -23,6 +23,8 @@ import {
   InventoryManagement,
   OrderDetails,
   EventSchedule,
+  LicenseMaintenance,
+  WatsonHealth3DMprToggle
 } from '@carbon/icons-react';
 import styles from './index.module.scss';
 import { usePathname } from 'next/navigation';
@@ -60,7 +62,7 @@ const HeaderWSideNav = (props) => {
               router.push(`/dashboard`);
             }}
           >
-            APS
+            APM
           </HeaderName>
           <HeaderGlobalBar className="flex items-center">
             <Toggle
@@ -162,11 +164,33 @@ const HeaderWSideNav = (props) => {
             >
               Schedule
             </SideNavLink>
+            <SideNavLink
+              className="cursor-pointer"
+              isSideNavExpanded={isSideNavExpanded}
+              renderIcon={LicenseMaintenance}
+              onClick={() => {
+                router.push(`/maintenance`);
+              }}
+              isActive={isCurrentPath('/maintenance')}
+            >
+              Maintenance
+            </SideNavLink>
+            <SideNavLink
+              className="cursor-pointer"
+              isSideNavExpanded={isSideNavExpanded}
+              renderIcon={WatsonHealth3DMprToggle}
+              onClick={() => {
+                router.push(`/space`);
+              }}
+              isActive={isCurrentPath('/space')}
+            >
+              Space
+            </SideNavLink>
           </SideNavItems>
         </SideNav>
       </Theme>
 
-      <Theme theme={theme.contentTheme} style={{ height: '100%' }}>
+      <Theme theme={theme.contentTheme} style={{ minHeight: '100vh',minWidth: '630px' }}>
         <Content style={{ height: '100%' }}>
           <div className={styles.body}>
             <div className={styles.bodyCont}>{props.children}</div>

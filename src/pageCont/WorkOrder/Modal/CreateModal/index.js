@@ -22,6 +22,7 @@ const ModalPages = ({
   changeState,
   createModaType,
   tableData,
+  reloadingData
 }) => {
   const [assignedToData, setAssignedToData] = useState([]); // assigned to  data
   const [addassignedToModal, setAddassignedToModal] = useState(false); // 添加 Assigned to 弹窗
@@ -160,6 +161,7 @@ const ModalPages = ({
   const handleCreateWorkOrder = async () => {
     let res =await addWorkOrder(formValue );
     if(res?.data?.code == 200){
+      reloadingData();
       handleCancelClicked();
     }else{
       message.error('Failed to create Work Order');
@@ -180,7 +182,7 @@ const ModalPages = ({
           primaryButtonDisabled={modalSaveIsDisablee}
         >
           <Grid className="pl-0 pr-0">
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <TextInput
                 className="mb-8"
                 id="orderName"
@@ -198,11 +200,11 @@ const ModalPages = ({
                 }}
               />
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <TextInput
                 className="mb-8"
                 id="orderId"
-                labelText="work Order Id"
+                labelText="Work Order Id"
                 placeholder="house#1"
                 required
                 invalid={fieldValidation.orderIdInvalid}
@@ -211,7 +213,7 @@ const ModalPages = ({
                 onChange={onFormValueChange}
               />
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <TextInput
                 className="mb-8"
                 id="assetId"
@@ -229,7 +231,7 @@ const ModalPages = ({
                 }}
               />
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <TextInput
                 className="mb-8"
                 id="orderType"
@@ -239,7 +241,7 @@ const ModalPages = ({
                 onChange={onFormValueChange}
               />
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <Select
                 className="mb-8"
                 id="status"
@@ -254,7 +256,7 @@ const ModalPages = ({
                 })}
               </Select>
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <Select
                 className="mb-8"
                 id="priority"
@@ -270,8 +272,9 @@ const ModalPages = ({
                 <SelectItem value="3" text="3" />
               </Select>
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <DatePicker
+                value={moment(formValue.creationTime, 'YYYY-MM-DD').valueOf()}
                 className="mb-8"
                 datePickerType="single"
                 onChange={(e) => {
@@ -286,8 +289,9 @@ const ModalPages = ({
                 />
               </DatePicker>
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <DatePicker
+                value={moment(formValue.dueTime, 'YYYY-MM-DD').valueOf()}
                 className="mb-8"
                 datePickerType="single"
                 onChange={(e)=>{
@@ -302,7 +306,7 @@ const ModalPages = ({
                 />
               </DatePicker>
             </Column>
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <Select
                 className="mb-8"
                 id="assignedTo"
@@ -333,7 +337,7 @@ const ModalPages = ({
                 })}
               </Select>
             </Column>
-            <Column sm={2} md={4} lg={16}>
+            <Column sm={4} md={4} lg={16}>
               <TextInput
                 id="description"
                 labelText="Description"

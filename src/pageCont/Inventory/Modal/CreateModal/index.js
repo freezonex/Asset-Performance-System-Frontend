@@ -114,7 +114,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
           primaryButtonDisabled={isPrimaryButtonDisabled}
         >
           <Grid className="pl-0 pr-0">
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <Select
                 className="mb-8"
                 id="assetTypeId"
@@ -146,10 +146,11 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               </Select>
             </Column>
 
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <DatePicker
                 className="mb-8"
                 datePickerType="single"
+                value={moment(formValue.expectedDate, 'YYYY-MM-DD').valueOf()}
                 onChange={(e) => {
                   let obj = {
                     ...formValue,
@@ -166,7 +167,7 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
               </DatePicker>
             </Column>
 
-            <Column sm={2} md={4} lg={8}>
+            <Column sm={4} md={4} lg={8}>
               <TextInput
                 id="expectedQuantity"
                 labelText="Ecpected Quantity"

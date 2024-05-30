@@ -3,98 +3,96 @@ import styles from './index.module.scss';
 import classNames from 'classnames';
 import { update } from '@/utils/immutableUtil';
 import { queryByAssetTypeList } from '@/api/common';
-import {
-  Pagination,
-} from '@carbon/react';
+import { Pagination } from '@carbon/react';
+import { Ai } from '@carbon/icons-react';
 
 class Comp extends Component {
   state = {
     isSHow: false,
-    tabList: [],           //列表数据
-    total: 0,              //总条数
-    pageSize: 10,          //每页条数
-    pageNum: 1,            //当前页
-  }
+    tabList: [], //列表数据
+    total: 0, //总条数
+    pageSize: 10, //每页条数
+    pageNum: 1, //当前页
+  };
   componentDidMount() {
-    this.props.init?.(this)
-
+    this.props.init?.(this);
   }
 
   open = () => {
-    this.setState({
-      pageNum: 1,
-      pageSize: 10,
-    }, () => {
-      this.getList({
+    this.setState(
+      {
         pageNum: 1,
         pageSize: 10,
-      })
-    })
-  }
+      },
+      () => {
+        this.getList({
+          pageNum: 1,
+          pageSize: 10,
+          defaultPage: true,
+        });
+      },
+    );
+  };
 
   close = () => {
-    this.setState({ isSHow: false })
-  }
+    this.setState({ isSHow: false });
+  };
 
   // 获取列表
   getList = async (params = {}) => {
-    const {
-      pageNum,
-      pageSize,
-    } = this.state;
-
-    console.log(this.props.data)
+    const { pageNum, pageSize } = this.state;
 
     var reqData = {
       pageNum,
       pageSize,
-      "assetTypeId": this.props.data.assetTypeId,
+      assetTypeId: this.props.data.assetTypeId,
+      currentId: this.props.data.id,
     };
     reqData = { ...reqData, ...params };
 
     var rs = await queryByAssetTypeList(reqData);
-    console.log(rs)
     // 成功
-    if (rs.data.code == 200) {
-      var data = rs.data.data
+    if (rs?.data?.code == 200) {
+      var data = rs.data.data;
       this.setState({
         tabList: data.list,
         total: parseInt(data.total),
+        pageSize: parseInt(data.pageSize),
+        pageNum: parseInt(data.pageNum),
         isSHow: true,
       });
     }
   };
 
-  shouldComponentUpdate = (np, ns) => update.call(this, np, ns)
+  shouldComponentUpdate = (np, ns) => update.call(this, np, ns);
   render() {
-    const {
-      isSHow,
-      tabList,
-      total,
-      pageSize,
-      pageNum,
-    } = this.state;
+    const { isSHow, tabList, total, pageSize, pageNum } = this.state;
 
     var columns = [
       {
         dataIndex: 'expectedDate',
         title: 'Expected  Date',
-        width: '17%',
+        width: '15%',
       },
       {
         dataIndex: 'expectedQuantity',
         title: 'Expected  Quantity',
-        width: '23%',
+        width: '15%',
         style: {
-          paddingLeft: '40px'
+          paddingLeft: '40px',
         },
+      },
+      {
+        dataIndex: 'ai',
+        title: '',
+        width: '5%',
       },
     ];
 
-    var height = 41.2 * (tabList.length + 1)
+    var height = 41.2 * (tabList.length + 1);
 
     if (isSHow) {
-      height += 40
+      height += 48;
     }
 
     return (
@@ -106,43 +104,89 @@ class Comp extends Component {
         }}
       >
         <div style={{ borderRight: '1px solid #ccc' }}></div>
-        {
-          columns.map((header, i) => {
+        {columns.map((header, i) => {
+          let nextSty = header.style || {};
 
-            var nextSty = header.style || {}
-
-            return (
+          return (
+            <div
+              className={styles.tableCell}
+              style={{
+                width: header.width,
+                minWidth: header.width,
+                maxWidth: header.width,
+              }}
+            >
               <div
-                className={styles.tableCell}
+                className={styles.header}
                 style={{
-                  width: header.width,
-                  minWidth: header.width,
-                  maxWidth: header.width,
+                  ...nextSty,
+                  borderRight:
+                    header.dataIndex === 'expectedQuantity'
+                      ? 'none'
+                      : '1px solid #ccc;',
                 }}
               >
-                <div className={styles.header} style={nextSty}>{header.title}</div>
-                {
-                  tabList.map((ite, i) => {
-                    return (
-                      <div
-                        className={classNames([styles.item, {
+                {header.title}
+              </div>
+              {tabList.map((ite, i) => {
+                if (header.dataIndex === 'expectedQuantity') {
+                  return (
+                    <div
+                      className={classNames([
+                        styles.item,
+                        {
                           [styles.s0]: ite.colorType == 0,
                           [styles.s1]: ite.colorType == 1,
                           [styles.s2]: ite.colorType == 2,
-                        }])}
-                        style={nextSty}
-                      >
-                        {ite[header.dataIndex]}
-                      </div>
-                    )
-                  })
+                        },
+                      ])}
+                      style={{ ...nextSty, borderRight: 'none' }}
+                    >
+                      {ite[header.dataIndex]}
+                    </div>
+                  );
                 }
-              </div>
-            )
-          })
-        }
+                if (header.dataIndex === 'ai') {
+                  return (
+                    <div
+                      className={classNames([
+                        styles.item,
+                        {
+                          [styles.s0]: ite.colorType == 0,
+                          [styles.s1]: ite.colorType == 1,
+                          [styles.s2]: ite.colorType == 2,
+                        },
+                      ])}
+                      style={nextSty}
+                    >
+                      {ite[header.dataIndex] == 1 && <Ai size={20} />}
+                    </div>
+                  );
+                }
+                return (
+                  <div
+                    className={classNames([
+                      styles.item,
+                      {
+                        [styles.s0]: ite.colorType == 0,
+                        [styles.s1]: ite.colorType == 1,
+                        [styles.s2]: ite.colorType == 2,
+                      },
+                    ])}
+                    style={nextSty}
+                  >
+                    {ite[header.dataIndex]}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
 
-        <div className={styles.pagination} style={{ width: '40%' }}>
+        <div
+          className={styles.pagination}
+          style={{ width: '35%', borderRight: '1px solid #ccc' }}
+        >
           <Pagination
             backwardText="Previous page"
             forwardText="Next page"
@@ -153,20 +197,22 @@ class Comp extends Component {
             pageSizes={[10, 20, 30, 40, 50]}
             totalItems={total}
             onChange={({ page, pageSize }) => {
-              this.setState({
-                pageSize: pageSize,
-                pageNum: page,
-              }, () => {
-                this.getList({
-                  pageNum: page,
+              this.setState(
+                {
                   pageSize: pageSize,
-                })
-              })
-
+                  pageNum: page,
+                },
+                () => {
+                  this.getList({
+                    pageNum: page,
+                    pageSize: pageSize,
+                    defaultPage: false,
+                  });
+                },
+              );
             }}
           />
         </div>
-
       </div>
     );
   }

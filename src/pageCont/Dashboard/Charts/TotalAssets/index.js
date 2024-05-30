@@ -46,6 +46,9 @@ function TotalAssets() {
           enabled: false,
         },
         height: '180px',
+        toolbar: {
+          enabled: false
+        } 
       });
     }
   };
