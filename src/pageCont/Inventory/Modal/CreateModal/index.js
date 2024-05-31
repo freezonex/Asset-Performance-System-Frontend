@@ -170,8 +170,8 @@ const ModalPages = ({ createModalIsopen, changeState }) => {
             <Column sm={4} md={4} lg={8}>
               <TextInput
                 id="expectedQuantity"
-                labelText="Ecpected Quantity"
-                placeholder="Ecpected Quantity"
+                labelText="Expected Quantity"
+                placeholder="Expected Quantity"
                 value={formValue.expectedQuantity}
                 onChange={onFormValueChange}
               />
